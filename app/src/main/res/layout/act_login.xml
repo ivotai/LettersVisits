@@ -2,16 +2,19 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingHorizontal="24dp">
+    android:layout_height="match_parent">
 
     <com.ruffian.library.widget.REditText
         android:id="@+id/et1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:hint="用户名"
         android:maxLines="1"
         android:padding="16dp"
         android:textColor="@color/black"
+        android:textColorHint="@color/grey_400"
         android:textSize="16dp"
         app:background_normal="@color/grey_100"
         app:corner_radius="4dp"
@@ -22,16 +25,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
 
-
     <com.ruffian.library.widget.REditText
         android:id="@+id/et2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:hint="密码"
         android:inputType="textPassword"
         android:maxLines="1"
         android:padding="16dp"
         android:textColor="@color/black"
+        android:textColorHint="@color/grey_400"
         android:textSize="16dp"
         app:background_normal="@color/grey_100"
         app:corner_radius="4dp"
@@ -43,10 +49,13 @@
 
     <com.ruffian.library.widget.RTextView
         android:id="@+id/btn1"
-        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:clickable="true"
+        android:focusable="true"
         android:gravity="center"
         android:padding="16dp"
         android:text="登录"
@@ -59,7 +68,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et2"
-        android:focusable="true" />
+        app:layout_constraintTop_toBottomOf="@+id/et2" />
+
+    <com.unicorn.lettersVisits.view.TitleBar
+        android:id="@+id/tb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

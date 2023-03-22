@@ -18,6 +18,9 @@ class LoginAct : BaseAct<ActLoginBinding>() {
 
     override fun initViews() {
         binding.apply {
+
+            tb.setTitle("信访智能移动终端")
+
             btn1.helper.backgroundColorPressed = ColorUtils.blendARGB(
                 color(splitties.material.colors.R.color.blue_600), Color.WHITE, 0.3f
             )
@@ -27,18 +30,18 @@ class LoginAct : BaseAct<ActLoginBinding>() {
     override fun initIntents() {
         binding.btn1.setOnClickListener {
             fun showRoleDialog() {
-                MaterialDialog(this, BottomSheet(LayoutMode.WRAP_CONTENT)).show {
+                MaterialDialog(this, BottomSheet(LayoutMode.MATCH_PARENT)).show {
                     lifecycleOwner(this@LoginAct)
                     title(text = "请选择您的身份")
                     listItems(items = Role.values().map { it.text }) { _, index, _ ->
                         Global.role = Role.values()[index]
-                        start<LoginAct>()
+                        // todo main2
+                        if (Global.role == Role.Role1) start<MainAct1>() else start<MainAct1>()
                     }
                 }
             }
             showRoleDialog()
         }
-
     }
 
 }
