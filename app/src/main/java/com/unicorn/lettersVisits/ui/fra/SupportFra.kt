@@ -1,6 +1,5 @@
 package com.unicorn.lettersVisits.ui.fra
 
-import com.blankj.utilcode.util.DeviceUtils.getModel
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.divider
 import com.drake.brv.utils.linear
@@ -21,23 +20,23 @@ class SupportFra : BaseFra<FraSupportBinding>() {
         binding.apply {
 
             rv.linear().divider {
-                    setDivider(width = 1, dp = true)
-                }.setup {
-                    addType<Support>(R.layout.item_support)
-                    addType<SupportHeader>(R.layout.head_support)
-                    onBind {
-                        when (val model = getModel<Any>()) {
-                            is Support -> {
-                                val binding = getBinding<ItemSupportBinding>()
-                                binding.tv1.text = model.text
-                            }
-                            is SupportHeader -> {
-                                val binding = getBinding<HeadSupportBinding>()
-                                binding.tvRole.text = Global.role.text
-                                     }
+                setDivider(width = 1, dp = true)
+            }.setup {
+                addType<Support>(R.layout.item_support)
+                addType<SupportHeader>(R.layout.head_support)
+                onBind {
+                    when (val model = getModel<Any>()) {
+                        is Support -> {
+                            val binding = getBinding<ItemSupportBinding>()
+                            binding.tv1.text = model.text
+                        }
+                        is SupportHeader -> {
+                            val binding = getBinding<HeadSupportBinding>()
+                            binding.tvRole.text = Global.role.text
                         }
                     }
-                }.models = listOf(
+                }
+            }.models = listOf(
                 "案件流程判断辅助",
                 "法律条款查询辅助",
                 "语音识别服务",
