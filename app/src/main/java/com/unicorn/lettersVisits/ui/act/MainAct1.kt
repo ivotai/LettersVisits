@@ -13,6 +13,7 @@ import com.unicorn.lettersVisits.app.setUpWithViewPager2
 import com.unicorn.lettersVisits.databinding.ActMain1Binding
 import com.unicorn.lettersVisits.ui.base.BaseAct
 import com.unicorn.lettersVisits.ui.fra.RandomColorFra
+import com.unicorn.lettersVisits.ui.fra.SupportFra
 import me.majiajie.pagerbottomtabstrip.item.NormalItemView
 
 
@@ -30,8 +31,11 @@ class MainAct1 : BaseAct<ActMain1Binding>() {
 
                 override fun getItemCount() = tabCount
 
-                override fun createFragment(position: Int) = RandomColorFra()
-
+                override fun createFragment(position: Int) = when (position) {
+                    0 -> RandomColorFra()
+                    1 -> SupportFra()
+                    else -> throw IllegalArgumentException()
+                }
             }
         }
 
@@ -55,16 +59,15 @@ class MainAct1 : BaseAct<ActMain1Binding>() {
 
             val navigationController = binding.tab.custom().addItem(
                 newItem(
-                    "信访申请列表",
-                    GoogleMaterial.Icon.gmd_fact_check,
-                    GoogleMaterial.Icon.gmd_fact_check
+                    "信访申请列表", GoogleMaterial.Icon.gmd_fact_check, GoogleMaterial.Icon.gmd_fact_check
                 )
             ).addItem(
                 newItem(
                     "辅助功能",
                     GoogleMaterial.Icon.gmd_support_agent,
                     GoogleMaterial.Icon.gmd_support_agent,
-                )
+
+                    )
             ).build()
             navigationController.setUpWithViewPager2(viewPager2 = viewPager2)
         }
