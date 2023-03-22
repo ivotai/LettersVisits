@@ -7,6 +7,8 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.afollestad.materialdialogs.list.listItems
+import com.bumptech.glide.Glide
+import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.Global
 import com.unicorn.lettersVisits.data.model.Role
 import com.unicorn.lettersVisits.databinding.ActLoginBinding
@@ -18,8 +20,6 @@ class LoginAct : BaseAct<ActLoginBinding>() {
 
     override fun initViews() {
         binding.apply {
-
-            tb.setTitle("信访智能移动终端")
 
             btn1.helper.backgroundColorPressed = ColorUtils.blendARGB(
                 color(splitties.material.colors.R.color.blue_600), Color.WHITE, 0.3f
