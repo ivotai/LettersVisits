@@ -88,9 +88,8 @@
         android:layout_marginTop="16dp"
         android:text="忘记密码？"
         android:textColor="@color/black"
-        android:textSize="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="14dp"
+        app:layout_constraintEnd_toEndOf="@+id/btn1"
         app:layout_constraintTop_toBottomOf="@+id/btn1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

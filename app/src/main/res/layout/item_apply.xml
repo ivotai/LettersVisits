@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="16dp"
     app:background_normal="@color/grey_100"
     app:corner_radius="16dp">
 
     <com.ruffian.library.widget.RImageView
         android:id="@+id/iv"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/support"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/img"
         app:corner_radius="100dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -21,28 +21,65 @@
         android:id="@+id/tv1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="名字"
-        android:textColor="@color/black"
-        android:textSize="18dp"
+        android:layout_marginStart="8dp"
+        android:text="张羡忠"
+        android:textColor="@color/grey_500"
+        android:textSize="14dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/iv"
         app:layout_constraintStart_toEndOf="@+id/iv"
         app:layout_constraintTop_toTopOf="@+id/iv" />
 
     <TextView
-        android:id="@+id/tv_role"
+        android:id="@+id/tv_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
         android:text="这段文字不用看这段文字不用看这段文字不用看这段文字不用看这段文字不用看这段文字不用看这段文字不用看这段文字不用看这段文字不用看这段文字不用看这段文字不用看这段文字不用看"
-        android:textColor="@color/grey_400"
-        android:textSize="14dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/black"
+        android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv" />
+
+    <!--    add view -->
+    <View
+        android:id="@+id/v"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="16dp"
+        android:background="@color/grey_300"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_content" />
+
+    <com.mikepenz.iconics.view.IconicsImageView
+        android:id="@+id/iv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:iiv_color="@color/grey_400"
+        app:iiv_icon="gmr-favorite"
+        app:iiv_size="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tv2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/v" />
+
+    <TextView
+        android:id="@+id/tv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="99"
+        android:textColor="@color/grey_400"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/iv2"
+        app:layout_constraintTop_toTopOf="@+id/iv2" />
 
 </com.ruffian.library.widget.RConstraintLayout>

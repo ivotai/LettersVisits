@@ -36,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:iiv_color="@color/grey_500"
-                app:iiv_icon="gmd-search"
+                app:iiv_icon="gmr-search"
                 app:iiv_size="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -44,13 +44,14 @@
 
             <TextView
                 android:id="@+id/tv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="搜索信访申请"
                 android:textColor="@color/grey_500"
                 android:textSize="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/v"
                 app:layout_constraintStart_toEndOf="@+id/iv"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -61,19 +62,19 @@
                 android:layout_marginEnd="16dp"
                 android:background="@color/grey_400"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/iv2"
+                app:layout_constraintEnd_toStartOf="@+id/ivAdd"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.mikepenz.iconics.view.IconicsImageView
-                android:id="@+id/iv2"
+                android:id="@+id/ivAdd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:iiv_color="@color/main_color"
-                app:iiv_icon="gmd-add"
+                app:iiv_icon="gmr-add"
                 app:iiv_size="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
         </com.ruffian.library.widget.RConstraintLayout>
 
@@ -83,6 +84,7 @@
         android:id="@+id/rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:paddingHorizontal="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

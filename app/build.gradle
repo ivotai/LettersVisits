@@ -60,6 +60,10 @@ dependencies {
     implementation "com.mikepenz:iconics-core:5.4.0"
     implementation "com.mikepenz:iconics-views:5.4.0"
     implementation 'com.mikepenz:google-material-typeface:4.0.0.2-kotlin@aar'
+    implementation 'com.mikepenz:google-material-typeface-outlined:4.0.0.1-kotlin@aar'
+    implementation 'com.mikepenz:google-material-typeface-rounded:4.0.0.1-kotlin@aar'
+    implementation 'com.mikepenz:google-material-typeface-sharp:4.0.0.1-kotlin@aar'
+
 
     implementation 'com.github.hackware1993:MagicIndicator:1.7.0'
 

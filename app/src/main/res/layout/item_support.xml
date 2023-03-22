@@ -25,7 +25,7 @@
             android:layout_gravity="center"
             android:padding="16dp"
             app:iiv_color="@color/white"
-            app:iiv_icon="gmd-ballot"
+            app:iiv_icon="gmr-ballot"
             app:iiv_size="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

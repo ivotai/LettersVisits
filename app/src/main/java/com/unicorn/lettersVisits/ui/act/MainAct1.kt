@@ -6,14 +6,13 @@ import com.blankj.utilcode.util.ColorUtils
 import com.drake.statusbar.immersive
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
-import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
+import com.mikepenz.iconics.typeface.library.googlematerial.RoundedGoogleMaterial
 import com.mikepenz.iconics.utils.colorInt
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.setUpWithViewPager2
 import com.unicorn.lettersVisits.databinding.ActMain1Binding
 import com.unicorn.lettersVisits.ui.base.BaseAct
 import com.unicorn.lettersVisits.ui.fra.ApplyListFra
-import com.unicorn.lettersVisits.ui.fra.RandomColorFra
 import com.unicorn.lettersVisits.ui.fra.SupportFra
 import me.majiajie.pagerbottomtabstrip.item.NormalItemView
 
@@ -60,15 +59,16 @@ class MainAct1 : BaseAct<ActMain1Binding>() {
 
             val navigationController = binding.tab.custom().addItem(
                 newItem(
-                    "信访申请列表", GoogleMaterial.Icon.gmd_fact_check, GoogleMaterial.Icon.gmd_fact_check
+                    "信访申请列表",
+                    RoundedGoogleMaterial.Icon.gmr_fact_check,
+                    RoundedGoogleMaterial.Icon.gmr_fact_check,
                 )
             ).addItem(
                 newItem(
                     "辅助功能",
-                    GoogleMaterial.Icon.gmd_support_agent,
-                    GoogleMaterial.Icon.gmd_support_agent,
-
-                    )
+                    RoundedGoogleMaterial.Icon.gmr_support_agent,
+                    RoundedGoogleMaterial.Icon.gmr_support_agent,
+                )
             ).build()
             navigationController.setUpWithViewPager2(viewPager2 = viewPager2)
         }
