@@ -24,6 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.act.MainAct1" />
+        <activity android:name=".ui.act.MainAct2" />
     </application>
 
 </manifest>

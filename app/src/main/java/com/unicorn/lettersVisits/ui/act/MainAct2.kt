@@ -13,11 +13,12 @@ import com.unicorn.lettersVisits.app.setUpWithViewPager2
 import com.unicorn.lettersVisits.databinding.ActMain1Binding
 import com.unicorn.lettersVisits.ui.base.BaseAct
 import com.unicorn.lettersVisits.ui.fra.ApplyListFra
+import com.unicorn.lettersVisits.ui.fra.RandomColorFra
 import com.unicorn.lettersVisits.ui.fra.SupportFra
 import me.majiajie.pagerbottomtabstrip.item.NormalItemView
 
 
-class MainAct1 : BaseAct<ActMain1Binding>() {
+class MainAct2 : BaseAct<ActMain1Binding>() {
 
     override fun initViews() {
 
@@ -27,12 +28,12 @@ class MainAct1 : BaseAct<ActMain1Binding>() {
         binding.vp.apply {
             isUserInputEnabled = false
             offscreenPageLimit = tabCount - 1
-            adapter = object : FragmentStateAdapter(this@MainAct1) {
+            adapter = object : FragmentStateAdapter(this@MainAct2) {
 
                 override fun getItemCount() = tabCount
 
                 override fun createFragment(position: Int) = when (position) {
-                    0 -> ApplyListFra()
+                    0 -> RandomColorFra()
                     1 -> SupportFra()
                     else -> throw IllegalArgumentException()
                 }

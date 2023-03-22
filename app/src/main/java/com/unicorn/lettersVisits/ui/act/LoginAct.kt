@@ -7,8 +7,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.afollestad.materialdialogs.list.listItems
-import com.bumptech.glide.Glide
-import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.Global
 import com.unicorn.lettersVisits.data.model.Role
 import com.unicorn.lettersVisits.databinding.ActLoginBinding
@@ -35,8 +33,7 @@ class LoginAct : BaseAct<ActLoginBinding>() {
                     title(text = "请选择您的身份")
                     listItems(items = Role.values().map { it.text }) { _, index, _ ->
                         Global.role = Role.values()[index]
-                        // todo main2
-                        if (Global.role == Role.Role1) start<MainAct1>() else start<MainAct1>()
+                        if (Global.role == Role.Role1) start<MainAct1>() else start<MainAct2>()
                     }
                 }
             }

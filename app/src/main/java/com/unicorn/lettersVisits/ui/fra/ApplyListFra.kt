@@ -16,8 +16,7 @@ class ApplyListFra : BaseFra<FraApplyListBinding>() {
 
     override fun initViews() {
         fun getApplyList(): List<Apply> {
-            val content =
-                "这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容"
+            val content = "这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容"
             val applyList = mutableListOf<Apply>()
             repeat(10) {
                 applyList.add(Apply(content = content))
@@ -43,11 +42,14 @@ class ApplyListFra : BaseFra<FraApplyListBinding>() {
     }
 
     override fun initIntents() {
-       binding.apply {
-           ivAdd.setOnClickListener {
-               ToastUtils.showShort("asdfasdfasdfa")
-           }
-       }
+        binding.apply {
+            tvSearch.setOnClickListener {
+                ToastUtils.showShort("搜索还没做")
+            }
+            ivAdd.setOnClickListener {
+                ToastUtils.showShort("添加还没做")
+            }
+        }
     }
 
     override fun initStatusBar() {
