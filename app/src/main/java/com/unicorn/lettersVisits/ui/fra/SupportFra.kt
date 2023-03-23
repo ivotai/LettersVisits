@@ -9,6 +9,7 @@ import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.Global
 import com.unicorn.lettersVisits.data.model.Support
 import com.unicorn.lettersVisits.data.model.SupportHeader
+import com.unicorn.lettersVisits.data.model.SupportType
 import com.unicorn.lettersVisits.databinding.FraSupportBinding
 import com.unicorn.lettersVisits.databinding.HeadSupportBinding
 import com.unicorn.lettersVisits.databinding.ItemSupportBinding
@@ -37,14 +38,12 @@ class SupportFra : BaseFra<FraSupportBinding>() {
                     }
                 }
             }.models = listOf(
-                "案件流程判断辅助",
-                "法律条款查询辅助",
-                "语音识别服务",
-                "常用计算工具辅助服务",
-                "人工智能辅助",
-            ).map {
-                Support(it)
-            }
+                Support(text = "案件流程判断辅助", supportType = SupportType.TOP),
+                Support(text = "法律条款查询辅助", supportType = SupportType.MIDDLE),
+                Support(text = "语音识别服务", supportType = SupportType.BOTTOM),
+                Support(text = "常用计算工具辅助服务", supportType = SupportType.TOP),
+                Support(text = "人工智能辅助", supportType = SupportType.BOTTOM),
+            )
 
             rv.bindingAdapter.addHeader(SupportHeader())
         }
