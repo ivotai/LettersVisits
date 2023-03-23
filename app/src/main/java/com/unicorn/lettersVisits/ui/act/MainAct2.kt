@@ -11,14 +11,16 @@ import com.mikepenz.iconics.utils.colorInt
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.setUpWithViewPager2
 import com.unicorn.lettersVisits.databinding.ActMain1Binding
+import com.unicorn.lettersVisits.databinding.ActMain2Binding
 import com.unicorn.lettersVisits.ui.base.BaseAct
 import com.unicorn.lettersVisits.ui.fra.ApplyListFra
 import com.unicorn.lettersVisits.ui.fra.RandomColorFra
+import com.unicorn.lettersVisits.ui.fra.Role2ApplyFra
 import com.unicorn.lettersVisits.ui.fra.SupportFra
 import me.majiajie.pagerbottomtabstrip.item.NormalItemView
 
 
-class MainAct2 : BaseAct<ActMain1Binding>() {
+class MainAct2 : BaseAct<ActMain2Binding>() {
 
     override fun initViews() {
 
@@ -33,7 +35,7 @@ class MainAct2 : BaseAct<ActMain1Binding>() {
                 override fun getItemCount() = tabCount
 
                 override fun createFragment(position: Int) = when (position) {
-                    0 -> RandomColorFra()
+                    0 -> Role2ApplyFra()
                     1 -> SupportFra()
                     else -> throw IllegalArgumentException()
                 }
