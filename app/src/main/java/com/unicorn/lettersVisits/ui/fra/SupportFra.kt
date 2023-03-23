@@ -2,7 +2,6 @@ package com.unicorn.lettersVisits.ui.fra
 
 import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.drake.brv.utils.bindingAdapter
-import com.drake.brv.utils.divider
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.setup
 import com.drake.statusbar.statusPadding
@@ -16,15 +15,14 @@ import com.unicorn.lettersVisits.databinding.FraSupportBinding
 import com.unicorn.lettersVisits.databinding.HeadSupportBinding
 import com.unicorn.lettersVisits.databinding.ItemSupportBinding
 import com.unicorn.lettersVisits.ui.base.BaseFra
+import splitties.resources.color
 
 class SupportFra : BaseFra<FraSupportBinding>() {
 
     override fun initViews() {
         binding.apply {
 
-            rv.linear().divider {
-                setDivider(width = 1, dp = true)
-            }.setup {
+            rv.linear().setup {
                 addType<Support>(R.layout.item_support)
                 addType<SupportHeader>(R.layout.head_support)
                 addType<SupportDivider>(R.layout.divider_support)
@@ -50,6 +48,7 @@ class SupportFra : BaseFra<FraSupportBinding>() {
                                 }
 
                                 //
+                                c1.helper.backgroundColorNormal = color(item.colorRes)
                                 tv1.text = item.text
                             }
                         }
@@ -60,15 +59,43 @@ class SupportFra : BaseFra<FraSupportBinding>() {
                     }
                 }
             }.models = listOf(
-                Support(text = "案件流程判断辅助", supportType = SupportType.TOP),
-                Support(text = "法律条款查询辅助", supportType = SupportType.MIDDLE),
-                Support(text = "语音识别服务", supportType = SupportType.BOTTOM),
+                Support(
+                    text = "案件流程判断辅助",
+                    supportType = SupportType.TOP,
+                    splitties.material.colors.R.color.red_300
+                ),
+                Support(
+                    text = "法律条款查询辅助",
+                    supportType = SupportType.MIDDLE,
+                    splitties.material.colors.R.color.orange_300
+                ),
+                Support(
+                    text = "语音识别服务",
+                    supportType = SupportType.BOTTOM,
+                    splitties.material.colors.R.color.green_300
+                ),
                 SupportDivider(),
-                Support(text = "常用计算工具辅助服务", supportType = SupportType.TOP),
-                Support(text = "人工智能辅助", supportType = SupportType.BOTTOM),
+                Support(
+                    text = "常用计算工具辅助服务",
+                    supportType = SupportType.TOP,
+                    colorRes = splitties.material.colors.R.color.teal_300
+                ),
+                Support(
+                    text = "人工智能辅助",
+                    supportType = SupportType.BOTTOM,
+                    colorRes = splitties.material.colors.R.color.blue_300
+                ),
                 SupportDivider(),
-                Support(text = "版本更新", supportType = SupportType.TOP),
-                Support(text = "退出账户", supportType = SupportType.BOTTOM),
+                Support(
+                    text = "版本更新",
+                    supportType = SupportType.TOP,
+                    colorRes = splitties.material.colors.R.color.purple_300
+                ),
+                Support(
+                    text = "退出账户",
+                    supportType = SupportType.BOTTOM,
+                    colorRes = splitties.material.colors.R.color.pink_300
+                ),
                 SupportDivider(),
             )
 
