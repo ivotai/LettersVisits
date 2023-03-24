@@ -25,6 +25,7 @@
         </activity>
         <activity android:name=".ui.act.MainAct1" />
         <activity android:name=".ui.act.MainAct2" />
+        <activity android:name=".ui.act.ObjectBoxAct"/>
     </application>
 
 </manifest>

@@ -1,13 +1,12 @@
 package com.unicorn.lettersVisits.app
 
-import com.unicorn.lettersVisits.data.model.Role
-import com.unicorn.lettersVisits.ui.act.MainAct1
+import com.unicorn.lettersVisits.data.model.Roles
 
 
 object Global {
 
     var isLogin = false
 
-    lateinit var role: Role
+    lateinit var roles: Roles
 
 }

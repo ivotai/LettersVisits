@@ -8,7 +8,7 @@ import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.afollestad.materialdialogs.list.listItems
 import com.unicorn.lettersVisits.app.Global
-import com.unicorn.lettersVisits.data.model.Role
+import com.unicorn.lettersVisits.data.model.Roles
 import com.unicorn.lettersVisits.databinding.ActLoginBinding
 import com.unicorn.lettersVisits.ui.base.BaseAct
 import splitties.activities.start
@@ -31,9 +31,9 @@ class LoginAct : BaseAct<ActLoginBinding>() {
                 MaterialDialog(this, BottomSheet(LayoutMode.MATCH_PARENT)).show {
                     lifecycleOwner(this@LoginAct)
                     title(text = "请选择您的身份")
-                    listItems(items = Role.values().map { it.text }) { _, index, _ ->
-                        Global.role = Role.values()[index]
-                        if (Global.role == Role.Role1) start<MainAct1>() else start<MainAct2>()
+                    listItems(items = Roles.values().map { it.text }) { _, index, _ ->
+                        Global.roles = Roles.values()[index]
+                        if (Global.roles == Roles.Roles1) start<ObjectBoxAct>() else start<ObjectBoxAct>()
                     }
                 }
             }
