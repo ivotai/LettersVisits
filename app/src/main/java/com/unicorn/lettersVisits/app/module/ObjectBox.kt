@@ -19,4 +19,8 @@ val objectBoxModule = module {
         get<BoxStore>().boxFor(Role::class.java)
     }
 
+    factory {
+        get<BoxStore>().boxFor(Role::class.java)
+    }
+
 }
