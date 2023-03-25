@@ -9,7 +9,7 @@ import io.objectbox.relation.ToOne
 data class User(
     @Id var id: Long = 0,
     var name: String? = null,
-){
+) {
     lateinit var role: ToOne<Role>
 }
 

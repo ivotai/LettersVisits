@@ -1,5 +1,7 @@
 package com.unicorn.lettersVisits.data.model
 
+import com.drake.brv.item.ItemExpand
+import com.unicorn.lettersVisits.app.module.SimpleComponent
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 
@@ -8,7 +10,3 @@ data class Role(
     @Id var id: Long = 0, var name: String? = null
 )
 
-/*
-    box.put(Role(name = "部委单位工作人员"))
-    box.put(Role(name = "信访人"))
- */

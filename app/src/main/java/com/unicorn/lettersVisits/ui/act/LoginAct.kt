@@ -5,12 +5,14 @@ import androidx.core.graphics.ColorUtils
 import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
+import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.afollestad.materialdialogs.list.listItems
 import com.unicorn.lettersVisits.app.Global
 import com.unicorn.lettersVisits.data.model.Roles
 import com.unicorn.lettersVisits.databinding.ActLoginBinding
 import com.unicorn.lettersVisits.ui.base.BaseAct
+import com.unicorn.lettersVisits.view.UserListView
 import splitties.activities.start
 import splitties.resources.color
 
@@ -41,7 +43,12 @@ class LoginAct : BaseAct<ActLoginBinding>() {
                     }
                 }
             }
-            showRoleDialog()
+            fun showUserDialog(){
+                MaterialDialog(this).show {
+                    customView(view = UserListView(context))
+                }
+            }
+            showUserDialog()
         }
     }
 
