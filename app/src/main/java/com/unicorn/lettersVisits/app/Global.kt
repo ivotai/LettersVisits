@@ -9,4 +9,6 @@ object Global {
 
     lateinit var roles: Roles
 
+    val isDataMode = true
+
 }

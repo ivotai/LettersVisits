@@ -21,37 +21,10 @@
         }
       ],
       "relations": []
-    },
-    {
-      "id": "2:2784461228617642430",
-      "lastPropertyId": "3:7526383966810058123",
-      "name": "User",
-      "properties": [
-        {
-          "id": "1:4531271627172704208",
-          "name": "id",
-          "type": 6,
-          "flags": 1
-        },
-        {
-          "id": "2:6934147616085275329",
-          "name": "name",
-          "type": 9
-        },
-        {
-          "id": "3:7526383966810058123",
-          "name": "roleId",
-          "indexId": "1:5397807005859250183",
-          "type": 11,
-          "flags": 520,
-          "relationTarget": "Role"
-        }
-      ],
-      "relations": []
     }
   ],
-  "lastEntityId": "2:2784461228617642430",
-  "lastIndexId": "1:5397807005859250183",
+  "lastEntityId": "1:7201837890516576552",
+  "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

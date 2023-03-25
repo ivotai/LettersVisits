@@ -32,8 +32,12 @@ class LoginAct : BaseAct<ActLoginBinding>() {
                     lifecycleOwner(this@LoginAct)
                     title(text = "请选择您的身份")
                     listItems(items = Roles.values().map { it.text }) { _, index, _ ->
+                        if (Global.isDataMode) {
+                            start<ObjectBoxAct>()
+                            return@listItems
+                        }
                         Global.roles = Roles.values()[index]
-                        if (Global.roles == Roles.Roles1) start<ObjectBoxAct>() else start<ObjectBoxAct>()
+                        if (Global.roles == Roles.Roles1) start<MainAct1>() else start<MainAct2>()
                     }
                 }
             }

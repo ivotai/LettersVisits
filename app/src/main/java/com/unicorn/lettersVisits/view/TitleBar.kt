@@ -3,6 +3,7 @@ package com.unicorn.lettersVisits.view
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.blankj.utilcode.util.ActivityUtils
 import com.dylanc.viewbinding.inflate
 import com.unicorn.lettersVisits.databinding.LayoutTitleBarBinding
@@ -14,7 +15,7 @@ import com.unicorn.lettersVisits.databinding.LayoutTitleBarBinding
     2. xml里创建，两个参数
     3. 后面两个参数是主题里的默认值，不管
  */
-class TitleBar(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
+class TitleBar(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(context, attrs) {
 
     private val binding = inflate<LayoutTitleBarBinding>()
 
