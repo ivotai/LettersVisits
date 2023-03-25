@@ -54,7 +54,7 @@ class SupportFra : BaseFra<FraSupportBinding>() {
                         }
                         is SupportHeader -> {
                             val binding = getBinding<HeadSupportBinding>()
-                            binding.tvRole.text = Global.roles.text
+                            binding.tvRole.text = Global.currentRole.name
                         }
                     }
                 }

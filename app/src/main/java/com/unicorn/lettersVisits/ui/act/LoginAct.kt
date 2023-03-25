@@ -2,17 +2,15 @@ package com.unicorn.lettersVisits.ui.act
 
 import android.graphics.Color
 import androidx.core.graphics.ColorUtils
-import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.customview.customView
-import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
-import com.afollestad.materialdialogs.list.listItems
+import com.drake.channel.receiveEvent
 import com.unicorn.lettersVisits.app.Global
-import com.unicorn.lettersVisits.data.model.Roles
+import com.unicorn.lettersVisits.data.model.User
 import com.unicorn.lettersVisits.databinding.ActLoginBinding
 import com.unicorn.lettersVisits.ui.base.BaseAct
-import com.unicorn.lettersVisits.view.UserListView
+import com.unicorn.lettersVisits.view.RoleUserListView
 import splitties.activities.start
 import splitties.resources.color
 
@@ -29,27 +27,33 @@ class LoginAct : BaseAct<ActLoginBinding>() {
 
     override fun initIntents() {
         binding.btn1.setOnClickListener {
-            fun showRoleDialog() {
-                MaterialDialog(this, BottomSheet(LayoutMode.MATCH_PARENT)).show {
-                    lifecycleOwner(this@LoginAct)
-                    title(text = "请选择您的身份")
-                    listItems(items = Roles.values().map { it.text }) { _, index, _ ->
-                        if (Global.isDataMode) {
-                            start<ObjectBoxAct>()
-                            return@listItems
-                        }
-                        Global.roles = Roles.values()[index]
-                        if (Global.roles == Roles.Roles1) start<MainAct1>() else start<MainAct2>()
-                    }
-                }
+            // 数据库模式
+            if (Global.isObjectBoxMode) {
+                start<ObjectBoxAct> {}
+                return@setOnClickListener
             }
-            fun showUserDialog(){
-                MaterialDialog(this).show {
-                    customView(view = UserListView(context))
+
+            fun showUserDialog() {
+                userDialog = MaterialDialog(this, BottomSheet()).show {
+                    title(text = "请选择用户")
+                    customView(view = RoleUserListView(context))
                 }
             }
             showUserDialog()
         }
     }
+
+    private var userDialog: MaterialDialog? = null
+
+    override fun initEvents() {
+        receiveEvent<User> {
+            userDialog?.dismiss()
+            Global.currentUser = it
+            // 硬编码
+            if (Global.currentRole.id == 1L) start<MainAct2>() else start<MainAct1>()
+            finish()
+        }
+    }
+
 
 }
