@@ -60,13 +60,13 @@ class Role2MainAct : BaseAct<ActMain1Binding>() {
 
             val navigationController = binding.tab.custom().addItem(
                 newItem(
-                    "信访申请2",
+                    "信访申请",
                     RoundedGoogleMaterial.Icon.gmr_fact_check,
                     RoundedGoogleMaterial.Icon.gmr_fact_check,
                 )
             ).addItem(
                 newItem(
-                    "辅助功能2",
+                    "辅助功能",
                     RoundedGoogleMaterial.Icon.gmr_support_agent,
                     RoundedGoogleMaterial.Icon.gmr_support_agent,
                 )

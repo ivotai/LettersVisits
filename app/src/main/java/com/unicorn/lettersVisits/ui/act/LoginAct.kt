@@ -6,8 +6,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.customview.customView
 import com.drake.channel.receiveEvent
-import com.drake.statusbar.immersive
-import com.drake.statusbar.statusPadding
 import com.unicorn.lettersVisits.app.Global
 import com.unicorn.lettersVisits.data.model.User
 import com.unicorn.lettersVisits.databinding.ActLoginBinding
@@ -52,15 +50,10 @@ class LoginAct : BaseAct<ActLoginBinding>() {
             userDialog?.dismiss()
             Global.currentUser = it
             // 信访人
-            if (Global.currentRole.name == "信访人") start<Role2MainAct>() else start<Role1MainAct>()
+            if (Global.currentRole!!.name != "信访人") start<Role1MainAct>() else start<Role2MainAct>()
             finish()
         }
     }
 
-    override fun initStatusBar() {
-        // true 表示黑色字体
-        immersive(darkMode = true)
-        binding.root.statusPadding()
-    }
 
 }

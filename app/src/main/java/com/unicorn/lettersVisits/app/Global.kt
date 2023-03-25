@@ -6,12 +6,12 @@ import com.unicorn.lettersVisits.data.model.User
 
 object Global {
 
-    var isLogin = false
-
     const val isObjectBoxMode = false
 
-    lateinit var currentUser: User
+    var currentUser: User? = null
 
-    val currentRole: Role get() = currentUser.role.target
+    val currentRole: Role? get() = currentUser?.role?.target
+
+    val isLogin get() = currentUser != null
 
 }
