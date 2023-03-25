@@ -1,6 +1,6 @@
 package com.unicorn.lettersVisits.app
 
-import com.unicorn.lettersVisits.data.model.Roles
+import com.unicorn.lettersVisits.data.model.Role
 import com.unicorn.lettersVisits.data.model.User
 
 
@@ -8,12 +8,10 @@ object Global {
 
     var isLogin = false
 
-    lateinit var roles: Roles
-
-    val isObjectBoxMode = true
+    const val isObjectBoxMode = false
 
     lateinit var currentUser: User
 
-    val currentRole get() = currentUser.role.target
+    val currentRole: Role get() = currentUser.role.target
 
 }

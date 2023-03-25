@@ -4,20 +4,21 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.blankj.utilcode.util.ColorUtils
 import com.drake.statusbar.immersive
+import com.drake.statusbar.statusPadding
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.googlematerial.RoundedGoogleMaterial
 import com.mikepenz.iconics.utils.colorInt
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.setUpWithViewPager2
-import com.unicorn.lettersVisits.databinding.ActMain1Binding
+import com.unicorn.lettersVisits.databinding.ActMain2Binding
 import com.unicorn.lettersVisits.ui.base.BaseAct
-import com.unicorn.lettersVisits.ui.fra.ApplyListFra
+import com.unicorn.lettersVisits.ui.fra.Role2ApplyFra
 import com.unicorn.lettersVisits.ui.fra.SupportFra
 import me.majiajie.pagerbottomtabstrip.item.NormalItemView
 
 
-class MainAct1 : BaseAct<ActMain1Binding>() {
+class Role1MainAct : BaseAct<ActMain2Binding>() {
 
     override fun initViews() {
 
@@ -27,12 +28,12 @@ class MainAct1 : BaseAct<ActMain1Binding>() {
         binding.vp.apply {
             isUserInputEnabled = false
             offscreenPageLimit = tabCount - 1
-            adapter = object : FragmentStateAdapter(this@MainAct1) {
+            adapter = object : FragmentStateAdapter(this@Role1MainAct) {
 
                 override fun getItemCount() = tabCount
 
                 override fun createFragment(position: Int) = when (position) {
-                    0 -> ApplyListFra()
+                    0 -> Role2ApplyFra()
                     1 -> SupportFra()
                     else -> throw IllegalArgumentException()
                 }
@@ -76,7 +77,8 @@ class MainAct1 : BaseAct<ActMain1Binding>() {
     }
 
     override fun initStatusBar() {
-        immersive()
+        immersive(darkMode = false)
+        binding.root.statusPadding()
     }
 
 }

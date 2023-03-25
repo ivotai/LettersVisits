@@ -11,16 +11,14 @@ import com.mikepenz.iconics.utils.colorInt
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.setUpWithViewPager2
 import com.unicorn.lettersVisits.databinding.ActMain1Binding
-import com.unicorn.lettersVisits.databinding.ActMain2Binding
 import com.unicorn.lettersVisits.ui.base.BaseAct
 import com.unicorn.lettersVisits.ui.fra.ApplyListFra
-import com.unicorn.lettersVisits.ui.fra.RandomColorFra
-import com.unicorn.lettersVisits.ui.fra.Role2ApplyFra
 import com.unicorn.lettersVisits.ui.fra.SupportFra
 import me.majiajie.pagerbottomtabstrip.item.NormalItemView
 
 
-class MainAct2 : BaseAct<ActMain2Binding>() {
+// 信访人 role2
+class Role2MainAct : BaseAct<ActMain1Binding>() {
 
     override fun initViews() {
 
@@ -30,12 +28,12 @@ class MainAct2 : BaseAct<ActMain2Binding>() {
         binding.vp.apply {
             isUserInputEnabled = false
             offscreenPageLimit = tabCount - 1
-            adapter = object : FragmentStateAdapter(this@MainAct2) {
+            adapter = object : FragmentStateAdapter(this@Role2MainAct) {
 
                 override fun getItemCount() = tabCount
 
                 override fun createFragment(position: Int) = when (position) {
-                    0 -> Role2ApplyFra()
+                    0 -> ApplyListFra()
                     1 -> SupportFra()
                     else -> throw IllegalArgumentException()
                 }
@@ -62,13 +60,13 @@ class MainAct2 : BaseAct<ActMain2Binding>() {
 
             val navigationController = binding.tab.custom().addItem(
                 newItem(
-                    "信访申请",
+                    "信访申请2",
                     RoundedGoogleMaterial.Icon.gmr_fact_check,
                     RoundedGoogleMaterial.Icon.gmr_fact_check,
                 )
             ).addItem(
                 newItem(
-                    "辅助功能",
+                    "辅助功能2",
                     RoundedGoogleMaterial.Icon.gmr_support_agent,
                     RoundedGoogleMaterial.Icon.gmr_support_agent,
                 )
@@ -79,7 +77,18 @@ class MainAct2 : BaseAct<ActMain2Binding>() {
     }
 
     override fun initStatusBar() {
-        immersive()
+        immersive(darkMode = true)
+        // 在 act 中设置状态栏颜色
+//        binding.vp.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+//            override fun onPageSelected(position: Int) {
+//                super.onPageSelected(position)
+//                if (position == 0) {
+//                    darkMode(true)
+//                } else {
+//                    darkMode(false)
+//                }
+//            }
+//        })
     }
 
 }

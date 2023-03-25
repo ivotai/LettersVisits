@@ -23,8 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.act.MainAct1" />
-        <activity android:name=".ui.act.MainAct2" />
+        <activity android:name=".ui.act.Role2MainAct" />
+        <activity android:name=".ui.act.Role1MainAct" />
         <activity android:name=".ui.act.ObjectBoxAct"/>
     </application>
 
