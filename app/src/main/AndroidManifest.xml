@@ -23,10 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.act.Role2MainAct" />
         <activity android:name=".ui.act.Role1MainAct" />
+        <activity android:name=".ui.act.Role2MainAct" />
         <activity android:name=".ui.act.ObjectBoxAct" />
         <activity android:name=".ui.act.CommonCalculationAct" />
+        <activity android:name=".ui.act.OpenAiAct" />
     </application>
 
 </manifest>

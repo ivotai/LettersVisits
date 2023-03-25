@@ -18,6 +18,7 @@ import com.unicorn.lettersVisits.databinding.HeadSupportBinding
 import com.unicorn.lettersVisits.databinding.ItemSupportBinding
 import com.unicorn.lettersVisits.ui.act.CommonCalculationAct
 import com.unicorn.lettersVisits.ui.act.LoginAct
+import com.unicorn.lettersVisits.ui.act.OpenAiAct
 import com.unicorn.lettersVisits.ui.base.BaseFra
 import splitties.activities.start
 import splitties.resources.color
@@ -121,7 +122,7 @@ class SupportFra : BaseFra<FraSupportBinding>() {
                                     requireContext().start<CommonCalculationAct> {}
                                 }
                                 "人工智能辅助" -> {
-                                    // todo
+                                    requireContext().start<OpenAiAct> {}
                                 }
                                 "版本更新" -> {
                                     ToastUtils.showShort("已是最新版本")

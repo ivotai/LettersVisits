@@ -18,7 +18,7 @@ class LoginAct : BaseAct<ActLoginBinding>() {
 
     override fun initViews() {
         binding.apply {
-
+            //
             btn1.helper.backgroundColorPressed = ColorUtils.blendARGB(
                 color(splitties.material.colors.R.color.blue_600), Color.WHITE, 0.3f
             )

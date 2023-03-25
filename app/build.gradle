@@ -81,11 +81,12 @@ dependencies {
     implementation "io.insert-koin:koin-android:3.3.3"
     implementation 'com.github.RuffianZhong:RWidgetHelper:androidx.v0.0.13'
 
-    implementation "com.aallam.openai:openai-client:3.1.1"
-    implementation 'io.ktor:ktor-client-okhttp:2.2.4'
 
     implementation "io.insert-koin:koin-android:3.3.3"
 
     implementation 'com.github.liangjingkanji:Channel:1.1.5'
 
+    implementation "com.aallam.openai:openai-client:3.2.0"
+    implementation 'io.ktor:ktor-client-okhttp:2.2.4'
+implementation 'com.github.liangjingkanji:soft-input-event:1.0.9'
 }
