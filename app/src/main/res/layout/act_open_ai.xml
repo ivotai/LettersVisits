@@ -8,7 +8,8 @@
         android:id="@+id/rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/grey_200"
+        android:background="@color/white"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toTopOf="@+id/RConstraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,6 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:clickable="true"
+            android:focusable="true"
             android:paddingHorizontal="16dp"
             android:paddingVertical="8dp"
             android:text="发送"
@@ -55,8 +57,7 @@
             app:corner_radius="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:focusable="true" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </com.ruffian.library.widget.RConstraintLayout>
 
