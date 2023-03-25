@@ -1,5 +1,6 @@
 package com.unicorn.lettersVisits.ui.fra
 
+import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.blankj.utilcode.util.ToastUtils
 import com.drake.brv.utils.bindingAdapter
@@ -15,7 +16,9 @@ import com.unicorn.lettersVisits.data.model.support.SupportType
 import com.unicorn.lettersVisits.databinding.FraSupportBinding
 import com.unicorn.lettersVisits.databinding.HeadSupportBinding
 import com.unicorn.lettersVisits.databinding.ItemSupportBinding
+import com.unicorn.lettersVisits.ui.act.LoginAct
 import com.unicorn.lettersVisits.ui.base.BaseFra
+import splitties.activities.start
 import splitties.resources.color
 
 class SupportFra : BaseFra<FraSupportBinding>() {
@@ -50,7 +53,7 @@ class SupportFra : BaseFra<FraSupportBinding>() {
             ), Support(
                 text = "退出账户",
                 supportType = SupportType.BOTTOM,
-                colorRes = splitties.material.colors.R.color.pink_300
+                colorRes = splitties.material.colors.R.color.indigo_300
             ), SupportDivider()
         )
 
@@ -123,7 +126,9 @@ class SupportFra : BaseFra<FraSupportBinding>() {
                                     ToastUtils.showShort("已是最新版本")
                                 }
                                 "退出账户" -> {
-                                    // todo
+                                    Global.currentUser = null
+                                    ActivityUtils.finishAllActivities()
+                                    requireContext().start<LoginAct>()
                                 }
                             }
                         }
