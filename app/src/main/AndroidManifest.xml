@@ -25,7 +25,8 @@
         </activity>
         <activity android:name=".ui.act.Role2MainAct" />
         <activity android:name=".ui.act.Role1MainAct" />
-        <activity android:name=".ui.act.ObjectBoxAct"/>
+        <activity android:name=".ui.act.ObjectBoxAct" />
+        <activity android:name=".ui.act.CommonCalculationAct" />
     </application>
 
 </manifest>

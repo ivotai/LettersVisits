@@ -1,6 +1,6 @@
 package com.unicorn.lettersVisits.app
 
-import com.unicorn.lettersVisits.data.model.Role
+import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.data.model.User
 
 

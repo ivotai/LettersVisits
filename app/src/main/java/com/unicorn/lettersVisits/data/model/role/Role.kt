@@ -1,4 +1,4 @@
-package com.unicorn.lettersVisits.data.model
+package com.unicorn.lettersVisits.data.model.role
 
 import com.drake.brv.item.ItemExpand
 import com.unicorn.lettersVisits.app.module.SimpleComponent

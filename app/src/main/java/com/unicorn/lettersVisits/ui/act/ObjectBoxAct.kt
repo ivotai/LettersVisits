@@ -1,6 +1,6 @@
 package com.unicorn.lettersVisits.ui.act
 
-import com.unicorn.lettersVisits.data.model.Role
+import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.data.model.User
 import com.unicorn.lettersVisits.databinding.ActObjectBoxBinding
 import com.unicorn.lettersVisits.ui.base.BaseAct

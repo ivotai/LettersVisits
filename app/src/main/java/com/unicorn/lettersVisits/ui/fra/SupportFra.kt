@@ -16,6 +16,7 @@ import com.unicorn.lettersVisits.data.model.support.SupportType
 import com.unicorn.lettersVisits.databinding.FraSupportBinding
 import com.unicorn.lettersVisits.databinding.HeadSupportBinding
 import com.unicorn.lettersVisits.databinding.ItemSupportBinding
+import com.unicorn.lettersVisits.ui.act.CommonCalculationAct
 import com.unicorn.lettersVisits.ui.act.LoginAct
 import com.unicorn.lettersVisits.ui.base.BaseFra
 import splitties.activities.start
@@ -108,16 +109,16 @@ class SupportFra : BaseFra<FraSupportBinding>() {
                         is Support -> {
                             when (item.text) {
                                 "案件流程判断辅助" -> {
-                                    // todo
+                                    ToastUtils.showShort("看不懂这个需求")
                                 }
                                 "法律条款查询辅助" -> {
-                                    // todo
+                                    ToastUtils.showShort("等待系统挂接法信系统，网址是多少？")
                                 }
                                 "语音识别服务" -> {
-                                    // todo
+                                    ToastUtils.showShort("我觉得没必要做这个功能")
                                 }
                                 "常用计算工具辅助服务" -> {
-                                    // todo
+                                    requireContext().start<CommonCalculationAct> {}
                                 }
                                 "人工智能辅助" -> {
                                     // todo

@@ -10,8 +10,8 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.RoundedGoogleMaterial
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.module.SimpleComponent
-import com.unicorn.lettersVisits.data.model.Role
-import com.unicorn.lettersVisits.data.model.RoleItemExpand
+import com.unicorn.lettersVisits.data.model.role.Role
+import com.unicorn.lettersVisits.data.model.role.RoleItemExpand
 import com.unicorn.lettersVisits.data.model.User
 import com.unicorn.lettersVisits.databinding.ItemRoleBinding
 import com.unicorn.lettersVisits.databinding.ItemUserBinding
