@@ -24,7 +24,7 @@
     },
     {
       "id": "2:2784461228617642430",
-      "lastPropertyId": "3:7526383966810058123",
+      "lastPropertyId": "4:2983621300566805876",
       "name": "User",
       "properties": [
         {
@@ -45,13 +45,72 @@
           "type": 11,
           "flags": 520,
           "relationTarget": "Role"
+        },
+        {
+          "id": "4:2983621300566805876",
+          "name": "organizationId",
+          "indexId": "3:8043480310251818922",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "Organization"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:8764066388558609841",
+      "lastPropertyId": "4:9161544921979697136",
+      "name": "Organization",
+      "properties": [
+        {
+          "id": "1:2513001831144019198",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5802339445093974357",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:2932348189146957092",
+          "name": "regionId",
+          "indexId": "2:1506423760538629879",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "Region"
+        },
+        {
+          "id": "4:9161544921979697136",
+          "name": "type",
+          "type": 5
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:3533396729093907381",
+      "lastPropertyId": "2:5163284410113695596",
+      "name": "Region",
+      "properties": [
+        {
+          "id": "1:3871703215310206436",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5163284410113695596",
+          "name": "name",
+          "type": 9
         }
       ],
       "relations": []
     }
   ],
-  "lastEntityId": "2:2784461228617642430",
-  "lastIndexId": "1:5397807005859250183",
+  "lastEntityId": "4:3533396729093907381",
+  "lastIndexId": "3:8043480310251818922",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

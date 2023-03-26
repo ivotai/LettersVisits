@@ -1,19 +1,15 @@
 package com.unicorn.lettersVisits.data.model
 
-import com.unicorn.lettersVisits.data.model.role.Role
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import io.objectbox.relation.ToOne
 
 
 @Entity
-data class User(
+data class Organization(
     @Id var id: Long = 0,
     var name: String? = null,
+    var type: Int = 0,   // 1法院,2政法委,3信访局
 ) {
-    lateinit var role: ToOne<Role>
-    lateinit var organization: ToOne<Organization>
+    lateinit var region: ToOne<Region>
 }
-
-/*
- */
