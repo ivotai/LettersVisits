@@ -6,7 +6,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.unicorn.lettersVisits.databinding.FraRole2ApplyBinding
 import com.unicorn.lettersVisits.ui.base.BaseFra
 
-class Role2ApplyFra : BaseFra<FraRole2ApplyBinding>() {
+class Role1ApplyFra : BaseFra<FraRole2ApplyBinding>() {
 
     override fun initViews() {
 
@@ -15,14 +15,14 @@ class Role2ApplyFra : BaseFra<FraRole2ApplyBinding>() {
         // init vp
         binding.vp.apply {
             offscreenPageLimit = tabCount - 1
-            adapter = object : FragmentStateAdapter(this@Role2ApplyFra) {
+            adapter = object : FragmentStateAdapter(this@Role1ApplyFra) {
 
                 override fun getItemCount() = tabCount
 
                 override fun createFragment(position: Int) = when (position) {
-                    0 -> Role2ApplyListFra()
-                    1 -> Role2ApplyListFra()
-                    2 -> Role2ApplyListFra()
+                    0 -> Role1ApplyListFra()
+                    1 -> Role1ApplyListFra()
+                    2 -> Role1ApplyListFra()
                     else -> throw IllegalArgumentException()
                 }
             }

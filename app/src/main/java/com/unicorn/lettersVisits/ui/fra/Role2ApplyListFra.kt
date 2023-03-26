@@ -7,11 +7,12 @@ import com.drake.brv.utils.setup
 import com.drake.statusbar.statusPadding
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.data.model.Apply
-import com.unicorn.lettersVisits.databinding.FraRole2ApplyListBinding
+import com.unicorn.lettersVisits.databinding.FraApplyListBinding
 import com.unicorn.lettersVisits.databinding.ItemApplyBinding
 import com.unicorn.lettersVisits.ui.base.BaseFra
 
-class Role2ApplyListFra: BaseFra<FraRole2ApplyListBinding>() {
+
+class Role2ApplyListFra : BaseFra<FraApplyListBinding>() {
 
     override fun initViews() {
         fun getApplyList(): List<Apply> {
@@ -26,7 +27,7 @@ class Role2ApplyListFra: BaseFra<FraRole2ApplyListBinding>() {
         binding.apply {
             rv.linear().divider {
                 setDivider(width = 16, dp = true)
-                includeVisible = true
+                endVisible = true
             }.setup {
                 addType<Apply>(R.layout.item_apply)
                 onBind {
@@ -38,6 +39,21 @@ class Role2ApplyListFra: BaseFra<FraRole2ApplyListBinding>() {
                 }
             }.models = getApplyList()
         }
+    }
+
+    override fun initIntents() {
+        binding.apply {
+            tvSearch.setOnClickListener {
+                ToastUtils.showShort("搜索没做")
+            }
+            ivAdd.setOnClickListener {
+                ToastUtils.showShort("添加没做")
+            }
+        }
+    }
+
+    override fun initStatusBar() {
+        binding.searchBarContainer.statusPadding()
     }
 
 }

@@ -1,18 +1,15 @@
 package com.unicorn.lettersVisits.ui.fra
 
-import com.blankj.utilcode.util.ToastUtils
 import com.drake.brv.utils.divider
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.setup
-import com.drake.statusbar.statusPadding
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.data.model.Apply
-import com.unicorn.lettersVisits.databinding.FraApplyListBinding
+import com.unicorn.lettersVisits.databinding.FraRole2ApplyListBinding
 import com.unicorn.lettersVisits.databinding.ItemApplyBinding
 import com.unicorn.lettersVisits.ui.base.BaseFra
 
-
-class ApplyListFra : BaseFra<FraApplyListBinding>() {
+class Role1ApplyListFra: BaseFra<FraRole2ApplyListBinding>() {
 
     override fun initViews() {
         fun getApplyList(): List<Apply> {
@@ -27,7 +24,7 @@ class ApplyListFra : BaseFra<FraApplyListBinding>() {
         binding.apply {
             rv.linear().divider {
                 setDivider(width = 16, dp = true)
-                endVisible = true
+                includeVisible = true
             }.setup {
                 addType<Apply>(R.layout.item_apply)
                 onBind {
@@ -39,21 +36,6 @@ class ApplyListFra : BaseFra<FraApplyListBinding>() {
                 }
             }.models = getApplyList()
         }
-    }
-
-    override fun initIntents() {
-        binding.apply {
-            tvSearch.setOnClickListener {
-                ToastUtils.showShort("搜索还没做")
-            }
-            ivAdd.setOnClickListener {
-                ToastUtils.showShort("添加还没做")
-            }
-        }
-    }
-
-    override fun initStatusBar() {
-        binding.searchBarContainer.statusPadding()
     }
 
 }
