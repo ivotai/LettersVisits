@@ -6,24 +6,17 @@ import com.drake.brv.utils.linear
 import com.drake.brv.utils.setup
 import com.drake.statusbar.statusPadding
 import com.unicorn.lettersVisits.R
+import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.Apply
 import com.unicorn.lettersVisits.databinding.FraApplyListBinding
 import com.unicorn.lettersVisits.databinding.ItemApplyBinding
 import com.unicorn.lettersVisits.ui.base.BaseFra
+import io.objectbox.kotlin.boxFor
 
 
-class Role2ApplyListFra : BaseFra<FraApplyListBinding>() {
+class Role2ApplyFra : BaseFra<FraApplyListBinding>() {
 
     override fun initViews() {
-        fun getApplyList(): List<Apply> {
-            val content = "这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容"
-            val applyList = mutableListOf<Apply>()
-            repeat(10) {
-                applyList.add(Apply(content = content))
-            }
-            return applyList
-        }
-
         binding.apply {
             rv.linear().divider {
                 setDivider(width = 16, dp = true)
@@ -37,7 +30,7 @@ class Role2ApplyListFra : BaseFra<FraApplyListBinding>() {
                         tvContent.text = model.content
                     }
                 }
-            }.models = getApplyList()
+            }.models = SimpleComponent().boxStore.boxFor<Apply>().all
         }
     }
 
