@@ -10,9 +10,9 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.RoundedGoogleMaterial
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.module.SimpleComponent
+import com.unicorn.lettersVisits.data.model.User
 import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.data.model.role.RoleItemExpand
-import com.unicorn.lettersVisits.data.model.User
 import com.unicorn.lettersVisits.databinding.ItemRoleBinding
 import com.unicorn.lettersVisits.databinding.ItemUserBinding
 import com.unicorn.lettersVisits.databinding.LayoutRoleUserListBinding
@@ -43,7 +43,12 @@ class RoleUserListView(context: Context) : ConstraintLayout(context) {
                         }
                         is User -> {
                             val binding = getBinding<ItemUserBinding>()
-                            binding.tv.text = item.name
+                            val role = item.role.target
+                            when (role.name) {
+                                "信访人" -> binding.tv.text = item.name
+                                else -> binding.tv.text =
+                                    "${item.organization.target.region.target.name} ${item.organization.target.name} ${item.name}"
+                            }
                         }
                     }
                 }

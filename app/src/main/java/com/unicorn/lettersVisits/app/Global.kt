@@ -6,7 +6,7 @@ import com.unicorn.lettersVisits.data.model.User
 
 object Global {
 
-    const val isObjectBoxMode = true
+    const val isObjectBoxMode = false
 
     var currentUser: User? = null
 
