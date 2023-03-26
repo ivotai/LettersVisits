@@ -3,15 +3,20 @@ package com.unicorn.lettersVisits.ui.fra
 import com.blankj.utilcode.util.ToastUtils
 import com.drake.brv.utils.divider
 import com.drake.brv.utils.linear
+import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
+import com.drake.channel.receiveEvent
 import com.drake.statusbar.statusPadding
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.Apply
+import com.unicorn.lettersVisits.data.model.User
 import com.unicorn.lettersVisits.databinding.FraApplyListBinding
 import com.unicorn.lettersVisits.databinding.ItemApplyBinding
+import com.unicorn.lettersVisits.ui.act.AddApplyAct
 import com.unicorn.lettersVisits.ui.base.BaseFra
 import io.objectbox.kotlin.boxFor
+import splitties.fragments.start
 
 
 class Role2ApplyFra : BaseFra<FraApplyListBinding>() {
@@ -27,6 +32,7 @@ class Role2ApplyFra : BaseFra<FraApplyListBinding>() {
                     val model = getModel<Apply>()
                     val binding = getBinding<ItemApplyBinding>()
                     binding.apply {
+                        tvUser.text = model.applicant.target.name
                         tvContent.text = model.content
                     }
                 }
@@ -40,8 +46,14 @@ class Role2ApplyFra : BaseFra<FraApplyListBinding>() {
                 ToastUtils.showShort("搜索没做")
             }
             ivAdd.setOnClickListener {
-                ToastUtils.showShort("添加没做")
+                start<AddApplyAct> {  }
             }
+        }
+    }
+
+    override fun initEvents() {
+        receiveEvent<Apply>{
+            binding.rv.models = SimpleComponent().boxStore.boxFor<Apply>().all
         }
     }
 

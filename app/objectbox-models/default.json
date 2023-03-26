@@ -107,10 +107,37 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "5:932456953393639465",
+      "lastPropertyId": "3:8411473827577891047",
+      "name": "Apply",
+      "properties": [
+        {
+          "id": "1:8039418630989402835",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8738447974837073374",
+          "name": "content",
+          "type": 9
+        },
+        {
+          "id": "3:8411473827577891047",
+          "name": "applicantId",
+          "indexId": "4:4761768335414333675",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "User"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "4:3533396729093907381",
-  "lastIndexId": "3:8043480310251818922",
+  "lastEntityId": "5:932456953393639465",
+  "lastIndexId": "4:4761768335414333675",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

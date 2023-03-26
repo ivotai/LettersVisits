@@ -59,7 +59,7 @@
     },
     {
       "id": "3:8764066388558609841",
-      "lastPropertyId": "3:2932348189146957092",
+      "lastPropertyId": "4:9161544921979697136",
       "name": "Organization",
       "properties": [
         {
@@ -80,6 +80,11 @@
           "type": 11,
           "flags": 520,
           "relationTarget": "Region"
+        },
+        {
+          "id": "4:9161544921979697136",
+          "name": "type",
+          "type": 5
         }
       ],
       "relations": []
