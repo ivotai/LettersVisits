@@ -77,8 +77,7 @@ class Role1MainAct : BaseAct<ActMain2Binding>() {
     }
 
     override fun initStatusBar() {
-        immersive(darkMode = false)
-        binding.root.statusPadding()
+        immersive(darkMode = true)
     }
 
 }

@@ -4,23 +4,16 @@ import com.drake.brv.utils.divider
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.setup
 import com.unicorn.lettersVisits.R
+import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.Apply
 import com.unicorn.lettersVisits.databinding.FraRole2ApplyListBinding
 import com.unicorn.lettersVisits.databinding.ItemApplyBinding
 import com.unicorn.lettersVisits.ui.base.BaseFra
+import io.objectbox.kotlin.boxFor
 
-class Role1ApplyListFra: BaseFra<FraRole2ApplyListBinding>() {
+class Role1ApplyListFra : BaseFra<FraRole2ApplyListBinding>() {
 
     override fun initViews() {
-        fun getApplyList(): List<Apply> {
-            val content = "这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容这是申请内容"
-            val applyList = mutableListOf<Apply>()
-            repeat(10) {
-                applyList.add(Apply(content = content))
-            }
-            return applyList
-        }
-
         binding.apply {
             rv.linear().divider {
                 setDivider(width = 16, dp = true)
@@ -31,10 +24,11 @@ class Role1ApplyListFra: BaseFra<FraRole2ApplyListBinding>() {
                     val model = getModel<Apply>()
                     val binding = getBinding<ItemApplyBinding>()
                     binding.apply {
+                        tvUser.text = model.applicant.target.name
                         tvContent.text = model.content
                     }
                 }
-            }.models = getApplyList()
+            }.models = SimpleComponent().boxStore.boxFor<Apply>().all
         }
     }
 
