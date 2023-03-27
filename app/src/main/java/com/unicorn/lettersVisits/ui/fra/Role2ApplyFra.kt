@@ -10,6 +10,7 @@ import com.drake.statusbar.statusPadding
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.Apply
+import com.unicorn.lettersVisits.data.model.Apply_
 import com.unicorn.lettersVisits.data.model.User
 import com.unicorn.lettersVisits.databinding.FraApplyListBinding
 import com.unicorn.lettersVisits.databinding.ItemApplyBinding
@@ -36,7 +37,7 @@ class Role2ApplyFra : BaseFra<FraApplyListBinding>() {
                         tvContent.text = model.content
                     }
                 }
-            }.models = SimpleComponent().boxStore.boxFor<Apply>().all
+            }.models = SimpleComponent().boxStore.boxFor<Apply>().query().order(Apply_.createTime).build().find()
         }
     }
 

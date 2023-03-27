@@ -6,6 +6,7 @@ import com.drake.brv.utils.setup
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.Apply
+import com.unicorn.lettersVisits.data.model.Apply_
 import com.unicorn.lettersVisits.databinding.FraRole2ApplyListBinding
 import com.unicorn.lettersVisits.databinding.ItemApplyBinding
 import com.unicorn.lettersVisits.ui.base.BaseFra
@@ -28,7 +29,9 @@ class Role1ApplyListFra : BaseFra<FraRole2ApplyListBinding>() {
                         tvContent.text = model.content
                     }
                 }
-            }.models = SimpleComponent().boxStore.boxFor<Apply>().all
+            }.models =
+                SimpleComponent().boxStore.boxFor<Apply>().query().order(Apply_.createTime).build()
+                    .find()
         }
     }
 

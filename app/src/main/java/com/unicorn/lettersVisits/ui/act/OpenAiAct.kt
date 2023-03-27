@@ -81,11 +81,13 @@ class OpenAiAct : BaseAct<ActOpenAiBinding>() {
 
     }
 
+private val baseUrl = "https://openai.proxy.mailjob.net"
+//    private val baseUrl = "https://hichatgpt.cc/"
     private val key = "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"
     private val modelId = "gpt-3.5-turbo"
     private val openAI = OpenAI(
         OpenAIConfig(
-            token = key, host = OpenAIHost("https://openai.proxy.mailjob.net")
+            token = key, host = OpenAIHost(baseUrl)
         )
     )
 
