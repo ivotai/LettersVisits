@@ -2,8 +2,9 @@ package com.unicorn.lettersVisits.ui.act
 
 
 import android.Manifest
-import android.widget.Toast
+import android.os.Environment.getExternalStorageDirectory
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.files.FileFilter
 import com.afollestad.materialdialogs.files.fileChooser
 import com.blankj.utilcode.util.ToastUtils
 import com.drake.channel.sendEvent
@@ -37,18 +38,22 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
 
     }
 
-    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun showFileDialog(){
-        ToastUtils.showShort("hehe")
+    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun showFileDialog() {
+        val myFilter: FileFilter = { true }
         MaterialDialog(this).show {
-            fileChooser(context) { dialog, file ->
+            fileChooser(
+                context = context, initialDirectory = getExternalStorageDirectory(), filter = myFilter
+            ) { dialog, file ->
 
                 // File selected
             }
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         // NOTE: delegate the permission handling to generated function
         onRequestPermissionsResult(requestCode, grantResults)

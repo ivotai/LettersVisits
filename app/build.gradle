@@ -12,7 +12,7 @@ android {
     defaultConfig {
         applicationId "com.unicorn.lettersVisits"
         minSdk 24
-        targetSdk 32
+        targetSdk 29
         versionCode 1
         versionName "1.0"
         multiDexEnabled = true
@@ -92,7 +92,7 @@ dependencies {
     implementation 'com.github.liangjingkanji:soft-input-event:1.0.9'
     implementation 'com.github.liangjingkanji:Net:3.5.7'
 
-    implementation 'com.afollestad.material-dialogs:files:3.2.1'
+    implementation 'com.afollestad.material-dialogs:files:3.3.0'
 
     implementation "com.github.permissions-dispatcher:permissionsdispatcher:4.9.2"
     kapt "com.github.permissions-dispatcher:permissionsdispatcher-processor:4.9.2"
