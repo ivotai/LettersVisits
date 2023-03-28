@@ -1,27 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.ruffian.library.widget.RConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:id="@+id/root"
+    app:corner_radius="100dp"
+    android:layout_marginStart="12dp"
+    android:layout_marginTop="12dp"
+    app:background_normal="@color/blue_50"
     android:layout_height="wrap_content">
 
     <com.ruffian.library.widget.RTextView
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
         android:id="@+id/tv"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="2dp"
+        android:paddingVertical="4dp"
         android:text="上传信访材料"
         android:textColor="@color/main_color"
+        android:textSize="12dp"
         android:textStyle="bold"
-        app:background_normal="@color/blue_50"
-        app:corner_radius="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.mikepenz.iconics.view.IconicsImageView
+        android:id="@+id/iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        app:iiv_color="@color/main_color"
+        app:iiv_icon="gmd-close"
+        app:iiv_size="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv"
+        app:layout_constraintTop_toTopOf="@+id/tv" />
+
+</com.ruffian.library.widget.RConstraintLayout>

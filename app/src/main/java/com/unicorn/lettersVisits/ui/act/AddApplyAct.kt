@@ -8,6 +8,7 @@ import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.files.FileFilter
 import com.afollestad.materialdialogs.files.fileChooser
 import com.drake.brv.utils.bindingAdapter
+import com.drake.brv.utils.mutable
 import com.drake.brv.utils.setup
 import com.drake.channel.sendEvent
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -50,22 +51,38 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
                     }
                 }
                 onClick(R.id.root) {
-                    val item = getModel<Any>()
-                    if (item is String) {
-                        filter = when (item) {
-                            "上传 Word 格式信访材料" -> {
-                                { it.isDirectory || it.extension == "docx" || it.extension == "doc" }
+                    when (val item = getModel<Any>()) {
+                        is String -> {
+                            filter = when (item) {
+                                "上传 Word 格式信访材料" -> {
+                                    { it.isDirectory || it.extension == "docx" || it.extension == "doc" }
+                                }
+                                "上传 PDF 格式信访材料" -> {
+                                    { it.isDirectory || it.extension == "pdf" }
+                                }
+                                "上传任意格式信访材料" -> {
+                                    { true }
+                                }
+                                else -> throw Exception("未知的文件类型")
                             }
-                            "上传 PDF 格式信访材料" -> {
-                                { it.isDirectory || it.extension == "pdf" }
-                            }
-                            "上传任意格式信访材料" -> {
-                                { true }
-                            }
-                            else -> throw Exception("未知的文件类型")
+                            showFileDialogWithPermissionCheck()
+                        }
+                        is Material -> {
+                            // do nothing
                         }
                     }
-                    showFileDialogWithPermissionCheck()
+                }
+                onClick(R.id.iv) {
+                    when (val item = getModel<Any>()) {
+                        is String -> {
+                            //
+                        }
+                        is Material -> {
+                            val position = layoutPosition
+                            binding.rv.mutable.removeAt(position) // 先删除数据
+                            binding.rv.bindingAdapter.notifyItemRemoved(position)
+                        }
+                    }
                 }
             }.models = listOf("上传 Word 格式信访材料", "上传 PDF 格式信访材料", "上传任意格式信访材料")
         }

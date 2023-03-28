@@ -27,11 +27,6 @@ class LoginAct : BaseAct<ActLoginBinding>() {
 
     override fun initIntents() {
         binding.btn1.setOnClickListener {
-            // 数据库模式
-            if (ObjectBoxAct.dataMode) {
-                start<ObjectBoxAct> {}
-                return@setOnClickListener
-            }
 
             fun showUserDialog() {
                 userDialog = MaterialDialog(this, BottomSheet()).show {
@@ -41,6 +36,8 @@ class LoginAct : BaseAct<ActLoginBinding>() {
             }
             showUserDialog()
         }
+
+        ObjectBoxAct.init()
     }
 
     private var userDialog: MaterialDialog? = null
