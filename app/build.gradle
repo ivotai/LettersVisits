@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'io.objectbox'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -11,7 +12,7 @@ android {
     defaultConfig {
         applicationId "com.unicorn.lettersVisits"
         minSdk 24
-        targetSdk 33
+        targetSdk 32
         versionCode 1
         versionName "1.0"
         multiDexEnabled = true
@@ -88,6 +89,11 @@ dependencies {
 
     implementation "com.aallam.openai:openai-client:3.2.0"
     implementation 'io.ktor:ktor-client-okhttp:2.2.4'
-implementation 'com.github.liangjingkanji:soft-input-event:1.0.9'
+    implementation 'com.github.liangjingkanji:soft-input-event:1.0.9'
     implementation 'com.github.liangjingkanji:Net:3.5.7'
+
+    implementation 'com.afollestad.material-dialogs:files:3.2.1'
+
+    implementation "com.github.permissions-dispatcher:permissionsdispatcher:4.9.2"
+    kapt "com.github.permissions-dispatcher:permissionsdispatcher-processor:4.9.2"
 }

@@ -28,7 +28,7 @@ class LoginAct : BaseAct<ActLoginBinding>() {
     override fun initIntents() {
         binding.btn1.setOnClickListener {
             // 数据库模式
-            if (Global.isObjectBoxMode) {
+            if (ObjectBoxAct.dataMode) {
                 start<ObjectBoxAct> {}
                 return@setOnClickListener
             }

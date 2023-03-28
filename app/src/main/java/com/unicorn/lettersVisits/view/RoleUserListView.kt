@@ -46,8 +46,8 @@ class RoleUserListView(context: Context) : ConstraintLayout(context) {
                             val role = item.role.target
                             when (role.name) {
                                 "信访人" -> binding.tv.text = item.name
-                                else -> binding.tv.text =
-                                    "${item.organization.target.region.target.name} ${item.organization.target.name} ${item.name}"
+                                else -> binding.tv.text = item.name
+//                                    "${item.organization.target.region.target.name} ${item.organization.target.name} ${item.name}"
                             }
                         }
                     }

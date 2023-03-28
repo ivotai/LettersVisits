@@ -16,12 +16,10 @@ class SimpleApp : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
 
-
-          startKoin {
-                androidContext(this@SimpleApp.applicationContext)
-                modules(objectBoxModule)
-            }
-
+        startKoin {
+            androidContext(this@SimpleApp.applicationContext)
+            modules(objectBoxModule)
+        }
 
         fun initStateConfig() {
             StateConfig.apply {
@@ -33,13 +31,12 @@ class SimpleApp : MultiDexApplication() {
         initStateConfig()
 
         fun initSmartRefreshLayout() {
-            SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, layout ->
+            SmartRefreshLayout.setDefaultRefreshHeaderCreator { _, _ ->
                 MaterialHeader(
                     this
                 )
             }
-
-            SmartRefreshLayout.setDefaultRefreshFooterCreator { context, layout ->
+            SmartRefreshLayout.setDefaultRefreshFooterCreator { _, _ ->
                 ClassicsFooter(
                     this
                 )

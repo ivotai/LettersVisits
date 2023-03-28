@@ -11,7 +11,6 @@ import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.Apply
 import com.unicorn.lettersVisits.data.model.Apply_
-import com.unicorn.lettersVisits.data.model.User
 import com.unicorn.lettersVisits.databinding.FraApplyListBinding
 import com.unicorn.lettersVisits.databinding.ItemApplyBinding
 import com.unicorn.lettersVisits.ui.act.AddApplyAct
@@ -37,7 +36,9 @@ class Role2ApplyFra : BaseFra<FraApplyListBinding>() {
                         tvContent.text = model.content
                     }
                 }
-            }.models = SimpleComponent().boxStore.boxFor<Apply>().query().order(Apply_.createTime).build().find()
+            }.models =
+                SimpleComponent().boxStore.boxFor<Apply>().query().orderDesc(Apply_.createTime)
+                    .build().find()
         }
     }
 
@@ -47,13 +48,13 @@ class Role2ApplyFra : BaseFra<FraApplyListBinding>() {
                 ToastUtils.showShort("搜索没做")
             }
             ivAdd.setOnClickListener {
-                start<AddApplyAct> {  }
+                start<AddApplyAct> { }
             }
         }
     }
 
     override fun initEvents() {
-        receiveEvent<Apply>{
+        receiveEvent<Apply> {
             binding.rv.models = SimpleComponent().boxStore.boxFor<Apply>().all
         }
     }
