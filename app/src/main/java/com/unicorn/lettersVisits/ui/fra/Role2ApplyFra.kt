@@ -36,9 +36,7 @@ class Role2ApplyFra : BaseFra<FraApplyListBinding>() {
                         tvContent.text = model.content
                     }
                 }
-            }.models =
-                SimpleComponent().boxStore.boxFor<Apply>().query().orderDesc(Apply_.createTime)
-                    .build().find()
+            }.models = getData()
         }
     }
 
@@ -55,9 +53,14 @@ class Role2ApplyFra : BaseFra<FraApplyListBinding>() {
 
     override fun initEvents() {
         receiveEvent<Apply> {
-            binding.rv.models = SimpleComponent().boxStore.boxFor<Apply>().all
+            binding.rv.models = getData()
+            binding.rv.smoothScrollToPosition(0)
         }
     }
+
+    private fun getData(): MutableList<Apply> =
+        SimpleComponent().boxStore.boxFor<Apply>().query().orderDesc(Apply_.createTime).build()
+            .find()
 
     override fun initStatusBar() {
         binding.searchBarContainer.statusPadding()
