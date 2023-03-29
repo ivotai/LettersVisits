@@ -21,6 +21,7 @@ import com.unicorn.lettersVisits.databinding.ActAddApplyBinding
 import com.unicorn.lettersVisits.databinding.ItemMaterialBinding
 import com.unicorn.lettersVisits.databinding.ItemMaterialUploadBinding
 import com.unicorn.lettersVisits.ui.base.BaseAct
+import io.objectbox.model.ModelProperty.addType
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 import java.io.File
@@ -53,22 +54,24 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
                 onClick(R.id.root) {
                     when (val item = getModel<Any>()) {
                         is String -> {
-                            filter = when (item) {
-                                "上传 Word 格式信访材料" -> {
-                                    { it.isDirectory || it.extension == "docx" || it.extension == "doc" }
-                                }
-                                "上传 PDF 格式信访材料" -> {
-                                    { it.isDirectory || it.extension == "pdf" }
-                                }
-                                "上传任意格式信访材料" -> {
-                                    { true }
-                                }
-                                else -> throw Exception("未知的文件类型")
-                            }
+//                            filter = when (item) {
+//                                "上传 Word 格式信访材料" -> {
+//                                    { it.isDirectory || it.extension == "docx" || it.extension == "doc" }
+//                                }
+//                                "上传 PDF 格式信访材料" -> {
+//                                    { it.isDirectory || it.extension == "pdf" }
+//                                }
+//                                "上传任意格式信访材料" -> {
+//                                    { true }
+//                                }
+//                                else -> throw Exception("未知的文件类型")
+//                            }
                             showFileDialogWithPermissionCheck()
                         }
                         is Material -> {
-                            // do nothing
+                            val position = modelPosition
+                            binding.rv.mutable.removeAt(position) // 先删除数据
+                            binding.rv.bindingAdapter.notifyItemRemoved(position)
                         }
                     }
                 }
@@ -78,13 +81,11 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
                             //
                         }
                         is Material -> {
-                            val position = layoutPosition
-                            binding.rv.mutable.removeAt(position) // 先删除数据
-                            binding.rv.bindingAdapter.notifyItemRemoved(position)
+
                         }
                     }
                 }
-            }.models = listOf("上传 Word 格式信访材料", "上传 PDF 格式信访材料", "上传任意格式信访材料")
+            }.models = listOf("上传信访材料")
         }
     }
 
@@ -116,8 +117,10 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
                 initialDirectory = File(getExternalStorageDirectory(), "Download"),
                 filter = filter
             ) { _, file ->
-                val index = binding.rv.bindingAdapter.headers.size
-                binding.rv.bindingAdapter.addHeader(Material(file), index = index, animation = true)
+                val index = binding.rv.bindingAdapter.modelCount - 1
+                binding.rv.bindingAdapter.addModels(
+                    listOf(Material(file = file)), index = index, animation = true
+                )
             }
         }
     }

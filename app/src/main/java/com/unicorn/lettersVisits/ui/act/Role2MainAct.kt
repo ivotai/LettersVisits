@@ -17,7 +17,6 @@ import com.unicorn.lettersVisits.ui.fra.SupportFra
 import me.majiajie.pagerbottomtabstrip.item.NormalItemView
 
 
-// 信访人 role2
 class Role2MainAct : BaseAct<ActMain1Binding>() {
 
     override fun initViews() {

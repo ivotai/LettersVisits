@@ -5,16 +5,12 @@ import com.unicorn.lettersVisits.data.model.Organization
 import com.unicorn.lettersVisits.data.model.Region
 import com.unicorn.lettersVisits.data.model.User
 import com.unicorn.lettersVisits.data.model.role.Role
-import com.unicorn.lettersVisits.databinding.ActObjectBoxBinding
-import com.unicorn.lettersVisits.ui.base.BaseAct
 import io.objectbox.Box
 import io.objectbox.BoxStore
-import org.koin.android.ext.android.inject
-import org.koin.java.KoinJavaComponent.inject
 
 
 // 这个界面用来执行一些数据库操作,测试
-class ObjectBoxAct () {
+class ObjectBoxAct() {
 
     companion object {
 
@@ -24,11 +20,11 @@ class ObjectBoxAct () {
         private val userBox: Box<User> = boxStore.boxFor(User::class.java)
         private val regionBox: Box<Region> = boxStore.boxFor(Region::class.java)
         private val organizationBox: Box<Organization> = boxStore.boxFor(Organization::class.java)
-        fun init(){
+        fun init() {
             if (roleBox.all.size != 0) return
 
-            val role1 = Role(name = "工作人员")
-            val role2 = Role(name = "信访人")
+            val role1 = Role(name = "部委单位工作人员")
+            val role2 = Role(name = "当事人")
             roleBox.put(role1, role2)
 
             val user1 = User(name = "张羡忠").apply {
@@ -37,7 +33,10 @@ class ObjectBoxAct () {
             val user2 = User(name = "杨间").apply {
                 role.target = role2
             }
-            userBox.put(user1, user2)
+            val user3 = User(name = "李四").apply {
+                role.target = role2
+            }
+            userBox.put(user1, user2, user3)
         }
 
     }
