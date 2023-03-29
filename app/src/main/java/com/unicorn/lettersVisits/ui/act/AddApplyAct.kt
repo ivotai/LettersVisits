@@ -26,6 +26,7 @@ import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.Global
 import com.unicorn.lettersVisits.app.baidu.FileUtil
 import com.unicorn.lettersVisits.app.module.SimpleComponent
+import com.unicorn.lettersVisits.data.model.Applicant
 import com.unicorn.lettersVisits.data.model.Apply
 import com.unicorn.lettersVisits.data.model.Material
 import com.unicorn.lettersVisits.databinding.ActAddApplyBinding
@@ -40,7 +41,6 @@ import java.util.*
 
 @RuntimePermissions
 class AddApplyAct : BaseAct<ActAddApplyBinding>() {
-
 
     override fun initViews() {
         binding.apply {
@@ -97,8 +97,11 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
         initAccessToken()
     }
 
+    // Android 10适配要点，作用域存储
+    // https://mp.weixin.qq.com/s?__biz=MzA5MzI3NjE2MA==&mid=2650249029&idx=1&sn=6ab18477950e5f4e1a14dc47ecc4f763&chksm=8863662abf14ef3c1500d64c106ab2e5a6c95e716ff6e57ba379e2aabca7b6046060ccb78af2&scene=21#wechat_redirect
     @NeedsPermission(
-        Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
     )
     fun showFileDialog() {
         MaterialDialog(this, BottomSheet()).show {
@@ -151,6 +154,7 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
         super.onDestroy()
     }
 
+    @Suppress("DEPRECATION")
     @NeedsPermission(
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -174,6 +178,7 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
         startActivityForResult(intent, 2333)
     }
 
+    @Suppress("DEPRECATION")
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -198,7 +203,15 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
         OCR.getInstance(this).recognizeIDCard(param, object : OnResultListener<IDCardResult?> {
             override fun onResult(result: IDCardResult?) {
                 if (result != null) {
-                    ToastUtils.showShort(result.toString())
+                    val applicant = Applicant(
+                        address = result.address.words,
+                        birthday = result.birthday.words,
+                        ethnic = result.birthday.words,
+                        gender = result.gender.words,
+                        idNumber = result.idNumber.words,
+                        name = result.name.words
+                    )
+                    onApplicant(applicant)
                 }
             }
 
@@ -206,6 +219,10 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
                 // do nothing
             }
         })
+    }
+
+    fun onApplicant(applicant: Applicant) {
+        // todo
     }
 
     override fun onRequestPermissionsResult(
