@@ -93,6 +93,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
     implementation 'com.github.bumptech.glide:glide:4.15.0'
+    implementation files('libs/ocrsdk.aar')
     annotationProcessor 'com.github.bumptech.glide:compiler:4.15.0'
 
     implementation "io.insert-koin:koin-android:3.3.3"

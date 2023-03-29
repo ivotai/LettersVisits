@@ -7,6 +7,11 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.files.FileFilter
 import com.afollestad.materialdialogs.files.fileChooser
+import com.baidu.ocr.sdk.OCR
+import com.baidu.ocr.sdk.OnResultListener
+import com.baidu.ocr.sdk.exception.OCRError
+import com.baidu.ocr.sdk.model.AccessToken
+import com.blankj.utilcode.util.ToastUtils
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.mutable
 import com.drake.brv.utils.setup
@@ -21,7 +26,6 @@ import com.unicorn.lettersVisits.databinding.ActAddApplyBinding
 import com.unicorn.lettersVisits.databinding.ItemMaterialBinding
 import com.unicorn.lettersVisits.databinding.ItemMaterialUploadBinding
 import com.unicorn.lettersVisits.ui.base.BaseAct
-import io.objectbox.model.ModelProperty.addType
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 import java.io.File
@@ -104,7 +108,7 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
                 finish()
             }
         }
-
+        initAccessToken()
     }
 
     @NeedsPermission(
@@ -132,5 +136,20 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
         // NOTE: delegate the permission handling to generated function
         onRequestPermissionsResult(requestCode, grantResults)
     }
+
+    private fun initAccessToken() {
+        OCR.getInstance(applicationContext).initAccessToken(object : OnResultListener<AccessToken> {
+            override fun onResult(accessToken: AccessToken) {
+                val token = accessToken.accessToken
+                ToastUtils.showShort("成了")
+            }
+
+            override fun onError(error: OCRError) {
+                error.printStackTrace()
+                ToastUtils.showShort("失败了")
+            }
+        }, applicationContext)
+    }
+
 
 }
