@@ -2,7 +2,11 @@ package com.unicorn.lettersVisits.ui.act
 
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.os.Environment.getExternalStorageDirectory
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.files.FileFilter
@@ -11,6 +15,7 @@ import com.baidu.ocr.sdk.OCR
 import com.baidu.ocr.sdk.OnResultListener
 import com.baidu.ocr.sdk.exception.OCRError
 import com.baidu.ocr.sdk.model.AccessToken
+import com.baidu.ocr.ui.camera.CameraActivity
 import com.blankj.utilcode.util.ToastUtils
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.mutable
@@ -19,6 +24,7 @@ import com.drake.channel.sendEvent
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.Global
+import com.unicorn.lettersVisits.app.baidu.FileUtil
 import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.Apply
 import com.unicorn.lettersVisits.data.model.Material
@@ -96,7 +102,7 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
     override fun initIntents() {
         binding.apply {
             tvCancel.setOnClickListener {
-                finish()
+                startOrcWithPermissionCheck()
             }
 
             tvAddApply.setOnClickListener {
@@ -151,5 +157,39 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
         }, applicationContext)
     }
 
+    @NeedsPermission(
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.CAMERA
+    )
+    fun startOrc() {
+        val intent = Intent(this, CameraActivity::class.java)
+        intent.putExtra(
+            CameraActivity.KEY_OUTPUT_FILE_PATH,
+            FileUtil.getSaveFile(application).absolutePath
+        )
+        intent.putExtra(
+            CameraActivity.KEY_NATIVE_ENABLE,
+            true
+        )
+        // KEY_NATIVE_MANUAL设置了之后CameraActivity中不再自动初始化和释放模型
+        // 请手动使用CameraNativeHelper初始化和释放模型
+        // 推荐这样做，可以避免一些activity切换导致的不必要的异常
+        intent.putExtra(
+            CameraActivity.KEY_NATIVE_MANUAL,
+            true
+        )
+        intent.putExtra(CameraActivity.KEY_CONTENT_TYPE, CameraActivity.CONTENT_TYPE_ID_CARD_FRONT)
+        startActivityForResult(intent, 2333)
+    }
 
-}
+
+
+}    private val startActivityLauncher: ActivityResultLauncher<Intent> =
+    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            //
+        } else if (it.resultCode == Activity.RESULT_CANCELED) {
+            //
+        }
+    }
