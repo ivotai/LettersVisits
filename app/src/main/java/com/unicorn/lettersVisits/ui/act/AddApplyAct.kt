@@ -2,20 +2,20 @@ package com.unicorn.lettersVisits.ui.act
 
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.os.Environment.getExternalStorageDirectory
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
-import com.afollestad.materialdialogs.files.FileFilter
 import com.afollestad.materialdialogs.files.fileChooser
 import com.baidu.ocr.sdk.OCR
 import com.baidu.ocr.sdk.OnResultListener
 import com.baidu.ocr.sdk.exception.OCRError
 import com.baidu.ocr.sdk.model.AccessToken
+import com.baidu.ocr.sdk.model.IDCardParams
+import com.baidu.ocr.sdk.model.IDCardResult
 import com.baidu.ocr.ui.camera.CameraActivity
+import com.baidu.ocr.ui.camera.CameraNativeHelper
+import com.baidu.ocr.ui.camera.CameraView
 import com.blankj.utilcode.util.ToastUtils
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.mutable
@@ -41,7 +41,6 @@ import java.util.*
 @RuntimePermissions
 class AddApplyAct : BaseAct<ActAddApplyBinding>() {
 
-    private var filter: FileFilter = { true }
 
     override fun initViews() {
         binding.apply {
@@ -62,36 +61,14 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
                     }
                 }
                 onClick(R.id.root) {
-                    when (val item = getModel<Any>()) {
+                    when (getModel<Any>()) {
                         is String -> {
-//                            filter = when (item) {
-//                                "上传 Word 格式信访材料" -> {
-//                                    { it.isDirectory || it.extension == "docx" || it.extension == "doc" }
-//                                }
-//                                "上传 PDF 格式信访材料" -> {
-//                                    { it.isDirectory || it.extension == "pdf" }
-//                                }
-//                                "上传任意格式信访材料" -> {
-//                                    { true }
-//                                }
-//                                else -> throw Exception("未知的文件类型")
-//                            }
                             showFileDialogWithPermissionCheck()
                         }
                         is Material -> {
                             val position = modelPosition
                             binding.rv.mutable.removeAt(position) // 先删除数据
                             binding.rv.bindingAdapter.notifyItemRemoved(position)
-                        }
-                    }
-                }
-                onClick(R.id.iv) {
-                    when (val item = getModel<Any>()) {
-                        is String -> {
-                            //
-                        }
-                        is Material -> {
-
                         }
                     }
                 }
@@ -102,6 +79,7 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
     override fun initIntents() {
         binding.apply {
             tvCancel.setOnClickListener {
+                // just for test
                 startOrcWithPermissionCheck()
             }
 
@@ -114,6 +92,8 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
                 finish()
             }
         }
+
+        // 初始化AccessToken
         initAccessToken()
     }
 
@@ -125,7 +105,6 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
             fileChooser(
                 context = context,
                 initialDirectory = File(getExternalStorageDirectory(), "Download"),
-                filter = filter
             ) { _, file ->
                 val index = binding.rv.bindingAdapter.modelCount - 1
                 binding.rv.bindingAdapter.addModels(
@@ -135,26 +114,41 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>, grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        // NOTE: delegate the permission handling to generated function
-        onRequestPermissionsResult(requestCode, grantResults)
-    }
-
+    private var ocrPrepared = false
     private fun initAccessToken() {
         OCR.getInstance(applicationContext).initAccessToken(object : OnResultListener<AccessToken> {
             override fun onResult(accessToken: AccessToken) {
-                val token = accessToken.accessToken
-                ToastUtils.showShort("成了")
+                ocrPrepared = true
+                initCameraNativeHelper()
             }
 
             override fun onError(error: OCRError) {
-                error.printStackTrace()
-                ToastUtils.showShort("失败了")
+                // do nothing
             }
         }, applicationContext)
+    }
+
+    private fun initCameraNativeHelper() {
+        //  初始化本地质量控制模型,释放代码在onDestroy中
+        //  调用身份证扫描必须加上 intent.putExtra(CameraActivity.KEY_NATIVE_MANUAL, true); 关闭自动初始化和释放本地模型
+        CameraNativeHelper.init(
+            this, OCR.getInstance(this).license
+        ) { errorCode, _ ->
+            ocrPrepared = false
+            val msg: String = when (errorCode) {
+                CameraView.NATIVE_SOLOAD_FAIL -> "加载so失败，请确保apk中存在ui部分的so"
+                CameraView.NATIVE_AUTH_FAIL -> "授权本地质量控制token获取失败"
+                CameraView.NATIVE_INIT_FAIL -> "本地质量控制"
+                else -> errorCode.toString()
+            }
+            ToastUtils.showShort(msg)
+        }
+    }
+
+    override fun onDestroy() {
+        // 释放本地质量控制模型
+        CameraNativeHelper.release()
+        super.onDestroy()
     }
 
     @NeedsPermission(
@@ -165,31 +159,61 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
     fun startOrc() {
         val intent = Intent(this, CameraActivity::class.java)
         intent.putExtra(
-            CameraActivity.KEY_OUTPUT_FILE_PATH,
-            FileUtil.getSaveFile(application).absolutePath
+            CameraActivity.KEY_OUTPUT_FILE_PATH, FileUtil.getSaveFile(application).absolutePath
         )
         intent.putExtra(
-            CameraActivity.KEY_NATIVE_ENABLE,
-            true
+            CameraActivity.KEY_NATIVE_ENABLE, true
         )
         // KEY_NATIVE_MANUAL设置了之后CameraActivity中不再自动初始化和释放模型
         // 请手动使用CameraNativeHelper初始化和释放模型
         // 推荐这样做，可以避免一些activity切换导致的不必要的异常
         intent.putExtra(
-            CameraActivity.KEY_NATIVE_MANUAL,
-            true
+            CameraActivity.KEY_NATIVE_MANUAL, true
         )
         intent.putExtra(CameraActivity.KEY_CONTENT_TYPE, CameraActivity.CONTENT_TYPE_ID_CARD_FRONT)
         startActivityForResult(intent, 2333)
     }
 
-
-
-}    private val startActivityLauncher: ActivityResultLauncher<Intent> =
-    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it.resultCode == Activity.RESULT_OK) {
-            //
-        } else if (it.resultCode == Activity.RESULT_CANCELED) {
-            //
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 2333 && resultCode == RESULT_OK) {
+            if (data != null) {
+                val filePath = FileUtil.getSaveFile(applicationContext).absolutePath
+                recIDCard(filePath)
+            }
         }
     }
+
+    private fun recIDCard(filePath: String) {
+        val param = IDCardParams()
+        param.imageFile = File(filePath)
+        // 设置身份证正反面
+        param.idCardSide = IDCardParams.ID_CARD_SIDE_FRONT
+        // 设置方向检测
+        param.isDetectDirection = true
+        // 设置图像参数压缩质量0-100, 越大图像质量越好但是请求时间越长。 不设置则默认值为20
+        param.imageQuality = 20
+        param.setDetectRisk(true)
+        OCR.getInstance(this).recognizeIDCard(param, object : OnResultListener<IDCardResult?> {
+            override fun onResult(result: IDCardResult?) {
+                if (result != null) {
+                    ToastUtils.showShort(result.toString())
+                }
+            }
+
+            override fun onError(error: OCRError) {
+                // do nothing
+            }
+        })
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        // NOTE: delegate the permission handling to generated function
+        onRequestPermissionsResult(requestCode, grantResults)
+    }
+
+}

@@ -1,0 +1,64 @@
+{
+  "direction": 0,
+  "words_result": {
+    "姓名": {
+      "location": {
+        "top": 172,
+        "left": 315,
+        "width": 156,
+        "height": 60
+      },
+      "words": "任佳健"
+    },
+    "民族": {
+      "location": {
+        "top": 279,
+        "left": 542,
+        "width": 42,
+        "height": 46
+      },
+      "words": "汉"
+    },
+    "住址": {
+      "location": {
+        "top": 462,
+        "left": 298,
+        "width": 486,
+        "height": 113
+      },
+      "words": "上海市虹口区山阴路57弄121号"
+    },
+    "公民身份号码": {
+      "location": {
+        "top": 702,
+        "left": 485,
+        "width": 654,
+        "height": 62
+      },
+      "words": "310109199101190576"
+    },
+    "出生": {
+      "location": {
+        "top": 366,
+        "left": 304,
+        "width": 383,
+        "height": 49
+      },
+      "words": "19910119"
+    },
+    "性别": {
+      "location": {
+        "top": 274,
+        "left": 300,
+        "width": 42,
+        "height": 47
+      },
+      "words": "男"
+    }
+  },
+  "words_result_num": 6,
+  "idcard_number_type": 1,
+  "image_status": "normal",
+  "risk_type": "normal",
+  "log_id": 1641030710952475982
+}
