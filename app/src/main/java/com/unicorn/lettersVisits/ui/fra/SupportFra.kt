@@ -96,7 +96,7 @@ class SupportFra : BaseFra<FraSupportBinding>() {
                         is SupportHeader -> {
                             getBinding<HeadSupportBinding>().apply {
                                 tvUser.text = Global.currentUser!!.name
-                                tvRole.text = Global.currentRole!!.name
+                                tvRole.text = Global.currentRole!!.roleName
                             }
                         }
                         is SupportDivider -> {

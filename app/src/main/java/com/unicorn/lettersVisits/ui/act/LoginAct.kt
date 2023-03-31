@@ -42,7 +42,7 @@ class LoginAct : BaseAct<ActLoginBinding>() {
             }
         }
         // 初始化本地数据
-        ObjectBoxAct.init()
+        ObjectBoxHelper.init()
     }
 
 

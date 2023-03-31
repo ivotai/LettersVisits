@@ -13,7 +13,7 @@ data class User(
     @Id var id: Long = 0,
     var username: String? = null,
     var password: String? = null,
-    @Convert(converter = RoleConverter::class, dbType = Int::class) var role: Role? = null,
+    @Convert(converter = RoleConverter::class, dbType = String::class) var role: Role? = null,
 
     var address: String? = null,
     var birthday: String? = null,
