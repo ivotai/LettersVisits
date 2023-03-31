@@ -45,11 +45,3 @@ fun ViewPager2.removeEdgeEffect() {
 
 
 //fun Long.toDisplayDateFormat(): String = DateTime(this).toString(displayDateFormat)
-
-@ColorInt
-fun Context.getAttrColor(
-    @AttrRes attrColor: Int, typedValue: TypedValue = TypedValue(), resolveRefs: Boolean = true
-): Int {
-    theme.resolveAttribute(attrColor, typedValue, resolveRefs)
-    return typedValue.data
-}

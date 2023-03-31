@@ -14,9 +14,6 @@ import com.baidu.ocr.ui.camera.CameraNativeHelper
 import com.baidu.ocr.ui.camera.CameraView
 import com.blankj.utilcode.util.ToastUtils
 import com.unicorn.lettersVisits.app.baidu.FileUtil
-import com.unicorn.lettersVisits.app.initialPassword
-import com.unicorn.lettersVisits.data.model.User
-import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.ui.base.BaseAct
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
@@ -25,7 +22,7 @@ import java.io.File
 @RuntimePermissions
 abstract class BaiduOrcAct<VB : ViewBinding>: BaseAct<VB>() {
 
-    abstract fun onResult(result: IDCardResult)
+    abstract fun onOrcResult(result: IDCardResult)
 
     private var ocrPrepared = false
 

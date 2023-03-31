@@ -2,21 +2,11 @@ package com.unicorn.lettersVisits.ui.act
 
 
 import android.Manifest
-import android.content.Intent
 import android.os.Environment.getExternalStorageDirectory
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.files.fileChooser
-import com.baidu.ocr.sdk.OCR
-import com.baidu.ocr.sdk.OnResultListener
-import com.baidu.ocr.sdk.exception.OCRError
-import com.baidu.ocr.sdk.model.AccessToken
-import com.baidu.ocr.sdk.model.IDCardParams
 import com.baidu.ocr.sdk.model.IDCardResult
-import com.baidu.ocr.ui.camera.CameraActivity
-import com.baidu.ocr.ui.camera.CameraNativeHelper
-import com.baidu.ocr.ui.camera.CameraView
-import com.blankj.utilcode.util.ToastUtils
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.mutable
 import com.drake.brv.utils.setup
@@ -24,7 +14,6 @@ import com.drake.channel.sendEvent
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.Global
-import com.unicorn.lettersVisits.app.baidu.FileUtil
 import com.unicorn.lettersVisits.app.initialPassword
 import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.Material
@@ -34,7 +23,6 @@ import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.databinding.ActAddApplyBinding
 import com.unicorn.lettersVisits.databinding.ItemMaterialBinding
 import com.unicorn.lettersVisits.databinding.ItemMaterialUploadBinding
-import com.unicorn.lettersVisits.ui.base.BaseAct
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 import java.io.File
@@ -43,7 +31,7 @@ import java.util.*
 
 @RuntimePermissions
 class AddPetitionAct : BaiduOrcAct<ActAddApplyBinding>() {
-    override fun onResult(result: IDCardResult) {
+    override fun onOrcResult(result: IDCardResult) {
         val user = User(
             username = result.name.words,
             password = initialPassword,
@@ -55,6 +43,7 @@ class AddPetitionAct : BaiduOrcAct<ActAddApplyBinding>() {
             idNumber = result.idNumber.words,
             name = result.name.words
         )
+        sendEvent(user)
     }
 
     override fun initViews() {
@@ -78,7 +67,7 @@ class AddPetitionAct : BaiduOrcAct<ActAddApplyBinding>() {
                 onClick(R.id.root) {
                     when (getModel<Any>()) {
                         is String -> {
-                            showFileDialog()
+                            showFileDialogWithPermissionCheck()
                         }
                         is Material -> {
                             val position = modelPosition
