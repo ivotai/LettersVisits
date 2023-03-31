@@ -20,7 +20,6 @@ class LoginAct : BaseAct<ActLoginBinding>() {
 
     override fun initViews() {
         binding.apply {
-            //
             btn1.helper.backgroundColorPressed = ColorUtils.blendARGB(
                 color(R.color.main_color), Color.WHITE, 0.3f
             )
@@ -51,7 +50,7 @@ class LoginAct : BaseAct<ActLoginBinding>() {
         receiveEvent<User> {
             userDialog?.dismiss()
             Global.currentUser = it
-            if (Global.currentRole == Role.PETITIONER) start<PetitionerMainAct>() else start<Role1MainAct>()
+            if (Global.currentRole == Role.PETITIONER) start<PetitionerMainAct>() else start<StaffMainAct>()
             finish()
         }
     }

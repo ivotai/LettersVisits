@@ -4,7 +4,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.blankj.utilcode.util.ColorUtils
 import com.drake.statusbar.immersive
-import com.drake.statusbar.statusPadding
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.googlematerial.RoundedGoogleMaterial
@@ -18,7 +17,7 @@ import com.unicorn.lettersVisits.ui.fra.SupportFra
 import me.majiajie.pagerbottomtabstrip.item.NormalItemView
 
 
-class Role1MainAct : BaseAct<ActMain2Binding>() {
+class StaffMainAct : BaseAct<ActMain2Binding>() {
 
     override fun initViews() {
 
@@ -28,7 +27,7 @@ class Role1MainAct : BaseAct<ActMain2Binding>() {
         binding.vp.apply {
             isUserInputEnabled = false
             offscreenPageLimit = tabCount - 1
-            adapter = object : FragmentStateAdapter(this@Role1MainAct) {
+            adapter = object : FragmentStateAdapter(this@StaffMainAct) {
 
                 override fun getItemCount() = tabCount
 

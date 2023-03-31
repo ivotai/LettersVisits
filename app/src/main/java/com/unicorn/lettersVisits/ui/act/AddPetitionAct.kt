@@ -42,11 +42,11 @@ import java.util.*
 
 
 @RuntimePermissions
-class AddApplyAct : BaseAct<ActAddApplyBinding>() {
+class AddPetitionAct : BaseAct<ActAddApplyBinding>() {
 
     override fun initViews() {
         binding.apply {
-            rv.layoutManager = FlexboxLayoutManager(this@AddApplyAct)
+            rv.layoutManager = FlexboxLayoutManager(this@AddPetitionAct)
             rv.setup {
                 addType<String>(R.layout.item_material_upload)
                 addType<Material>(R.layout.item_material)
@@ -121,6 +121,7 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
     }
 
     private var ocrPrepared = false
+
     private fun initAccessToken() {
         OCR.getInstance(applicationContext).initAccessToken(object : OnResultListener<AccessToken> {
             override fun onResult(accessToken: AccessToken) {

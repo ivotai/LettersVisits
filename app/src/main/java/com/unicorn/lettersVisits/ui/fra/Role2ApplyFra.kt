@@ -13,7 +13,7 @@ import com.unicorn.lettersVisits.data.model.Petition
 import com.unicorn.lettersVisits.data.model.Petition_
 import com.unicorn.lettersVisits.databinding.FraApplyListBinding
 import com.unicorn.lettersVisits.databinding.ItemApplyBinding
-import com.unicorn.lettersVisits.ui.act.AddApplyAct
+import com.unicorn.lettersVisits.ui.act.AddPetitionAct
 import com.unicorn.lettersVisits.ui.base.BaseFra
 import io.objectbox.kotlin.boxFor
 import splitties.fragments.start
@@ -46,7 +46,7 @@ class Role2ApplyFra : BaseFra<FraApplyListBinding>() {
                 ToastUtils.showShort("搜索没做")
             }
             ivAdd.setOnClickListener {
-                start<AddApplyAct> { }
+                start<AddPetitionAct> { }
             }
         }
     }
