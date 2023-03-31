@@ -9,10 +9,17 @@ import io.objectbox.relation.ToOne
 @Entity
 data class User(
     @Id var id: Long = 0,
+    var username: String? = null,
+    var password: String? = null,
+    var address: String? = null,
+    var birthday: String? = null,
+    var ethnic: String? = null,
+    var gender: String? = null,
+    var idNumber: String? = null,
     var name: String? = null,
 ) {
     lateinit var role: ToOne<Role>
-    lateinit var organization: ToOne<Organization>
+    lateinit var department: ToOne<Department>
 }
 
 /*

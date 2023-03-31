@@ -24,7 +24,7 @@
     },
     {
       "id": "2:2784461228617642430",
-      "lastPropertyId": "4:2983621300566805876",
+      "lastPropertyId": "12:3448862909704449770",
       "name": "User",
       "properties": [
         {
@@ -47,44 +47,47 @@
           "relationTarget": "Role"
         },
         {
-          "id": "4:2983621300566805876",
-          "name": "organizationId",
-          "indexId": "3:8043480310251818922",
-          "type": 11,
-          "flags": 520,
-          "relationTarget": "Organization"
-        }
-      ],
-      "relations": []
-    },
-    {
-      "id": "3:8764066388558609841",
-      "lastPropertyId": "4:9161544921979697136",
-      "name": "Organization",
-      "properties": [
-        {
-          "id": "1:2513001831144019198",
-          "name": "id",
-          "type": 6,
-          "flags": 1
-        },
-        {
-          "id": "2:5802339445093974357",
-          "name": "name",
+          "id": "5:6307140673130955454",
+          "name": "username",
           "type": 9
         },
         {
-          "id": "3:2932348189146957092",
-          "name": "regionId",
-          "indexId": "2:1506423760538629879",
-          "type": 11,
-          "flags": 520,
-          "relationTarget": "Region"
+          "id": "6:3111471038179514042",
+          "name": "password",
+          "type": 9
         },
         {
-          "id": "4:9161544921979697136",
-          "name": "type",
-          "type": 5
+          "id": "7:4850809609939208984",
+          "name": "address",
+          "type": 9
+        },
+        {
+          "id": "8:3956413296619411335",
+          "name": "birthday",
+          "type": 9
+        },
+        {
+          "id": "9:3225483704281906902",
+          "name": "ethnic",
+          "type": 9
+        },
+        {
+          "id": "10:5727768170202130584",
+          "name": "gender",
+          "type": 9
+        },
+        {
+          "id": "11:1457667603520702723",
+          "name": "idNumber",
+          "type": 9
+        },
+        {
+          "id": "12:3448862909704449770",
+          "name": "departmentId",
+          "indexId": "7:2330793982678989462",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "Department"
         }
       ],
       "relations": []
@@ -109,47 +112,96 @@
       "relations": []
     },
     {
-      "id": "5:932456953393639465",
-      "lastPropertyId": "4:3797189959267813729",
-      "name": "Apply",
+      "id": "6:2344817862223472093",
+      "lastPropertyId": "4:7193763175569441481",
+      "name": "Department",
       "properties": [
         {
-          "id": "1:8039418630989402835",
+          "id": "1:2639066223106665449",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:8738447974837073374",
+          "id": "2:4606217210810145514",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:8710424640054073441",
+          "name": "departmentType",
+          "type": 5
+        },
+        {
+          "id": "4:7193763175569441481",
+          "name": "regionId",
+          "indexId": "5:6021507022090132029",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "Region"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "7:6479716510433386145",
+      "lastPropertyId": "4:5172826573291564348",
+      "name": "Petition",
+      "properties": [
+        {
+          "id": "1:6993417803273093055",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5038468385092910325",
           "name": "content",
           "type": 9
         },
         {
-          "id": "3:8411473827577891047",
-          "name": "applicantId",
-          "indexId": "4:4761768335414333675",
+          "id": "3:8556541730377879085",
+          "name": "createTime",
+          "type": 10
+        },
+        {
+          "id": "4:5172826573291564348",
+          "name": "petitionerId",
+          "indexId": "6:3968782122995247682",
           "type": 11,
           "flags": 520,
           "relationTarget": "User"
-        },
-        {
-          "id": "4:3797189959267813729",
-          "name": "createTime",
-          "type": 10
         }
       ],
       "relations": []
     }
   ],
-  "lastEntityId": "5:932456953393639465",
-  "lastIndexId": "4:4761768335414333675",
+  "lastEntityId": "7:6479716510433386145",
+  "lastIndexId": "7:2330793982678989462",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
-  "retiredEntityUids": [],
-  "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredEntityUids": [
+    8764066388558609841,
+    932456953393639465
+  ],
+  "retiredIndexUids": [
+    1506423760538629879,
+    8043480310251818922,
+    4761768335414333675
+  ],
+  "retiredPropertyUids": [
+    2513001831144019198,
+    5802339445093974357,
+    2932348189146957092,
+    9161544921979697136,
+    2983621300566805876,
+    8039418630989402835,
+    8738447974837073374,
+    8411473827577891047,
+    3797189959267813729
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

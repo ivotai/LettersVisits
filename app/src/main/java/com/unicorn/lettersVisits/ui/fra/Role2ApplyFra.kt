@@ -9,8 +9,8 @@ import com.drake.channel.receiveEvent
 import com.drake.statusbar.statusPadding
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.module.SimpleComponent
-import com.unicorn.lettersVisits.data.model.Apply
-import com.unicorn.lettersVisits.data.model.Apply_
+import com.unicorn.lettersVisits.data.model.Petition
+import com.unicorn.lettersVisits.data.model.Petition_
 import com.unicorn.lettersVisits.databinding.FraApplyListBinding
 import com.unicorn.lettersVisits.databinding.ItemApplyBinding
 import com.unicorn.lettersVisits.ui.act.AddApplyAct
@@ -27,12 +27,12 @@ class Role2ApplyFra : BaseFra<FraApplyListBinding>() {
                 setDivider(width = 16, dp = true)
                 endVisible = true
             }.setup {
-                addType<Apply>(R.layout.item_apply)
+                addType<Petition>(R.layout.item_apply)
                 onBind {
-                    val model = getModel<Apply>()
+                    val model = getModel<Petition>()
                     val binding = getBinding<ItemApplyBinding>()
                     binding.apply {
-                        tvUser.text = model.applicant.target.name
+                        tvUser.text = model.petitioner.target.name
                         tvContent.text = model.content
                     }
                 }
@@ -52,14 +52,14 @@ class Role2ApplyFra : BaseFra<FraApplyListBinding>() {
     }
 
     override fun initEvents() {
-        receiveEvent<Apply> {
+        receiveEvent<Petition> {
             binding.rv.models = getData()
             binding.rv.smoothScrollToPosition(0)
         }
     }
 
-    private fun getData(): MutableList<Apply> =
-        SimpleComponent().boxStore.boxFor<Apply>().query().orderDesc(Apply_.createTime).build()
+    private fun getData(): MutableList<Petition> =
+        SimpleComponent().boxStore.boxFor<Petition>().query().orderDesc(Petition_.createTime).build()
             .find()
 
     override fun initStatusBar() {

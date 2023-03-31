@@ -110,7 +110,7 @@
     },
     {
       "id": "5:932456953393639465",
-      "lastPropertyId": "3:8411473827577891047",
+      "lastPropertyId": "4:3797189959267813729",
       "name": "Apply",
       "properties": [
         {
@@ -131,6 +131,11 @@
           "type": 11,
           "flags": 520,
           "relationTarget": "User"
+        },
+        {
+          "id": "4:3797189959267813729",
+          "name": "createTime",
+          "type": 10
         }
       ],
       "relations": []

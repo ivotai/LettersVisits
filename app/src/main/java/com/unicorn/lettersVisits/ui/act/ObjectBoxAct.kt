@@ -1,7 +1,7 @@
 package com.unicorn.lettersVisits.ui.act
 
 import com.unicorn.lettersVisits.app.module.SimpleComponent
-import com.unicorn.lettersVisits.data.model.Organization
+import com.unicorn.lettersVisits.data.model.Department
 import com.unicorn.lettersVisits.data.model.Region
 import com.unicorn.lettersVisits.data.model.User
 import com.unicorn.lettersVisits.data.model.role.Role
@@ -19,7 +19,7 @@ class ObjectBoxAct() {
         private val roleBox: Box<Role> = boxStore.boxFor(Role::class.java)
         private val userBox: Box<User> = boxStore.boxFor(User::class.java)
         private val regionBox: Box<Region> = boxStore.boxFor(Region::class.java)
-        private val organizationBox: Box<Organization> = boxStore.boxFor(Organization::class.java)
+        private val departmentBox: Box<Department> = boxStore.boxFor(Department::class.java)
         fun init() {
             if (roleBox.all.size != 0) return
 

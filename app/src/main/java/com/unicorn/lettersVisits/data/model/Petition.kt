@@ -3,13 +3,14 @@ package com.unicorn.lettersVisits.data.model
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import io.objectbox.relation.ToOne
+import java.util.Date
 
 
 @Entity
-data class Organization(
+data class Petition(
     @Id var id: Long = 0,
-    var name: String? = null,
-    var type: Int = 0,   // 1法院,2政法委,3信访局
+    var content: String? = null,
+    var createTime:Date? = null,
 ) {
-    lateinit var region: ToOne<Region>
+    lateinit var petitioner: ToOne<User>
 }

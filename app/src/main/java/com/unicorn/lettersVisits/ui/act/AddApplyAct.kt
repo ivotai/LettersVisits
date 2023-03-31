@@ -27,7 +27,7 @@ import com.unicorn.lettersVisits.app.Global
 import com.unicorn.lettersVisits.app.baidu.FileUtil
 import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.Applicant
-import com.unicorn.lettersVisits.data.model.Apply
+import com.unicorn.lettersVisits.data.model.Petition
 import com.unicorn.lettersVisits.data.model.Material
 import com.unicorn.lettersVisits.databinding.ActAddApplyBinding
 import com.unicorn.lettersVisits.databinding.ItemMaterialBinding
@@ -84,11 +84,11 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
             }
 
             tvAddApply.setOnClickListener {
-                val apply = Apply(content = etContent.text.toString(), createTime = Date()).apply {
-                    applicant.target = Global.currentUser
+                val petition = Petition(content = etContent.text.toString(), createTime = Date()).apply {
+                    petitioner.target = Global.currentUser
                 }
-                SimpleComponent().boxStore.boxFor(Apply::class.java).put(apply)
-                sendEvent(apply)
+                SimpleComponent().boxStore.boxFor(Petition::class.java).put(petition)
+                sendEvent(petition)
                 finish()
             }
         }
