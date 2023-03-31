@@ -9,7 +9,6 @@ import com.dylanc.viewbinding.inflate
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.RoundedGoogleMaterial
 import com.unicorn.lettersVisits.R
-import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.User
 import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.data.model.role.RoleItemExpand
@@ -43,12 +42,7 @@ class RoleUserListView(context: Context) : ConstraintLayout(context) {
                         }
                         is User -> {
                             val binding = getBinding<ItemUserBinding>()
-                            val role = item.role.target
-                            when (role.name) {
-                                "当事人" -> binding.tv.text = item.name
-                                else -> binding.tv.text = item.name
-//                                    "${item.department.target.region.target.name} ${item.department.target.name} ${item.name}"
-                            }
+                            binding.tv.text = item.name
                         }
                     }
                 }
@@ -65,7 +59,7 @@ class RoleUserListView(context: Context) : ConstraintLayout(context) {
                 }
 
             }.models =
-                SimpleComponent().boxStore.boxFor(Role::class.java).all.map { RoleItemExpand(it) }
+                Role.values().map { RoleItemExpand(it) }
         }
     }
 

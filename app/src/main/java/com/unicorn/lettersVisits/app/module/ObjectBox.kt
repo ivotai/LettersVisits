@@ -1,9 +1,6 @@
 package com.unicorn.lettersVisits.app.module
 
 import com.unicorn.lettersVisits.data.model.MyObjectBox
-import com.unicorn.lettersVisits.data.model.role.Role
-import com.unicorn.lettersVisits.data.model.User
-import io.objectbox.BoxStore
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 

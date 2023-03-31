@@ -16,25 +16,20 @@ class ObjectBoxAct() {
 
         private val boxStore: BoxStore by lazy { SimpleComponent().boxStore }
 
-        private val roleBox: Box<Role> = boxStore.boxFor(Role::class.java)
-        private val userBox: Box<User> = boxStore.boxFor(User::class.java)
+         private val userBox: Box<User> = boxStore.boxFor(User::class.java)
         private val regionBox: Box<Region> = boxStore.boxFor(Region::class.java)
         private val departmentBox: Box<Department> = boxStore.boxFor(Department::class.java)
         fun init() {
-            if (roleBox.all.size != 0) return
 
-            val role1 = Role(name = "部委单位工作人员")
-            val role2 = Role(name = "当事人")
-            roleBox.put(role1, role2)
 
             val user1 = User(name = "张羡忠").apply {
-                role.target = role1
+                role = Role.STAFF
             }
             val user2 = User(name = "杨间").apply {
-                role.target = role2
+                role= Role.PETITIONER
             }
             val user3 = User(name = "李四").apply {
-                role.target = role2
+                role =Role.PETITIONER
             }
             userBox.put(user1, user2, user3)
         }

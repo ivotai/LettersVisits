@@ -1,14 +1,14 @@
 package com.unicorn.lettersVisits.app
 
-import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.data.model.User
+import com.unicorn.lettersVisits.data.model.role.Role
 
 
 object Global {
 
     var currentUser: User? = null
 
-    val currentRole: Role? get() = currentUser?.role?.target
+    val currentRole: Role? get() = currentUser?.role
 
     val isLogin get() = currentUser != null
 

@@ -57,7 +57,7 @@ class OpenAiAct : BaseAct<ActOpenAiBinding>() {
                         R.layout.item_chat_ai
                     }
                     else -> {
-                        throw IllegalStateException("Unknown Chat Role")
+                        throw IllegalStateException("Unknown Chat Roles")
                     }
                 }
             }
