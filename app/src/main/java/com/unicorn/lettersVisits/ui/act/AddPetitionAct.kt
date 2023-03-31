@@ -5,11 +5,13 @@ import android.Manifest
 import android.os.Environment.getExternalStorageDirectory
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
+import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.files.fileChooser
 import com.baidu.ocr.sdk.model.IDCardResult
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.mutable
 import com.drake.brv.utils.setup
+import com.drake.channel.receiveEvent
 import com.drake.channel.sendEvent
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.unicorn.lettersVisits.R
@@ -19,10 +21,12 @@ import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.Material
 import com.unicorn.lettersVisits.data.model.Petition
 import com.unicorn.lettersVisits.data.model.User
+import com.unicorn.lettersVisits.data.model.event.StartOrc
 import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.databinding.ActAddApplyBinding
 import com.unicorn.lettersVisits.databinding.ItemMaterialBinding
 import com.unicorn.lettersVisits.databinding.ItemMaterialUploadBinding
+import com.unicorn.lettersVisits.view.PetitionerSelectView
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 import java.io.File
@@ -84,8 +88,7 @@ class AddPetitionAct : BaiduOrcAct<ActAddApplyBinding>() {
         super.initIntents()
         binding.apply {
             tvCancel.setOnClickListener {
-                // just for test
-                startOrcWithPermissionCheck()
+                finish()
             }
 
             tvAddApply.setOnClickListener {
@@ -96,6 +99,12 @@ class AddPetitionAct : BaiduOrcAct<ActAddApplyBinding>() {
                 SimpleComponent().boxStore.boxFor(Petition::class.java).put(petition)
                 sendEvent(petition)
                 finish()
+            }
+
+            tvPetitioner.setOnClickListener {
+                dialogHolder = MaterialDialog(this@AddPetitionAct, BottomSheet()).show {
+                    customView(view = PetitionerSelectView(this@AddPetitionAct))
+                }
             }
         }
     }
@@ -119,6 +128,23 @@ class AddPetitionAct : BaiduOrcAct<ActAddApplyBinding>() {
             }
         }
     }
+
+    private var dialogHolder: MaterialDialog? = null
+
+
+    override fun initEvents() {
+        receiveEvent<StartOrc> {
+            dialogHolder?.dismiss()
+            startOrcWithPermissionCheck()
+        }
+        receiveEvent<User> {
+            dialogHolder?.dismiss()
+            petitioner = it
+            binding.tvPetitioner.text = it.name
+        }
+    }
+
+    private var petitioner: User? = null
 
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray

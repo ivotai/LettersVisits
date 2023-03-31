@@ -35,4 +35,9 @@ class Role1ApplyListFra : BaseFra<FraRole2ApplyListBinding>() {
         }
     }
 
+    override fun initIntents() {
+        binding.apply {
+
+        }
+    }
 }
