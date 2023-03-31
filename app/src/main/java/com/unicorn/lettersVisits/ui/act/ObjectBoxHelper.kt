@@ -22,7 +22,7 @@ class ObjectBoxHelper() {
         private val departmentBox: Box<Department> = boxStore.boxFor(Department::class.java)
 
         fun init() {
-            if (userBox.all.size != 0) {
+            if (userBox.isEmpty) {
                 userBox.put(
                     User(name = "张羡忠", role = Role.STAFF),
                     User(name = "杨间", role = Role.PETITIONER),

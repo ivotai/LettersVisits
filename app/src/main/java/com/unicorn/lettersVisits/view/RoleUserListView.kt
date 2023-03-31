@@ -33,7 +33,7 @@ class RoleUserListView(context: Context) : ConstraintLayout(context) {
                     when (val item = getModel<Any>()) {
                         is RoleItemExpand -> {
                             val binding = getBinding<ItemRoleBinding>()
-                            binding.tv.text = item.role.name
+                            binding.tv.text = item.role.roleName
 
                             // 设置图标
                             val iconicsDrawable = binding.iv.drawable as IconicsDrawable
@@ -58,8 +58,7 @@ class RoleUserListView(context: Context) : ConstraintLayout(context) {
                     }
                 }
 
-            }.models =
-                Role.values().map { RoleItemExpand(it) }
+            }.models = Role.values().map { RoleItemExpand(it) }
         }
     }
 
