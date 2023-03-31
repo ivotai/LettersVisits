@@ -5,7 +5,7 @@ import io.objectbox.annotation.Id
 
 
 @Entity
-data class Region(
+data class Jurisdiction(
     @Id var id: Long = 0,
     var name: String? = null,
 ) {

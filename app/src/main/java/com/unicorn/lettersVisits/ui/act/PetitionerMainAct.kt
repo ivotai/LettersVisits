@@ -17,7 +17,7 @@ import com.unicorn.lettersVisits.ui.fra.SupportFra
 import me.majiajie.pagerbottomtabstrip.item.NormalItemView
 
 
-class Role2MainAct : BaseAct<ActMain1Binding>() {
+class PetitionerMainAct : BaseAct<ActMain1Binding>() {
 
     override fun initViews() {
 
@@ -27,7 +27,7 @@ class Role2MainAct : BaseAct<ActMain1Binding>() {
         binding.vp.apply {
             isUserInputEnabled = false
             offscreenPageLimit = tabCount - 1
-            adapter = object : FragmentStateAdapter(this@Role2MainAct) {
+            adapter = object : FragmentStateAdapter(this@PetitionerMainAct) {
 
                 override fun getItemCount() = tabCount
 

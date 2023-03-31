@@ -9,6 +9,7 @@ import com.drake.channel.receiveEvent
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.Global
 import com.unicorn.lettersVisits.data.model.User
+import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.databinding.ActLoginBinding
 import com.unicorn.lettersVisits.ui.base.BaseAct
 import com.unicorn.lettersVisits.view.RoleUserListView
@@ -50,8 +51,7 @@ class LoginAct : BaseAct<ActLoginBinding>() {
         receiveEvent<User> {
             userDialog?.dismiss()
             Global.currentUser = it
-            // 信访人
-            if (Global.currentRole!!.name != "当事人") start<Role1MainAct>() else start<Role2MainAct>()
+            if (Global.currentRole == Role.PETITIONER) start<PetitionerMainAct>() else start<Role1MainAct>()
             finish()
         }
     }

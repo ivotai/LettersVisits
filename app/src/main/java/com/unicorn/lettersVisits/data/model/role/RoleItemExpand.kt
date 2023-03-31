@@ -21,18 +21,13 @@ class RoleItemExpand(val role: Role) : ItemExpand {
     override var itemSublist: List<Any?>?
         get() {
             val userBox = SimpleComponent().boxStore.boxFor<User>()
-
             // https://github.com/objectbox/objectbox-java/issues/1048 有 bug 暂时只能用4种类型查询, string 要特别处理
             val query = userBox.query {
-//                equal(User_.role, role.roleName, QueryBuilder.StringOrder.CASE_SENSITIVE)
+                equal(User_.role, role.roleName, QueryBuilder.StringOrder.CASE_SENSITIVE)
                 orderDesc(User_.name)
             }
-            val list = query.find()
-
-            return list
+            return query.find()
         }
         set(value) {}
-    //        SimpleComponent().boxStore.boxFor<User>().query().equal(User_.role, Role.PETITIONER.id)
-//            .build().find()
 
 }

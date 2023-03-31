@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.act.Role1MainAct" />
-        <activity android:name=".ui.act.Role2MainAct" />
+        <activity android:name=".ui.act.PetitionerMainAct" />
         <activity android:name=".ui.act.CommonCalculationAct" />
         <activity android:name=".ui.act.OpenAiAct" />
         <activity android:name=".ui.act.AddApplyAct" />

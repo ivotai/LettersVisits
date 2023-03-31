@@ -11,5 +11,5 @@ data class Department(
     var name: String? = null,
     var departmentType: Int = 0,   // 1法院,2政法委,3信访局
 ) {
-    lateinit var region: ToOne<Region>
+    lateinit var jurisdiction: ToOne<Jurisdiction>
 }

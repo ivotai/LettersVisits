@@ -25,10 +25,12 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.Global
 import com.unicorn.lettersVisits.app.baidu.FileUtil
+import com.unicorn.lettersVisits.app.initialPassword
 import com.unicorn.lettersVisits.app.module.SimpleComponent
-import com.unicorn.lettersVisits.data.model.Applicant
-import com.unicorn.lettersVisits.data.model.Petition
 import com.unicorn.lettersVisits.data.model.Material
+import com.unicorn.lettersVisits.data.model.Petition
+import com.unicorn.lettersVisits.data.model.User
+import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.databinding.ActAddApplyBinding
 import com.unicorn.lettersVisits.databinding.ItemMaterialBinding
 import com.unicorn.lettersVisits.databinding.ItemMaterialUploadBinding
@@ -84,9 +86,10 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
             }
 
             tvAddApply.setOnClickListener {
-                val petition = Petition(content = etContent.text.toString(), createTime = Date()).apply {
-                    petitioner.target = Global.currentUser
-                }
+                val petition =
+                    Petition(content = etContent.text.toString(), createTime = Date()).apply {
+                        petitioner.target = Global.currentUser
+                    }
                 SimpleComponent().boxStore.boxFor(Petition::class.java).put(petition)
                 sendEvent(petition)
                 finish()
@@ -203,7 +206,10 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
         OCR.getInstance(this).recognizeIDCard(param, object : OnResultListener<IDCardResult?> {
             override fun onResult(result: IDCardResult?) {
                 if (result != null) {
-                    val applicant = Applicant(
+                    val user = User(
+                        username = result.name.words,
+                        password = initialPassword,
+                        role = Role.PETITIONER,
                         address = result.address.words,
                         birthday = result.birthday.words,
                         ethnic = result.birthday.words,
@@ -211,7 +217,7 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
                         idNumber = result.idNumber.words,
                         name = result.name.words
                     )
-                    onApplicant(applicant)
+                    // todo create user
                 }
             }
 
@@ -219,10 +225,6 @@ class AddApplyAct : BaseAct<ActAddApplyBinding>() {
                 // do nothing
             }
         })
-    }
-
-    fun onApplicant(applicant: Applicant) {
-        // todo
     }
 
     override fun onRequestPermissionsResult(

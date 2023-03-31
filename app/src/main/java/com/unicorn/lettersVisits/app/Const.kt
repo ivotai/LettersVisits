@@ -14,7 +14,7 @@ const val Title = "Title"
 const val Category = "Category"
 
 
-
+const val initialPassword = "111111"
 
 
 

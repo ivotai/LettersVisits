@@ -14,7 +14,6 @@ data class User(
     var username: String? = null,
     var password: String? = null,
     @Convert(converter = RoleConverter::class, dbType = String::class) var role: Role? = null,
-
     var address: String? = null,
     var birthday: String? = null,
     var ethnic: String? = null,
