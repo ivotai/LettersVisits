@@ -3,7 +3,6 @@ package com.unicorn.lettersVisits.ui.act
 
 import android.Manifest
 import android.os.Environment.getExternalStorageDirectory
-import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.customview.customView
@@ -24,7 +23,7 @@ import com.unicorn.lettersVisits.data.model.Petition
 import com.unicorn.lettersVisits.data.model.User
 import com.unicorn.lettersVisits.data.model.event.StartOrcEvent
 import com.unicorn.lettersVisits.data.model.role.Role
-import com.unicorn.lettersVisits.databinding.ActAddApplyBinding
+import com.unicorn.lettersVisits.databinding.ActAddPetitionBinding
 import com.unicorn.lettersVisits.databinding.ItemMaterialBinding
 import com.unicorn.lettersVisits.databinding.ItemMaterialUploadBinding
 import com.unicorn.lettersVisits.view.PetitionerSelectView
@@ -35,7 +34,8 @@ import java.util.*
 
 
 @RuntimePermissions
-class AddPetitionAct : BaiduOrcAct<ActAddApplyBinding>() {
+class AddPetitionAct : BaiduOrcAct<ActAddPetitionBinding>() {
+
     override fun onOrcResult(result: IDCardResult) {
         val user = User(
             username = result.name.words,
@@ -69,7 +69,7 @@ class AddPetitionAct : BaiduOrcAct<ActAddApplyBinding>() {
                         }
                     }
                 }
-                onClick(R.id.root) {
+                onFastClick(R.id.root) {
                     when (getModel<Any>()) {
                         is String -> {
                             showFileDialogWithPermissionCheck()
@@ -122,10 +122,11 @@ class AddPetitionAct : BaiduOrcAct<ActAddApplyBinding>() {
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
     )
     fun showFileDialog() {
-        MaterialDialog(this, BottomSheet(LayoutMode.MATCH_PARENT)).show {
+        MaterialDialog(this).show {
             fileChooser(
                 context = context,
                 initialDirectory = File(getExternalStorageDirectory(), "Download"),
+                emptyTextRes = R.string.empty_text,
             ) { _, file ->
                 val index = binding.rv.bindingAdapter.modelCount - 1
                 binding.rv.bindingAdapter.addModels(

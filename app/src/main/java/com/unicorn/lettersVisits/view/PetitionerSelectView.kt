@@ -54,7 +54,7 @@ class PetitionerSelectView(context: Context) : ConstraintLayout(context) {
                         }
                     }
                 }
-                R.id.root.onClick {
+                R.id.root.onFastClick {
                     when (val item = getModel<Any>()) {
                         is User -> {
                             // 发送事件

@@ -46,7 +46,7 @@ class RoleUserListView(context: Context) : ConstraintLayout(context) {
                         }
                     }
                 }
-                R.id.root.onClick {
+                R.id.root.onFastClick {
                     when (val item = getModel<Any>()) {
                         is RoleItemExpand -> {
                             expandOrCollapse()

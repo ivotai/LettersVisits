@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">LettersVisits</string>
+    <string name="empty_text">空的</string>
+
 </resources>

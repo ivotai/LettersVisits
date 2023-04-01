@@ -6,6 +6,7 @@ import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import io.objectbox.relation.ToOne
+import java.io.Serializable
 
 
 @Entity
@@ -20,7 +21,7 @@ data class User(
     var gender: String? = null,
     var idNumber: String? = null,
     var name: String? = null,
-) {
+) : Serializable {
 
     lateinit var department: ToOne<Department>
 
