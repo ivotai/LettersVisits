@@ -92,7 +92,7 @@
             app:layout_constraintTop_toTopOf="@+id/l_petitioner" />
 
         <View
-            android:id="@+id/v"
+            android:id="@+id/v1"
             android:layout_width="0dp"
             android:layout_height="1px"
             android:layout_marginTop="16dp"
@@ -106,11 +106,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="部委单位"
+            android:text="信访单位"
             android:textColor="@color/black"
             android:textSize="16dp"
             app:layout_constraintStart_toStartOf="@+id/l_petitioner"
-            app:layout_constraintTop_toBottomOf="@+id/v" />
+            app:layout_constraintTop_toBottomOf="@+id/v1" />
 
         <TextView
             android:id="@+id/tv_department"
@@ -123,6 +123,39 @@
             app:layout_constraintBottom_toBottomOf="@+id/l_department"
             app:layout_constraintEnd_toEndOf="@+id/tv_petitioner"
             app:layout_constraintTop_toTopOf="@+id/l_department" />
+
+        <View
+            android:id="@+id/v2"
+            android:layout_width="0dp"
+            android:layout_height="1px"
+            android:layout_marginTop="16dp"
+            android:background="@color/grey_200"
+            app:layout_constraintEnd_toEndOf="@+id/tv_petitioner"
+            app:layout_constraintStart_toStartOf="@+id/l_petitioner"
+            app:layout_constraintTop_toBottomOf="@+id/l_department" />
+
+        <TextView
+            android:id="@+id/l_petition_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="信访类型"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            app:layout_constraintStart_toStartOf="@+id/l_petitioner"
+            app:layout_constraintTop_toBottomOf="@+id/v2" />
+
+        <TextView
+            android:id="@+id/tv_petition_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:hint="请选择"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/l_petition_type"
+            app:layout_constraintEnd_toEndOf="@+id/tv_petitioner"
+            app:layout_constraintTop_toTopOf="@+id/l_petition_type" />
 
     </com.ruffian.library.widget.RConstraintLayout>
 

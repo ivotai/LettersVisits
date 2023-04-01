@@ -19,7 +19,7 @@ import io.objectbox.kotlin.boxFor
 import splitties.fragments.start
 
 
-class PetitionerApplyFra : BaseFra<FraApplyListBinding>() {
+class PetitionerPetitionListFra : BaseFra<FraApplyListBinding>() {
 
     override fun initViews() {
         binding.apply {
@@ -46,7 +46,7 @@ class PetitionerApplyFra : BaseFra<FraApplyListBinding>() {
                 ToastUtils.showShort("搜索没做")
             }
             ivAdd.setOnClickListener {
-                start<AddPetitionAct> { }
+                start<AddPetitionAct> {}
             }
         }
     }

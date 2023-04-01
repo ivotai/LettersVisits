@@ -12,7 +12,7 @@ import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.setUpWithViewPager2
 import com.unicorn.lettersVisits.databinding.ActPetitionerMainBinding
 import com.unicorn.lettersVisits.ui.base.BaseAct
-import com.unicorn.lettersVisits.ui.fra.PetitionerApplyFra
+import com.unicorn.lettersVisits.ui.fra.PetitionerPetitionListFra
 import com.unicorn.lettersVisits.ui.fra.SupportFra
 import me.majiajie.pagerbottomtabstrip.item.NormalItemView
 
@@ -32,7 +32,7 @@ class PetitionerMainAct : BaseAct<ActPetitionerMainBinding>() {
                 override fun getItemCount() = tabCount
 
                 override fun createFragment(position: Int) = when (position) {
-                    0 -> PetitionerApplyFra()
+                    0 -> PetitionerPetitionListFra()
                     1 -> SupportFra()
                     else -> throw IllegalArgumentException()
                 }
