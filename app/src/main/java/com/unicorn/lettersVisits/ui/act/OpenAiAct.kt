@@ -19,6 +19,7 @@ import com.drake.softinput.hasSoftInput
 import com.drake.softinput.hideSoftInput
 import com.drake.softinput.setWindowSoftInput
 import com.drake.statusbar.immersive
+import com.drake.statusbar.statusMargin
 import com.drake.statusbar.statusPadding
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.databinding.ActOpenAiBinding
@@ -31,19 +32,17 @@ import splitties.resources.color
 class OpenAiAct : BaseAct<ActOpenAiBinding>() {
     override fun initStatusBar() {
         immersive(darkMode = true)
-        binding.rv.statusPadding()
+        binding.rv.statusMargin()
     }
 
     @OptIn(BetaOpenAI::class)
     override fun initViews() {
         binding.apply {
-            //
             btnSend.helper.backgroundColorPressed = ColorUtils.blendARGB(
                 color(R.color.main_color), Color.BLACK, 0.3f
             )
         }
         setWindowSoftInput(float = binding.RConstraintLayout, onChanged = {
-            Log.d("SoftInput", "visibility = ${hasSoftInput()}")
         })
 
         binding.rv.linear().setup {
@@ -57,7 +56,7 @@ class OpenAiAct : BaseAct<ActOpenAiBinding>() {
                         R.layout.item_chat_ai
                     }
                     else -> {
-                        throw IllegalStateException("Unknown Chat Roles")
+                        throw IllegalArgumentException("Unknown Chat Roles")
                     }
                 }
             }
@@ -87,7 +86,7 @@ class OpenAiAct : BaseAct<ActOpenAiBinding>() {
     private val modelId = "gpt-3.5-turbo"
     private val openAI = OpenAI(
         OpenAIConfig(
-            token = key, host = OpenAIHost("https://api.openai.com")
+            token = key, host = OpenAIHost(baseUrl)
         )
     )
 
