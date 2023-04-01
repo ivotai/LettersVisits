@@ -53,14 +53,16 @@ class PetitionerApplyFra : BaseFra<FraApplyListBinding>() {
 
     override fun initEvents() {
         receiveEvent<Petition> {
-            binding.rv.models = getData()
-            binding.rv.smoothScrollToPosition(0)
+            binding.apply {
+                rv.models = getData()
+                rv.smoothScrollToPosition(0)
+            }
         }
     }
 
     private fun getData(): MutableList<Petition> =
-        SimpleComponent().boxStore.boxFor<Petition>().query().orderDesc(Petition_.createTime).build()
-            .find()
+        SimpleComponent().boxStore.boxFor<Petition>().query().orderDesc(Petition_.createTime)
+            .build().find()
 
     override fun initStatusBar() {
         binding.searchBarContainer.statusPadding()

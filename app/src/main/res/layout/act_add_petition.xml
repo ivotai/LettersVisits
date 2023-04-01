@@ -6,25 +6,35 @@
     android:layout_height="match_parent"
     android:background="@color/grey_100">
 
+    <com.unicorn.lettersVisits.view.TitleBar
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.ruffian.library.widget.RConstraintLayout
         android:id="@+id/rc1"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         app:background_normal="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/rc2"
+        app:corner_radius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/titleBar">
 
         <com.ruffian.library.widget.REditText
             android:id="@+id/etContent"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="200dp"
             android:gravity="start|top"
             android:hint="输入申请内容"
             android:padding="16dp"
+            android:textSize="18dp"
             app:background_normal="@color/white"
+            app:corner_radius="16dp"
             app:layout_constraintBottom_toTopOf="@+id/rv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -48,18 +58,20 @@
         android:id="@+id/rc2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_margin="16dp"
         android:paddingBottom="64dp"
         app:background_normal="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/rc3"
+        app:corner_radius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rc1">
 
         <TextView
             android:id="@+id/l_petitioner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:text="当事人"
             android:textColor="@color/black"
             android:textSize="16dp"
@@ -70,7 +82,7 @@
             android:id="@+id/tv_petitioner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="16dp"
             android:gravity="end"
             android:hint="请选择"
             android:textColor="@color/black"
@@ -79,16 +91,26 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/l_petitioner" />
 
+        <View
+            android:id="@+id/v"
+            android:layout_width="0dp"
+            android:layout_height="1px"
+            android:layout_marginTop="16dp"
+            android:background="@color/grey_200"
+            app:layout_constraintEnd_toEndOf="@+id/tv_petitioner"
+            app:layout_constraintStart_toStartOf="@+id/l_petitioner"
+            app:layout_constraintTop_toBottomOf="@+id/l_petitioner" />
+
         <TextView
             android:id="@+id/l_department"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:text="部委单位"
             android:textColor="@color/black"
             android:textSize="16dp"
             app:layout_constraintStart_toStartOf="@+id/l_petitioner"
-            app:layout_constraintTop_toBottomOf="@+id/l_petitioner" />
+            app:layout_constraintTop_toBottomOf="@+id/v" />
 
         <TextView
             android:id="@+id/tv_department"
@@ -104,42 +126,26 @@
 
     </com.ruffian.library.widget.RConstraintLayout>
 
-    <com.ruffian.library.widget.RConstraintLayout
-        android:id="@+id/rc3"
+    <com.ruffian.library.widget.RTextView
+        android:id="@+id/btnConfirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="确认"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:background_normal="?attr/colorPrimary"
+        app:corner_radius="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:id="@+id/tv_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="24dp"
-            android:paddingVertical="16dp"
-            android:text="取消"
-            android:textColor="@color/grey_700"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_add_apply"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="24dp"
-            android:paddingVertical="16dp"
-            android:text="提交"
-            android:textColor="@color/main_color"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </com.ruffian.library.widget.RConstraintLayout>
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

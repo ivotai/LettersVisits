@@ -1,12 +1,8 @@
 
 
 class Petition {
-  int id;
-  User petitioner; // 信访人
   Department department; // 部委单位
   String petitionType; // 信访类型
-  String content; // 信访内容
-  List<Attachment> attachments; // 附件列表
   PetitionStatus status; // 信访状态
   String reply; // 部委单位的答复
 }

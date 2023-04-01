@@ -9,7 +9,7 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         app:iiv_color="@color/black"
-        app:iiv_icon="pho-caret-left"
+        app:iiv_icon="gmd-arrow-back-ios"
         app:iiv_size="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

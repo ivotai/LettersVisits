@@ -16,6 +16,8 @@ import com.drake.channel.receiveEvent
 import com.drake.channel.sendEvent
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.unicorn.lettersVisits.R
+import com.unicorn.lettersVisits.app.Global
+import com.unicorn.lettersVisits.app.Param
 import com.unicorn.lettersVisits.app.initialPassword
 import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.Material
@@ -27,6 +29,7 @@ import com.unicorn.lettersVisits.databinding.ActAddPetitionBinding
 import com.unicorn.lettersVisits.databinding.ItemMaterialBinding
 import com.unicorn.lettersVisits.databinding.ItemMaterialUploadBinding
 import com.unicorn.lettersVisits.view.PetitionerSelectView
+import io.objectbox.kotlin.boxFor
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 import java.io.File
@@ -53,6 +56,15 @@ class AddPetitionAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
     override fun initViews() {
         binding.apply {
+            titleBar.setTitle("添加信访申请")
+
+            // 获取当事人
+            val user = intent.getSerializableExtra(Param) as User?
+            if (user != null) {
+                onPetitioner(user)
+            }
+
+            // 信访材料
             rv.layoutManager = FlexboxLayoutManager(this@AddPetitionAct)
             rv.setup {
                 addType<String>(R.layout.item_material_upload)
@@ -76,8 +88,10 @@ class AddPetitionAct : BaiduOrcAct<ActAddPetitionBinding>() {
                         }
                         is Material -> {
                             val position = modelPosition
-                            binding.rv.mutable.removeAt(position) // 先删除数据
-                            binding.rv.bindingAdapter.notifyItemRemoved(position)
+                            binding.apply {
+                                rv.mutable.removeAt(position) // 先删除数据
+                                rv.bindingAdapter.notifyItemRemoved(position) // 然后刷新列表
+                            }
                         }
                     }
                 }
@@ -87,22 +101,30 @@ class AddPetitionAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
     override fun initIntents() {
         super.initIntents()
-        binding.apply {
-            tvCancel.setOnClickListener {
-                finish()
-            }
 
-            tvAddApply.setOnClickListener {
+
+        binding.apply {
+
+            rv.setOnClickListener {
+                // 一些验证
+                val content = etContent.text.toString().trim()
+                if (content.isEmpty()){
+                    ToastUtils.showShort("请输入申请内容")
+                    return@setOnClickListener
+                }
                 if (mPetitioner == null) {
                     ToastUtils.showShort("请选择当事人")
                     return@setOnClickListener
                 }
 
-                val petition =
-                    Petition(content = etContent.text.toString(), createTime = Date()).apply {
-                        petitioner.target = mPetitioner
-                    }
-                SimpleComponent().boxStore.boxFor(Petition::class.java).put(petition)
+                val petition = Petition(
+                    content = content, createTime = Date()
+                ).apply {
+                    petitioner.target = mPetitioner
+                    creator.target = Global.currentUser
+                }
+                SimpleComponent().boxStore.boxFor<Petition>().put(petition)
+
                 sendEvent(petition)
                 finish()
             }
@@ -128,6 +150,7 @@ class AddPetitionAct : BaiduOrcAct<ActAddPetitionBinding>() {
                 initialDirectory = File(getExternalStorageDirectory(), "Download"),
                 emptyTextRes = R.string.empty_text,
             ) { _, file ->
+                // todo 添加没有更好的办法了吗
                 val index = binding.rv.bindingAdapter.modelCount - 1
                 binding.rv.bindingAdapter.addModels(
                     listOf(Material(file = file)), index = index, animation = true
@@ -146,9 +169,13 @@ class AddPetitionAct : BaiduOrcAct<ActAddPetitionBinding>() {
         }
         receiveEvent<User> {
             dialogHolder?.dismiss()
-            mPetitioner = it
-            binding.tvPetitioner.text = it.name
+            onPetitioner(it)
         }
+    }
+
+    private fun onPetitioner(it: User) {
+        mPetitioner = it
+        binding.tvPetitioner.text = it.name
     }
 
     private var mPetitioner: User? = null
