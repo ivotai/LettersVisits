@@ -10,14 +10,14 @@ import com.mikepenz.iconics.typeface.library.googlematerial.RoundedGoogleMateria
 import com.mikepenz.iconics.utils.colorInt
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.setUpWithViewPager2
-import com.unicorn.lettersVisits.databinding.ActMain1Binding
+import com.unicorn.lettersVisits.databinding.ActPetitionerMainBinding
 import com.unicorn.lettersVisits.ui.base.BaseAct
-import com.unicorn.lettersVisits.ui.fra.Role2ApplyFra
+import com.unicorn.lettersVisits.ui.fra.PetitionerApplyFra
 import com.unicorn.lettersVisits.ui.fra.SupportFra
 import me.majiajie.pagerbottomtabstrip.item.NormalItemView
 
 
-class PetitionerMainAct : BaseAct<ActMain1Binding>() {
+class PetitionerMainAct : BaseAct<ActPetitionerMainBinding>() {
 
     override fun initViews() {
 
@@ -32,7 +32,7 @@ class PetitionerMainAct : BaseAct<ActMain1Binding>() {
                 override fun getItemCount() = tabCount
 
                 override fun createFragment(position: Int) = when (position) {
-                    0 -> Role2ApplyFra()
+                    0 -> PetitionerApplyFra()
                     1 -> SupportFra()
                     else -> throw IllegalArgumentException()
                 }
@@ -77,6 +77,7 @@ class PetitionerMainAct : BaseAct<ActMain1Binding>() {
 
     override fun initStatusBar() {
         immersive(darkMode = true)
+
         // 在 act 中设置状态栏颜色
 //        binding.vp.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
 //            override fun onPageSelected(position: Int) {

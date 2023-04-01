@@ -19,7 +19,7 @@ import io.objectbox.kotlin.boxFor
 import splitties.fragments.start
 
 
-class Role2ApplyFra : BaseFra<FraApplyListBinding>() {
+class PetitionerApplyFra : BaseFra<FraApplyListBinding>() {
 
     override fun initViews() {
         binding.apply {

@@ -1,5 +1,6 @@
 package com.unicorn.lettersVisits.ui.fra
 
+import com.afollestad.materialdialogs.MaterialDialog
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.SizeUtils.dp2px
 import com.blankj.utilcode.util.ToastUtils
@@ -28,39 +29,19 @@ class SupportFra : BaseFra<FraSupportBinding>() {
     override fun initViews() {
 
         fun getData() = listOf(
-            Support(
-                text = "案件流程判断辅助",
-                supportType = SupportType.TOP,
-                splitties.material.colors.R.color.red_300
-            ), Support(
-                text = "法律条款查询辅助",
-                supportType = SupportType.MIDDLE,
-                splitties.material.colors.R.color.orange_300
-            ), Support(
-                text = "语音识别服务",
-                supportType = SupportType.BOTTOM,
-                splitties.material.colors.R.color.green_300
-            ), SupportDivider(), Support(
-                text = "常用计算工具辅助服务",
-                supportType = SupportType.TOP,
-                colorRes = splitties.material.colors.R.color.teal_300
-            ), Support(
-                text = "人工智能辅助",
-                supportType = SupportType.BOTTOM,
-                colorRes = splitties.material.colors.R.color.blue_300
-            ), SupportDivider(), Support(
-                text = "版本更新",
-                supportType = SupportType.TOP,
-                colorRes = splitties.material.colors.R.color.purple_300
-            ), Support(
-                text = "退出账户",
-                supportType = SupportType.BOTTOM,
-                colorRes = splitties.material.colors.R.color.indigo_300
-            ), SupportDivider()
+            Support.Support1,
+            Support.Support2,
+            Support.Support3,
+            SupportDivider(),
+            Support.Support4,
+            Support.OpenAi,
+            SupportDivider(),
+            Support.CheckVersion,
+            Support.Logout,
+            SupportDivider()
         )
 
         binding.apply {
-
             rv.linear().setup {
 
                 addType<Support>(R.layout.item_support)
@@ -108,29 +89,38 @@ class SupportFra : BaseFra<FraSupportBinding>() {
                 R.id.root.onFastClick {
                     when (val item = getModel<Any>()) {
                         is Support -> {
-                            when (item.text) {
-                                "案件流程判断辅助" -> {
-                                    ToastUtils.showShort("看不懂这个需求")
+                            when (item) {
+                                Support.Support1 -> {
+                                    MaterialDialog(requireContext()).show {
+                                        title(text = "这个看不懂")
+                                        message(text = "1、提供案件流程判断辅助，登记的案件经过高院再审程序且为基层院一审的民事、行政案件则提示当事人，民事诉讼法\\行政司法解释，该类案件可向检查院提出抗诉")
+                                    }
                                 }
-                                "法律条款查询辅助" -> {
-                                    ToastUtils.showShort("等待系统挂接法信系统，网址是多少？")
+                                Support.Support2 -> {
+                                    MaterialDialog(requireContext()).show {
+                                        title(text = "网址是多少")
+                                        message(text = "2、提供法律条款查询辅助，系统挂接法信系统，供用户查询法律条款。")
+                                    }
                                 }
-                                "语音识别服务" -> {
-                                    ToastUtils.showShort("我觉得没必要做这个功能")
+                                Support.Support3 -> {
+                                    MaterialDialog(requireContext()).show {
+                                        title(text = "有必要做吗")
+                                        message(text = "3、提供语音识别服务，可将用户谈话记录形成文档。")
+                                    }
                                 }
-                                "常用计算工具辅助服务" -> {
+                                Support.Support4 -> {
                                     requireContext().start<CommonCalculationAct> {}
                                 }
-                                "人工智能辅助" -> {
+                                Support.OpenAi -> {
                                     requireContext().start<OpenAiAct> {}
                                 }
-                                "版本更新" -> {
+                                Support.CheckVersion -> {
                                     ToastUtils.showShort("已是最新版本")
                                 }
-                                "退出账户" -> {
+                                Support.Logout -> {
                                     Global.currentUser = null
                                     ActivityUtils.finishAllActivities()
-                                    requireContext().start<LoginAct>()
+                                    requireContext().start<LoginAct> {}
                                 }
                             }
                         }
