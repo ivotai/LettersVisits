@@ -1,4 +1,4 @@
-package com.unicorn.lettersVisits.ui.act
+package com.unicorn.lettersVisits.app
 
 import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.Department
@@ -11,22 +11,22 @@ import io.objectbox.kotlin.boxFor
 
 
 // 这个界面用来执行一些数据库操作,测试
-class ObjectBoxHelper() {
+class ObjectBoxHelper {
 
     companion object {
 
         private val boxStore: BoxStore by lazy { SimpleComponent().boxStore }
 
         private val userBox: Box<User> = boxStore.boxFor()
-        private val jurisdictionBox: Box<Jurisdiction> = boxStore.boxFor(Jurisdiction::class.java)
-        private val departmentBox: Box<Department> = boxStore.boxFor(Department::class.java)
+        private val jurisdictionBox: Box<Jurisdiction> = boxStore.boxFor()
+        private val departmentBox: Box<Department> = boxStore.boxFor()
 
         fun init() {
             if (userBox.isEmpty) {
                 userBox.put(
                     User(name = "张羡忠", role = Role.STAFF),
                     User(name = "杨间", role = Role.PETITIONER),
-                    User(name = "李四", role = Role.PETITIONER),
+                    User(name = "童倩", role = Role.PETITIONER),
                 )
             }
         }

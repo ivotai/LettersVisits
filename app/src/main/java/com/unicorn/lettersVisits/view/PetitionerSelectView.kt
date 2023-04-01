@@ -11,7 +11,7 @@ import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.User
 import com.unicorn.lettersVisits.data.model.User_
-import com.unicorn.lettersVisits.data.model.event.StartOrc
+import com.unicorn.lettersVisits.data.model.event.StartOrcEvent
 import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.databinding.ItemUserBinding
 import com.unicorn.lettersVisits.databinding.LayoutPetitionerSelectBinding
@@ -61,7 +61,7 @@ class PetitionerSelectView(context: Context) : ConstraintLayout(context) {
                             sendEvent(event = item)
                         }
                         is String -> {
-                            sendEvent(event = StartOrc())
+                            sendEvent(event = StartOrcEvent())
                         }
                     }
                 }

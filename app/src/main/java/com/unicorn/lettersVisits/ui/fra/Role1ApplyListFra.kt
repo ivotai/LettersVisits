@@ -2,7 +2,9 @@ package com.unicorn.lettersVisits.ui.fra
 
 import com.drake.brv.utils.divider
 import com.drake.brv.utils.linear
+import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
+import com.drake.channel.receiveEvent
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.Petition
@@ -29,11 +31,21 @@ class Role1ApplyListFra : BaseFra<FraRole2ApplyListBinding>() {
                         tvContent.text = model.content
                     }
                 }
-            }.models =
-                SimpleComponent().boxStore.boxFor<Petition>().query().order(Petition_.createTime).build()
-                    .find()
+            }.models = getData()
         }
     }
+
+    override fun initEvents() {
+        receiveEvent<Petition> {
+            binding.rv.models = getData()
+            binding.rv.smoothScrollToPosition(0)
+        }
+    }
+
+    private fun getData(): MutableList<Petition> =
+        SimpleComponent().boxStore.boxFor<Petition>().query().orderDesc(Petition_.createTime)
+            .build().find()
+
 
     override fun initIntents() {
         binding.apply {

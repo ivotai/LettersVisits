@@ -3,11 +3,13 @@ package com.unicorn.lettersVisits.ui.act
 
 import android.Manifest
 import android.os.Environment.getExternalStorageDirectory
+import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.files.fileChooser
 import com.baidu.ocr.sdk.model.IDCardResult
+import com.blankj.utilcode.util.ToastUtils
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.mutable
 import com.drake.brv.utils.setup
@@ -15,13 +17,12 @@ import com.drake.channel.receiveEvent
 import com.drake.channel.sendEvent
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.unicorn.lettersVisits.R
-import com.unicorn.lettersVisits.app.Global
 import com.unicorn.lettersVisits.app.initialPassword
 import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.Material
 import com.unicorn.lettersVisits.data.model.Petition
 import com.unicorn.lettersVisits.data.model.User
-import com.unicorn.lettersVisits.data.model.event.StartOrc
+import com.unicorn.lettersVisits.data.model.event.StartOrcEvent
 import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.databinding.ActAddApplyBinding
 import com.unicorn.lettersVisits.databinding.ItemMaterialBinding
@@ -92,9 +93,14 @@ class AddPetitionAct : BaiduOrcAct<ActAddApplyBinding>() {
             }
 
             tvAddApply.setOnClickListener {
+                if (mPetitioner == null) {
+                    ToastUtils.showShort("请选择当事人")
+                    return@setOnClickListener
+                }
+
                 val petition =
                     Petition(content = etContent.text.toString(), createTime = Date()).apply {
-                        petitioner.target = Global.currentUser
+                        petitioner.target = mPetitioner
                     }
                 SimpleComponent().boxStore.boxFor(Petition::class.java).put(petition)
                 sendEvent(petition)
@@ -116,7 +122,7 @@ class AddPetitionAct : BaiduOrcAct<ActAddApplyBinding>() {
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
     )
     fun showFileDialog() {
-        MaterialDialog(this, BottomSheet()).show {
+        MaterialDialog(this, BottomSheet(LayoutMode.MATCH_PARENT)).show {
             fileChooser(
                 context = context,
                 initialDirectory = File(getExternalStorageDirectory(), "Download"),
@@ -133,18 +139,18 @@ class AddPetitionAct : BaiduOrcAct<ActAddApplyBinding>() {
 
 
     override fun initEvents() {
-        receiveEvent<StartOrc> {
+        receiveEvent<StartOrcEvent> {
             dialogHolder?.dismiss()
             startOrcWithPermissionCheck()
         }
         receiveEvent<User> {
             dialogHolder?.dismiss()
-            petitioner = it
+            mPetitioner = it
             binding.tvPetitioner.text = it.name
         }
     }
 
-    private var petitioner: User? = null
+    private var mPetitioner: User? = null
 
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray

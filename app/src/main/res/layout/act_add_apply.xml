@@ -9,8 +9,10 @@
     <com.ruffian.library.widget.RConstraintLayout
         android:id="@+id/rc1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
         app:background_normal="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/rc2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -18,11 +20,12 @@
         <com.ruffian.library.widget.REditText
             android:id="@+id/etContent"
             android:layout_width="0dp"
-            android:layout_height="200dp"
+            android:layout_height="0dp"
             android:gravity="start|top"
-            android:hint="输入信访申请内容"
+            android:hint="输入申请内容"
             android:padding="16dp"
             app:background_normal="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/rv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -34,10 +37,9 @@
             android:clipToPadding="false"
             android:paddingEnd="12dp"
             android:paddingBottom="12dp"
-            app:layout_constraintBottom_toTopOf="@id/rc3"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etContent"
             tools:ignore="RtlSymmetry" />
 
     </com.ruffian.library.widget.RConstraintLayout>
@@ -46,19 +48,18 @@
         android:id="@+id/rc2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:paddingBottom="64dp"
         app:background_normal="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/rc3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rc1">
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/l_petitioner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
             android:text="当事人"
             android:textColor="@color/black"
             android:textSize="16dp"
@@ -69,14 +70,37 @@
             android:id="@+id/tv_petitioner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="24dp"
             android:gravity="end"
             android:hint="请选择当事人"
             android:textColor="@color/black"
             android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/l_petitioner"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/l_petitioner" />
+
+        <TextView
+            android:id="@+id/l_department"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="部委单位"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            app:layout_constraintStart_toStartOf="@+id/l_petitioner"
+            app:layout_constraintTop_toBottomOf="@+id/l_petitioner" />
+
+        <TextView
+            android:id="@+id/tv_department"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:hint="请选择部位单位"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/l_department"
+            app:layout_constraintEnd_toEndOf="@+id/tv_petitioner"
+            app:layout_constraintTop_toTopOf="@+id/l_department" />
 
     </com.ruffian.library.widget.RConstraintLayout>
 
