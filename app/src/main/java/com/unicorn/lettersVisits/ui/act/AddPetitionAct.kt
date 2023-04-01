@@ -2,7 +2,9 @@ package com.unicorn.lettersVisits.ui.act
 
 
 import android.Manifest
+import android.graphics.Color
 import android.os.Environment.getExternalStorageDirectory
+import androidx.core.graphics.ColorUtils
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.customview.customView
@@ -23,6 +25,8 @@ import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.Material
 import com.unicorn.lettersVisits.data.model.Petition
 import com.unicorn.lettersVisits.data.model.User
+import com.unicorn.lettersVisits.data.model.event.PetitionerSaveEvent
+import com.unicorn.lettersVisits.data.model.event.PetitionerSelectEvent
 import com.unicorn.lettersVisits.data.model.event.StartOrcEvent
 import com.unicorn.lettersVisits.data.model.role.PetitionType
 import com.unicorn.lettersVisits.data.model.role.Role
@@ -33,6 +37,7 @@ import com.unicorn.lettersVisits.view.PetitionerSelectView
 import io.objectbox.kotlin.boxFor
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
+import splitties.resources.color
 import java.io.File
 import java.util.*
 
@@ -52,12 +57,16 @@ class AddPetitionAct : BaiduOrcAct<ActAddPetitionBinding>() {
             idNumber = result.idNumber.words,
             name = result.name.words
         )
-        sendEvent(user)
+        onPetitioner(user)
     }
 
     override fun initViews() {
         binding.apply {
             titleBar.setTitle("添加信访申请")
+
+            btnConfirm.helper.backgroundColorPressed = ColorUtils.blendARGB(
+                color(R.color.main_color), Color.WHITE, 0.3f
+            )
 
             // 设置当事人
             if (Global.isPetitioner) {
@@ -129,7 +138,7 @@ class AddPetitionAct : BaiduOrcAct<ActAddPetitionBinding>() {
                 SimpleComponent().boxStore.boxFor<Petition>().put(petition)
 
                 // 通知列表刷新
-                sendEvent(petition)
+                sendEvent(PetitionerSaveEvent())
                 finish()
             }
 
@@ -169,27 +178,26 @@ class AddPetitionAct : BaiduOrcAct<ActAddPetitionBinding>() {
                 initialDirectory = File(getExternalStorageDirectory(), "Download"),
                 emptyTextRes = R.string.empty_text,
             ) { _, file ->
-                // todo 添加没有更好的办法了吗
-                val index = binding.rv.bindingAdapter.modelCount - 1
-                binding.rv.bindingAdapter.addModels(
-                    listOf(Material(file = file)), index = index, animation = true
-                )
+                binding.rv.bindingAdapter.apply {
+                    val index = modelCount - 1
+                    addModels(
+                        listOf(Material(file = file)), index = index, animation = true
+                    )
+                }
             }
         }
     }
 
     private var dialogHolder: MaterialDialog? = null
 
-
     override fun initEvents() {
         receiveEvent<StartOrcEvent> {
             dialogHolder?.dismiss()
             startOrcWithPermissionCheck()
         }
-        // on petitioner selected event
-        receiveEvent<User> {
+        receiveEvent<PetitionerSelectEvent> {
             dialogHolder?.dismiss()
-            onPetitioner(it)
+            onPetitioner(it.petitioner)
         }
     }
 

@@ -11,6 +11,7 @@ import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.Petition
 import com.unicorn.lettersVisits.data.model.Petition_
+import com.unicorn.lettersVisits.data.model.event.PetitionerSaveEvent
 import com.unicorn.lettersVisits.databinding.FraApplyListBinding
 import com.unicorn.lettersVisits.databinding.ItemApplyBinding
 import com.unicorn.lettersVisits.ui.act.AddPetitionAct
@@ -52,7 +53,7 @@ class PetitionerPetitionListFra : BaseFra<FraApplyListBinding>() {
     }
 
     override fun initEvents() {
-        receiveEvent<Petition> {
+        receiveEvent<PetitionerSaveEvent> {
             binding.apply {
                 rv.models = getData()
                 rv.smoothScrollToPosition(0)
