@@ -110,7 +110,7 @@ abstract class BaiduOrcAct<VB : ViewBinding>: BaseAct<VB>() {
         OCR.getInstance(this).recognizeIDCard(param, object : OnResultListener<IDCardResult?> {
             override fun onResult(result: IDCardResult?) {
                 if (result != null) {
-                    onResult(result)
+                    onOrcResult(result)
                 }
             }
 
