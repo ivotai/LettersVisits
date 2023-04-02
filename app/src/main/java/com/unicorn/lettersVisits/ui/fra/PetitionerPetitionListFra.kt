@@ -8,9 +8,10 @@ import com.drake.brv.utils.setup
 import com.drake.channel.receiveEvent
 import com.drake.statusbar.statusPadding
 import com.unicorn.lettersVisits.R
-import com.unicorn.lettersVisits.app.module.SimpleComponent
+import com.unicorn.lettersVisits.app.Global
 import com.unicorn.lettersVisits.data.model.Petition
 import com.unicorn.lettersVisits.data.model.Petition_
+import com.unicorn.lettersVisits.data.model.User_
 import com.unicorn.lettersVisits.data.model.event.PetitionerPutEvent
 import com.unicorn.lettersVisits.databinding.FraApplyListBinding
 import com.unicorn.lettersVisits.databinding.ItemApplyBinding
@@ -33,7 +34,7 @@ class PetitionerPetitionListFra : BaseFra<FraApplyListBinding>() {
                     val model = getModel<Petition>()
                     val binding = getBinding<ItemApplyBinding>()
                     binding.apply {
-                        tvUser.text = model.petitioner.target.name
+                        tvUser.text = model.petitioner.target.username
                         tvContent.text = model.content
                     }
                 }
@@ -53,7 +54,9 @@ class PetitionerPetitionListFra : BaseFra<FraApplyListBinding>() {
                 ToastUtils.showShort("搜索没做")
             }
             ivAdd.setOnClickListener {
-                start<PetitionDetailAct> {}
+                start<PetitionDetailAct> {
+
+                }
             }
         }
     }
@@ -67,9 +70,13 @@ class PetitionerPetitionListFra : BaseFra<FraApplyListBinding>() {
         }
     }
 
-    private fun getData(): MutableList<Petition> =
-        SimpleComponent().boxStore.boxFor<Petition>().query().orderDesc(Petition_.createTime)
-            .build().find()
+    private fun getData(): MutableList<Petition> {
+        val petitionBox = Global.boxStore.boxFor<Petition>()
+        val builder = petitionBox.query().orderDesc(Petition_.createTime)
+        builder.link(Petition_.petitioner)
+            .apply(User_.username.equal(Global.currentUser!!.username))
+        return builder.build().find()
+    }
 
     override fun initStatusBar() {
         binding.searchBarContainer.statusPadding()

@@ -106,8 +106,8 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                 }
                 onFastClick(R.id.tv) {
                     if (!mEditable) return@onFastClick
-                    when (getModel<PetitionField>()) {
-                        PetitionField.PF_PETITIONER -> {
+                    when (getModel<PetitionField>().label) {
+                        "当事人" -> {
                             if (Global.isStaff) {
                                 dialogHolder =
                                     MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
@@ -116,7 +116,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                                     }
                             }
                         }
-                        PetitionField.PF_DEPARTMENT -> {
+                        "信访单位" -> {
                             val departments = Global.boxStore.boxFor<Department>().all
                             MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
                                 title(text = "请选择信访单位")
@@ -127,7 +127,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                                 }
                             }
                         }
-                        PetitionField.PF_PETITION_TYPE -> {
+                        "信访类型" -> {
                             val petitionTypes = PetitionType.values()
                             MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
                                 title(text = "请选择信访类型")
@@ -138,16 +138,16 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                                 }
                             }
                         }
-                        PetitionField.PF_REPLY -> {
+                        else -> {
                             // do nothing
                         }
                     }
                 }
             }.models = listOf(
-                PetitionField.PF_PETITIONER,
-                PetitionField.PF_DEPARTMENT,
-                PetitionField.PF_PETITION_TYPE,
-                PetitionField.PF_REPLY
+                PetitionField(label = "当事人", hint = "请选择"),
+                PetitionField(label = "信访单位", hint = "请选择"),
+                PetitionField(label = "信访类型", hint = "请选择"),
+                PetitionField(label = "信访答复", hint = "待答复"),
             )
         }
     }
@@ -208,6 +208,10 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                     ToastUtils.showShort("请选择当事人")
                     return@setOnClickListener
                 }
+                if (mPetition.department.target == null) {
+                    ToastUtils.showShort("请选择信访单位")
+                    return@setOnClickListener
+                }
 
                 // 保存数据
                 mPetition.apply {
@@ -231,6 +235,10 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                         Global.boxStore.boxFor<Petition>().put(mPetition)
                     }
                 }
+            }
+
+            btnTransfer.setOnClickListener {
+                ToastUtils.showShort("转办没做")
             }
         }
     }

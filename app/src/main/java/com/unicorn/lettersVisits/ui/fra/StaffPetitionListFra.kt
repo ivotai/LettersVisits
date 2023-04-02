@@ -6,9 +6,9 @@ import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
 import com.drake.channel.receiveEvent
 import com.unicorn.lettersVisits.R
+import com.unicorn.lettersVisits.app.Global
 import com.unicorn.lettersVisits.app.module.SimpleComponent
-import com.unicorn.lettersVisits.data.model.Petition
-import com.unicorn.lettersVisits.data.model.Petition_
+import com.unicorn.lettersVisits.data.model.*
 import com.unicorn.lettersVisits.data.model.event.PetitionerSelectEvent
 import com.unicorn.lettersVisits.databinding.FraRole2ApplyListBinding
 import com.unicorn.lettersVisits.databinding.ItemApplyBinding
@@ -51,9 +51,13 @@ class StaffPetitionListFra : BaseFra<FraRole2ApplyListBinding>() {
         }
     }
 
-    private fun getData(): MutableList<Petition> =
-        SimpleComponent().boxStore.boxFor<Petition>().query().orderDesc(Petition_.createTime)
-            .build().find()
+    private fun getData(): MutableList<Petition> {
+        val petitionBox = Global.boxStore.boxFor<Petition>()
+        val builder = petitionBox.query().orderDesc(Petition_.createTime)
+        builder.link(Petition_.department)
+            .apply(Department_.name.equal(Global.currentUser!!.department.target.name))
+        return builder.build().find()
+    }
 
 
     override fun initIntents() {
