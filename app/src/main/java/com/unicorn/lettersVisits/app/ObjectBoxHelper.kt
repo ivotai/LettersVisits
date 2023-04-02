@@ -24,9 +24,9 @@ class ObjectBoxHelper {
         fun init() {
             if (userBox.isEmpty) {
                 userBox.put(
-                    User(name = "张羡忠", role = Role.STAFF),
-                    User(name = "杨间", role = Role.PETITIONER),
-                    User(name = "童倩", role = Role.PETITIONER),
+                    User(username = "张羡忠", role = Role.STAFF),
+                    User(username = "杨间", role = Role.PETITIONER),
+                    User(username = "童倩", role = Role.PETITIONER),
                 )
             }
         }

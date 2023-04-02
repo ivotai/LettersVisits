@@ -76,7 +76,7 @@ class SupportFra : BaseFra<FraSupportBinding>() {
                         }
                         is SupportHeader -> {
                             getBinding<HeadSupportBinding>().apply {
-                                tvUser.text = Global.currentUser!!.name
+                                tvUser.text = Global.currentUser!!.username
                                 tvRole.text = Global.currentRole!!.roleName
                             }
                         }

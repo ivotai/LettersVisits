@@ -4,6 +4,7 @@ package com.unicorn.lettersVisits.ui.act
 import android.Manifest
 import android.graphics.Color
 import android.os.Environment.getExternalStorageDirectory
+import android.view.View
 import androidx.core.graphics.ColorUtils
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
@@ -91,16 +92,33 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
     override fun initIntents() {
         super.initIntents()
 
+        fun enableEditing() {
+            binding.apply {
+                etContent.isEnabled = true
+                tvPetitioner.isEnabled = true
+                tvPetitionType.isEnabled = true
+                btnConfirm.visibility = View.VISIBLE
+            }
+        }
+
         binding.apply {
             // 如果是当事人，设置默认当事人
             if (Global.isPetitioner) {
-                mPetition.petitioner.target  = Global.currentUser
+                mPetition.petitioner.target = Global.currentUser
             }
 
             // 恢复数据
             val id = intent.getLongExtra("id", -1L)
             if (id != -1L) {
                 mPetition = Global.boxStore.boxFor<Petition>().get(id)
+
+                // 如果是创建者，则启用编辑
+                if (mPetition.creator.target == Global.currentUser) {
+                    enableEditing()
+                }
+            } else {
+                // 如果是新增，则启用编辑
+                enableEditing()
             }
 
             // 展示数据
@@ -112,6 +130,9 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
         }
 
         binding.apply {
+
+
+            etContent.isEnabled = true
 
             btnConfirm.setOnClickListener {
                 // 非空验证
