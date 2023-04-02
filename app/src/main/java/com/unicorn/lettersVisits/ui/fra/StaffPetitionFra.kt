@@ -8,7 +8,7 @@ import com.unicorn.lettersVisits.ui.act.PetitionDetailAct
 import com.unicorn.lettersVisits.ui.base.BaseFra
 import splitties.fragments.start
 
-class Role1ApplyFra : BaseFra<FraRole2ApplyBinding>() {
+class StaffPetitionFra : BaseFra<FraRole2ApplyBinding>() {
 
     override fun initViews() {
 
@@ -17,12 +17,12 @@ class Role1ApplyFra : BaseFra<FraRole2ApplyBinding>() {
         // init vp
         binding.vp.apply {
             offscreenPageLimit = tabCount - 1
-            adapter = object : FragmentStateAdapter(this@Role1ApplyFra) {
+            adapter = object : FragmentStateAdapter(this@StaffPetitionFra) {
 
                 override fun getItemCount() = tabCount
 
                 override fun createFragment(position: Int) = when (position) {
-                    0 -> Role1ApplyListFra()
+                    0 -> StaffPetitionListFra()
                     1 -> RandomColorFra()
                     2 -> RandomColorFra()
                     else -> throw IllegalArgumentException()

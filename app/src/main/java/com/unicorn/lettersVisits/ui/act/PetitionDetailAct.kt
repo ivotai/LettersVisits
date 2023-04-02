@@ -7,32 +7,39 @@ import android.os.Environment.getExternalStorageDirectory
 import android.view.View
 import androidx.core.graphics.ColorUtils
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.bottomsheets.BottomSheet
+import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.files.fileChooser
+import com.afollestad.materialdialogs.list.listItems
 import com.baidu.ocr.sdk.model.IDCardResult
-import com.blankj.utilcode.util.SizeUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.mutable
 import com.drake.brv.utils.setup
 import com.drake.channel.receiveEvent
+import com.drake.channel.sendEvent
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.Global
 import com.unicorn.lettersVisits.app.initialPassword
 import com.unicorn.lettersVisits.data.model.*
+import com.unicorn.lettersVisits.data.model.event.PetitionerPutEvent
 import com.unicorn.lettersVisits.data.model.event.PetitionerSelectEvent
 import com.unicorn.lettersVisits.data.model.event.StartOrcEvent
+import com.unicorn.lettersVisits.data.model.role.PetitionType
 import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.databinding.ActAddPetitionBinding
 import com.unicorn.lettersVisits.databinding.ItemMaterialBinding
 import com.unicorn.lettersVisits.databinding.ItemMaterialUploadBinding
 import com.unicorn.lettersVisits.databinding.ItemPetitionFieldBinding
+import com.unicorn.lettersVisits.view.PetitionerSelectView
 import io.objectbox.kotlin.boxFor
-import io.objectbox.model.ModelProperty.addType
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 import splitties.resources.color
 import java.io.File
+import java.util.*
 
 
 @RuntimePermissions
@@ -44,7 +51,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
         binding.apply {
             titleBar.setTitle("信访申请")
 
-            btnConfirm.helper.backgroundColorPressed = ColorUtils.blendARGB(
+            btnSubmit.helper.backgroundColorPressed = ColorUtils.blendARGB(
                 color(R.color.main_color), Color.WHITE, 0.3f
             )
 
@@ -86,43 +93,58 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             rv2.linear().setup {
                 addType<PetitionField>(R.layout.item_petition_field)
                 onBind {
-//                    // 根据 modelPosition 绘制背景
                     val binding = getBinding<ItemPetitionFieldBinding>()
-//                    val helper = binding.root.helper
-//                    val cornerRadius = SizeUtils.dp2px(16f).toFloat()
-//                    if (modelPosition == 0) {
-////                        helper.cornerRadiusTopLeft = cornerRadius
-////                        helper.cornerRadiusTopRight = cornerRadius
-//                    }
-//                    if (modelPosition == modelCount - 1) {
-//                        helper.cornerRadiusBottomLeft = cornerRadius
-//                        helper.cornerRadiusBottomRight = cornerRadius
-//                    }
-
                     val item = getModel<PetitionField>()
                     binding.apply {
                         l.text = item.label
                         tv.hint = item.hint
-                        tv.text = item.value
+                        tv.text = item.text
                     }
                 }
                 onFastClick(R.id.tv) {
                     if (!mEditable) return@onFastClick
                     when (getModel<PetitionField>()) {
                         PetitionField.PF_PETITIONER -> {
+                            if (Global.isStaff) {
+                                dialogHolder =
+                                    MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
+                                        title(text = "请选择当事人")
+                                        customView(view = PetitionerSelectView(this@PetitionDetailAct))
+                                    }
+                            }
                         }
                         PetitionField.PF_DEPARTMENT -> {
-
+                            val departments = Global.boxStore.boxFor<Department>().all
+                            MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
+                                title(text = "请选择信访单位")
+                                listItems(
+                                    items = departments.map { it.name },
+                                ) { _, index, _ ->
+                                    setDepartment(departments[index])
+                                }
+                            }
                         }
                         PetitionField.PF_PETITION_TYPE -> {
-
+                            val petitionTypes = PetitionType.values()
+                            MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
+                                title(text = "请选择信访类型")
+                                listItems(
+                                    items = petitionTypes.map { it.petitionTypeName },
+                                ) { _, index, _ ->
+                                    setPetitionType(petitionTypes[index])
+                                }
+                            }
                         }
                         PetitionField.PF_REPLY -> {
-
+                            // do nothing
                         }
                     }
                 }
-            }.models = PetitionField.values().toList()
+            }.models = listOf(
+                PetitionField.PF_PETITIONER,
+                PetitionField.PF_DEPARTMENT,
+                PetitionField.PF_PETITION_TYPE,
+            )
         }
     }
 
@@ -130,14 +152,12 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
         super.initIntents()
 
         binding.apply {
-            // 如果是当事人
+            // 赋予一些默认值
             if (Global.isPetitioner) {
-                mPetition.petitioner.target = Global.currentUser
+                setPetitioner(Global.currentUser)
             }
-
-            // 如果是Staff
             if (Global.isStaff) {
-                mPetition.department.target = Global.currentUser!!.department.target
+                setDepartment(Global.currentUser?.department?.target)
             }
 
             // 恢复数据
@@ -155,85 +175,49 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
             // 根据 mEditable 设置界面
             etContent.isEnabled = mEditable
-            btnConfirm.visibility = if (mEditable) View.VISIBLE else View.GONE
+            btnSubmit.visibility = if (mEditable) View.VISIBLE else View.GONE
 
-            // 根据 isCreating 设置界面
-            val show = isCreating && Global.isStaff
-            btnReply.visibility = if (show) View.VISIBLE else View.GONE
-            btnTransfer.visibility = if (show) View.VISIBLE else View.GONE
+            // 根据 temp 设置界面
+            val temp = !isCreating && Global.isStaff
+            btnReply.visibility = if (temp) View.VISIBLE else View.GONE
+            btnTransfer.visibility = if (temp) View.VISIBLE else View.GONE
 
             // 展示数据
             mPetition.apply {
                 etContent.setText(this.content)
-//                tvPetitioner.text = this.petitioner.target?.name
-//                tvDepartment.text = this.department.target?.name
-//                tvPetitionType.text = this.petitionType.petitionTypeName
+                setPetitioner(this.petitioner.target)
+                setDepartment(this.department.target)
+                setPetitionType(this.petitionType)
             }
         }
 
-//        binding.apply {
-//            btnConfirm.setOnClickListener {
-//                if (!mEditable) return@setOnClickListener
-//                // 非空验证
-//                val content = etContent.text.toString().trim()
-//                if (content.isEmpty()) {
-//                    ToastUtils.showShort("请输入申请内容")
-//                    return@setOnClickListener
-//                }
-//                if (mPetition.petitioner.target == null) {
-//                    ToastUtils.showShort("请选择当事人")
-//                    return@setOnClickListener
-//                }
-//
-//                // 保存数据
-//                mPetition.apply {
-//                    this.content = content
-//                    this.creator.target = Global.currentUser
-//                    this.createTime = Date()
-//                }
-//                Global.boxStore.boxFor<Petition>().put(mPetition)
-//
-//                // 通知列表刷新
-//                sendEvent(PetitionerPutEvent())
-//                finish()
-//            }
-//
-//            tvPetitioner.setOnClickListener {
-//                if (!mEditable) return@setOnClickListener
-//                if (Global.isStaff) {
-//                    dialogHolder = MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
-//                        title(text = "请选择当事人")
-//                        customView(view = PetitionerSelectView(this@PetitionDetailAct))
-//                    }
-//                }
-//            }
-//
-//            tvDepartment.setOnClickListener {
-//                if (!mEditable) return@setOnClickListener
-//                val departments = Global.boxStore.boxFor<Department>().all
-//                dialogHolder = MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
-//                    title(text = "请选择部门")
-//                    listItems(
-//                        items = departments.map { it.name!! },
-//                    ) { _, index, _ ->
-//                        setDepartment(departments[index])
-//                    }
-//                }
-//            }
-//
-//            tvPetitionType.setOnClickListener {
-//                if (!mEditable) return@setOnClickListener
-//                dialogHolder = MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
-//                    title(text = "请选择信访类型")
-//                    listItems(
-//                        items = PetitionType.values().map { it.petitionTypeName },
-//                    ) { _, index, text ->
-//                        mPetition.petitionType = PetitionType.values()[index]
-//                        tvPetitionType.text = text
-//                    }
-//                }
-//            }
-//        }
+        binding.apply {
+            btnSubmit.setOnClickListener {
+                if (!mEditable) return@setOnClickListener
+                // 非空验证
+                val content = etContent.text.toString().trim()
+                if (content.isEmpty()) {
+                    ToastUtils.showShort("请输入申请内容")
+                    return@setOnClickListener
+                }
+                if (mPetition.petitioner.target == null) {
+                    ToastUtils.showShort("请选择当事人")
+                    return@setOnClickListener
+                }
+
+                // 保存数据
+                mPetition.apply {
+                    this.content = content
+                    this.creator.target = Global.currentUser
+                    this.createTime = Date()
+                }
+                Global.boxStore.boxFor<Petition>().put(mPetition)
+
+                // 通知列表刷新
+                sendEvent(PetitionerPutEvent())
+                finish()
+            }
+        }
     }
 
     // Android 10适配要点，作用域存储
@@ -289,14 +273,33 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
     private var mPetition = Petition()
 
-    private fun setPetitioner(it: User) {
-        mPetition.petitioner.target = it
-//        binding.tvPetitioner.text = it.username
+    private fun setPetitioner(it: User?) {
+        if (it == null) return
+        binding.rv2.bindingAdapter.apply {
+            mPetition.petitioner.target = it
+            val petitionField = models!![0] as PetitionField
+            petitionField.text = it.username
+            notifyItemChanged(0)
+        }
     }
 
-    private fun setDepartment(it: Department) {
-        mPetition.department.target = it
-//        binding.tvDepartment.text = it.name
+    private fun setDepartment(it: Department?) {
+        if (it == null) return
+        binding.rv2.bindingAdapter.apply {
+            mPetition.department.target = it
+            val petitionField = models!![1] as PetitionField
+            petitionField.text = it.name
+            notifyItemChanged(1)
+        }
+    }
+
+    private fun setPetitionType(it: PetitionType) {
+        binding.rv2.bindingAdapter.apply {
+            mPetition.petitionType = it
+            val petitionField = models!![2] as PetitionField
+            petitionField.text = it.petitionTypeName
+            notifyItemChanged(2)
+        }
     }
 
     override fun onRequestPermissionsResult(

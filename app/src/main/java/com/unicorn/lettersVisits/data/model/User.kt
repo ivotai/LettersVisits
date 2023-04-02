@@ -12,7 +12,7 @@ import java.io.Serializable
 @Entity
 data class User(
     @Id var id: Long = 0,
-    var username: String? = null,
+    var username: String = "",
     var password: String? = null,
     @Convert(converter = RoleConverter::class, dbType = String::class) var role: Role? = null,
     var address: String? = null,

@@ -12,7 +12,7 @@ import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.setUpWithViewPager2
 import com.unicorn.lettersVisits.databinding.ActMain2Binding
 import com.unicorn.lettersVisits.ui.base.BaseAct
-import com.unicorn.lettersVisits.ui.fra.Role1ApplyFra
+import com.unicorn.lettersVisits.ui.fra.StaffPetitionFra
 import com.unicorn.lettersVisits.ui.fra.SupportFra
 import me.majiajie.pagerbottomtabstrip.item.NormalItemView
 
@@ -32,7 +32,7 @@ class StaffMainAct : BaseAct<ActMain2Binding>() {
                 override fun getItemCount() = tabCount
 
                 override fun createFragment(position: Int) = when (position) {
-                    0 -> Role1ApplyFra()
+                    0 -> StaffPetitionFra()
                     1 -> SupportFra()
                     else -> throw IllegalArgumentException()
                 }

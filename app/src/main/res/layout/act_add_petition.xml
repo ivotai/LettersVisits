@@ -78,7 +78,7 @@
     </com.ruffian.library.widget.RConstraintLayout>
 
     <com.ruffian.library.widget.RTextView
-        android:id="@+id/btnConfirm"
+        android:id="@+id/btn_submit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -95,14 +95,16 @@
         app:background_normal="@color/main_color"
         app:corner_radius="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnReply"
+        app:layout_constraintEnd_toStartOf="@+id/btn_reply"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.ruffian.library.widget.RTextView
-        android:id="@+id/btnReply"
+        android:id="@+id/btn_reply"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
         android:focusable="true"
@@ -117,12 +119,12 @@
         app:border_width_normal="1dp"
         app:corner_radius="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnTransfer"
+        app:layout_constraintEnd_toStartOf="@+id/btn_transfer"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnConfirm" />
+        app:layout_constraintStart_toEndOf="@+id/btn_submit" />
 
     <com.ruffian.library.widget.RTextView
-        android:id="@+id/btnTransfer"
+        android:id="@+id/btn_transfer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -143,6 +145,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnReply" />
+        app:layout_constraintStart_toEndOf="@+id/btn_reply" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

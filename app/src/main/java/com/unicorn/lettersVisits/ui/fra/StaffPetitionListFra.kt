@@ -9,12 +9,15 @@ import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.Petition
 import com.unicorn.lettersVisits.data.model.Petition_
+import com.unicorn.lettersVisits.data.model.event.PetitionerSelectEvent
 import com.unicorn.lettersVisits.databinding.FraRole2ApplyListBinding
 import com.unicorn.lettersVisits.databinding.ItemApplyBinding
+import com.unicorn.lettersVisits.ui.act.PetitionDetailAct
 import com.unicorn.lettersVisits.ui.base.BaseFra
 import io.objectbox.kotlin.boxFor
+import splitties.fragments.start
 
-class Role1ApplyListFra : BaseFra<FraRole2ApplyListBinding>() {
+class StaffPetitionListFra : BaseFra<FraRole2ApplyListBinding>() {
 
     override fun initViews() {
         binding.apply {
@@ -31,12 +34,18 @@ class Role1ApplyListFra : BaseFra<FraRole2ApplyListBinding>() {
                         tvContent.text = model.content
                     }
                 }
+                onFastClick(R.id.root) {
+                    val model = getModel<Petition>()
+                    start<PetitionDetailAct> {
+                        putExtra("id", model.id)
+                    }
+                }
             }.models = getData()
         }
     }
 
     override fun initEvents() {
-        receiveEvent<Petition> {
+        receiveEvent<PetitionerSelectEvent> {
             binding.rv.models = getData()
             binding.rv.smoothScrollToPosition(0)
         }
