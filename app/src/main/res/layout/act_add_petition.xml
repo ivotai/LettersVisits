@@ -18,9 +18,7 @@
         android:id="@+id/rc1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
         app:background_normal="@color/white"
-        app:corner_radius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleBar">
@@ -35,8 +33,6 @@
             android:textColor="@color/black"
             android:textSize="18dp"
             app:background_normal="@color/white"
-            app:corner_radius="16dp"
-            app:enabled="false"
             app:layout_constraintBottom_toTopOf="@+id/rv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,10 +56,10 @@
         android:id="@+id/rc2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="16dp"
+        android:layout_marginTop="16dp"
         android:paddingBottom="16dp"
         app:background_normal="@color/white"
-        app:corner_radius="16dp"
+        app:corner_radius="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rc1">
@@ -177,7 +173,7 @@
 
     <com.ruffian.library.widget.RTextView
         android:id="@+id/btnConfirm"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -190,12 +186,57 @@
         android:textColor="@color/white"
         android:textSize="16dp"
         android:textStyle="bold"
-        app:background_normal="?attr/colorPrimary"
+        app:background_normal="@color/main_color"
+        app:corner_radius="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnReply"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.ruffian.library.widget.RTextView
+        android:id="@+id/btnReply"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="答复"
+        android:textColor="@color/main_color"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:background_normal="@color/white"
+        app:border_color_normal="@color/main_color"
+        app:border_width_normal="1dp"
+        app:corner_radius="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnTransfer"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnConfirm" />
+
+    <com.ruffian.library.widget.RTextView
+        android:id="@+id/btnTransfer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="转办"
+        android:textColor="@color/main_color"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:background_normal="@color/white"
+        app:border_color_normal="@color/main_color"
+        app:border_width_normal="1dp"
         app:corner_radius="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
-
+        app:layout_constraintStart_toEndOf="@+id/btnReply" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
