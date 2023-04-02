@@ -6,14 +6,12 @@ import android.graphics.Color
 import android.os.Environment.getExternalStorageDirectory
 import android.view.View
 import androidx.core.graphics.ColorUtils
-import androidx.databinding.DataBindingUtil.getBinding
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.files.fileChooser
 import com.afollestad.materialdialogs.list.listItems
 import com.baidu.ocr.sdk.model.IDCardResult
-import com.blankj.utilcode.util.DeviceUtils.getModel
 import com.blankj.utilcode.util.ToastUtils
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.mutable
@@ -24,6 +22,7 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.Global
 import com.unicorn.lettersVisits.app.initialPassword
+import com.unicorn.lettersVisits.data.model.Department
 import com.unicorn.lettersVisits.data.model.Material
 import com.unicorn.lettersVisits.data.model.Petition
 import com.unicorn.lettersVisits.data.model.User
@@ -98,17 +97,22 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
         super.initIntents()
 
         binding.apply {
-            // 如果是当事人，设置默认当事人
+            // 如果是当事人
             if (Global.isPetitioner) {
                 mPetition.petitioner.target = Global.currentUser
+            }
+
+            // 如果是Staff
+            if (Global.isStaff) {
+                mPetition.department.target = Global.currentUser!!.department.target
             }
 
             // 恢复数据
             val id = intent.getLongExtra("id", -1L)
             val isCreating = id == -1L
-            if (isCreating){
+            if (isCreating) {
                 mEditable = true
-            }else{
+            } else {
                 mPetition = Global.boxStore.boxFor<Petition>().get(id)
                 // 如果是创建者，则启用编辑
                 if (mPetition.creator.target == Global.currentUser) {
@@ -118,19 +122,19 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
             // 根据 mEditable 设置界面
             etContent.isEnabled = mEditable
-            btnConfirm.visibility = if(mEditable) View.VISIBLE else View.INVISIBLE
+            btnConfirm.visibility = if (mEditable) View.VISIBLE else View.GONE
 
             // 根据 isCreating 设置界面
-
-
+            val show = isCreating && Global.isStaff
+            btnReply.visibility = if (show) View.VISIBLE else View.GONE
+            btnTransfer.visibility = if (show) View.VISIBLE else View.GONE
 
             // 展示数据
             mPetition.apply {
                 etContent.setText(this.content)
                 tvPetitioner.text = this.petitioner.target?.name
+                tvDepartment.text = this.department.target?.name
                 tvPetitionType.text = this.petitionType.petitionTypeName
-
-                tvPetitionType.text ="不予通过，愿意还是非常不爱水电费而我若群无而"
             }
         }
 
@@ -167,6 +171,19 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                     dialogHolder = MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
                         title(text = "请选择当事人")
                         customView(view = PetitionerSelectView(this@PetitionDetailAct))
+                    }
+                }
+            }
+
+            tvDepartment.setOnClickListener {
+                if (!mEditable) return@setOnClickListener
+                val departments = Global.boxStore.boxFor<Department>().all
+                dialogHolder = MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
+                    title(text = "请选择部门")
+                    listItems(
+                        items = departments.map { it.name!! },
+                    ) { _, index, _ ->
+                        setDepartment(departments[index])
                     }
                 }
             }
@@ -241,7 +258,12 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
     private fun setPetitioner(it: User) {
         mPetition.petitioner.target = it
-        binding.tvPetitioner.text = it.name
+        binding.tvPetitioner.text = it.username
+    }
+
+    private fun setDepartment(it: Department) {
+        mPetition.department.target = it
+        binding.tvDepartment.text = it.name
     }
 
     override fun onRequestPermissionsResult(

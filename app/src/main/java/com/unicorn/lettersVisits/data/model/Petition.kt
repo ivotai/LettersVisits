@@ -21,4 +21,5 @@ data class Petition(
 ) : Serializable {
     lateinit var petitioner: ToOne<User>
     lateinit var creator: ToOne<User>
+    lateinit var department: ToOne<Department>
 }

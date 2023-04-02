@@ -10,10 +10,11 @@ import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.Global
 import com.unicorn.lettersVisits.app.ObjectBoxHelper
 import com.unicorn.lettersVisits.data.model.User
+import com.unicorn.lettersVisits.data.model.event.UserSelectEvent
 import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.databinding.ActLoginBinding
 import com.unicorn.lettersVisits.ui.base.BaseAct
-import com.unicorn.lettersVisits.view.RoleUserListView
+import com.unicorn.lettersVisits.view.UserSelectView
 import splitties.activities.start
 import splitties.resources.color
 
@@ -35,7 +36,7 @@ class LoginAct : BaseAct<ActLoginBinding>() {
                 fun showUserDialog() {
                     dialogHolder = MaterialDialog(this@LoginAct, BottomSheet()).show {
                         title(text = "请选择用户")
-                        customView(view = RoleUserListView(context), scrollable = true)
+                        customView(view = UserSelectView(context), scrollable = true)
                     }
                 }
                 showUserDialog()
@@ -48,10 +49,9 @@ class LoginAct : BaseAct<ActLoginBinding>() {
 
 
     override fun initEvents() {
-        receiveEvent<User> {
+        receiveEvent<UserSelectEvent> {
             dialogHolder?.dismiss()
-
-            Global.currentUser = it
+            Global.currentUser = it.user
             if (Global.currentRole == Role.PETITIONER) start<PetitionerMainAct>() else start<StaffMainAct>()
             finish()
         }

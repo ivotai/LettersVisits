@@ -104,7 +104,7 @@
     },
     {
       "id": "7:6479716510433386145",
-      "lastPropertyId": "6:1551415852753881914",
+      "lastPropertyId": "7:5701169155587269459",
       "name": "Petition",
       "properties": [
         {
@@ -143,6 +143,14 @@
           "type": 11,
           "flags": 520,
           "relationTarget": "User"
+        },
+        {
+          "id": "7:5701169155587269459",
+          "name": "departmentId",
+          "indexId": "10:813258585932288493",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "Department"
         }
       ],
       "relations": []
@@ -168,7 +176,7 @@
     }
   ],
   "lastEntityId": "9:2258414702534839458",
-  "lastIndexId": "9:4783556852770229333",
+  "lastIndexId": "10:813258585932288493",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

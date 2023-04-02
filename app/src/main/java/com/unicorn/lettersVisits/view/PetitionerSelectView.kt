@@ -31,7 +31,7 @@ class PetitionerSelectView(context: Context) : ConstraintLayout(context) {
             val userBox = SimpleComponent().boxStore.boxFor<User>()
             val query = userBox.query {
                 equal(User_.role, Role.PETITIONER.roleName, QueryBuilder.StringOrder.CASE_SENSITIVE)
-                order(User_.name)
+                order(User_.username)
             }
             return query.find()
         }
@@ -47,7 +47,7 @@ class PetitionerSelectView(context: Context) : ConstraintLayout(context) {
                     when (val item = getModel<Any>()) {
                         is User -> {
                             val binding = getBinding<ItemUserBinding>()
-                            binding.tv.text = item.name
+                            binding.tv.text = item.username
                         }
                         is String -> {
                             val binding = getBinding<ItemUserBinding>()

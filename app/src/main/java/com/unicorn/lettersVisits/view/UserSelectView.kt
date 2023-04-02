@@ -10,6 +10,7 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.RoundedGoogleMaterial
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.data.model.User
+import com.unicorn.lettersVisits.data.model.event.UserSelectEvent
 import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.data.model.role.RoleItemExpand
 import com.unicorn.lettersVisits.databinding.ItemRoleBinding
@@ -17,7 +18,7 @@ import com.unicorn.lettersVisits.databinding.ItemUserBinding
 import com.unicorn.lettersVisits.databinding.LayoutRoleUserListBinding
 
 
-class RoleUserListView(context: Context) : ConstraintLayout(context) {
+class UserSelectView(context: Context) : ConstraintLayout(context) {
 
     private val binding = inflate<LayoutRoleUserListBinding>()
 
@@ -42,7 +43,7 @@ class RoleUserListView(context: Context) : ConstraintLayout(context) {
                         }
                         is User -> {
                             val binding = getBinding<ItemUserBinding>()
-                            binding.tv.text = item.name
+                            binding.tv.text = item.username
                         }
                     }
                 }
@@ -52,8 +53,7 @@ class RoleUserListView(context: Context) : ConstraintLayout(context) {
                             expandOrCollapse()
                         }
                         is User -> {
-                            // 发送事件
-                            sendEvent(event = item)
+                            sendEvent(UserSelectEvent(user = item))
                         }
                     }
                 }
