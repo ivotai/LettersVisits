@@ -18,6 +18,7 @@ data class Petition(
     @Convert(
         converter = PetitionTypeConverter::class, dbType = String::class
     ) var petitionType: PetitionType = PetitionType.PetitionType1,
+    var reply: String? = null,
 ) : Serializable {
     lateinit var petitioner: ToOne<User>
     lateinit var creator: ToOne<User>

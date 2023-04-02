@@ -10,13 +10,12 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.files.fileChooser
+import com.afollestad.materialdialogs.input.getInputField
+import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItems
 import com.baidu.ocr.sdk.model.IDCardResult
 import com.blankj.utilcode.util.ToastUtils
-import com.drake.brv.utils.bindingAdapter
-import com.drake.brv.utils.linear
-import com.drake.brv.utils.mutable
-import com.drake.brv.utils.setup
+import com.drake.brv.utils.*
 import com.drake.channel.receiveEvent
 import com.drake.channel.sendEvent
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -90,7 +89,11 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             }.models = listOf("上传信访材料")
 
             // petition field
-            rv2.linear().setup {
+            rv2.linear().divider {
+                setColorRes(splitties.material.colors.R.color.grey_200)
+                setDivider(width = 1, dp = false)
+            }.setup {
+
                 addType<PetitionField>(R.layout.item_petition_field)
                 onBind {
                     val binding = getBinding<ItemPetitionFieldBinding>()
@@ -144,6 +147,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                 PetitionField.PF_PETITIONER,
                 PetitionField.PF_DEPARTMENT,
                 PetitionField.PF_PETITION_TYPE,
+                PetitionField.PF_REPLY
             )
         }
     }
@@ -179,8 +183,8 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
             // 根据 temp 设置界面
             val temp = !isCreating && Global.isStaff
-            btnReply.visibility = if (temp) View.VISIBLE else View.GONE
             btnTransfer.visibility = if (temp) View.VISIBLE else View.GONE
+            btnReply.visibility = if (temp) View.VISIBLE else View.GONE
 
             // 展示数据
             mPetition.apply {
@@ -216,6 +220,17 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                 // 通知列表刷新
                 sendEvent(PetitionerPutEvent())
                 finish()
+            }
+
+            btnReply.setOnClickListener {
+                MaterialDialog(this@PetitionDetailAct).show {
+                    title(text = "请输入答复内容")
+                    input()
+                    positiveButton { dialog ->
+                        setReply(dialog.getInputField().text.toString())
+                        Global.boxStore.boxFor<Petition>().put(mPetition)
+                    }
+                }
             }
         }
     }
@@ -299,6 +314,15 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             val petitionField = models!![2] as PetitionField
             petitionField.text = it.petitionTypeName
             notifyItemChanged(2)
+        }
+    }
+
+    private fun setReply(it: String) {
+        binding.rv2.bindingAdapter.apply {
+            mPetition.reply = it
+            val petitionField = models!![3] as PetitionField
+            petitionField.text = it
+            notifyItemChanged(3)
         }
     }
 

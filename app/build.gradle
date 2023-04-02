@@ -115,7 +115,7 @@ dependencies {
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
     implementation files('libs/ocrsdk.aar')
     implementation files('libs/ocr_ui-debug.aar')
-
+    implementation 'com.afollestad.material-dialogs:input:3.3.0'
     implementation 'cat.ereza:customactivityoncrash:2.4.0'
 
 
