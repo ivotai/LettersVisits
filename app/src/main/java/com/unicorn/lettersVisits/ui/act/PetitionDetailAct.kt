@@ -6,12 +6,14 @@ import android.graphics.Color
 import android.os.Environment.getExternalStorageDirectory
 import android.view.View
 import androidx.core.graphics.ColorUtils
+import androidx.databinding.DataBindingUtil.getBinding
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.files.fileChooser
 import com.afollestad.materialdialogs.list.listItems
 import com.baidu.ocr.sdk.model.IDCardResult
+import com.blankj.utilcode.util.DeviceUtils.getModel
 import com.blankj.utilcode.util.ToastUtils
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.mutable
@@ -35,6 +37,7 @@ import com.unicorn.lettersVisits.databinding.ItemMaterialBinding
 import com.unicorn.lettersVisits.databinding.ItemMaterialUploadBinding
 import com.unicorn.lettersVisits.view.PetitionerSelectView
 import io.objectbox.kotlin.boxFor
+import io.objectbox.model.ModelProperty.addType
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 import splitties.resources.color
@@ -45,6 +48,8 @@ import java.util.*
 @RuntimePermissions
 class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
+
+    private var mEditable = false
 
     override fun initViews() {
         binding.apply {
@@ -72,6 +77,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                     }
                 }
                 onFastClick(R.id.root) {
+                    if (!mEditable) return@onFastClick
                     when (getModel<Any>()) {
                         is String -> {
                             showFileDialogWithPermissionCheck()
@@ -92,15 +98,6 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
     override fun initIntents() {
         super.initIntents()
 
-        fun enableEditing() {
-            binding.apply {
-                etContent.isEnabled = true
-                tvPetitioner.isEnabled = true
-                tvPetitionType.isEnabled = true
-                btnConfirm.visibility = View.VISIBLE
-            }
-        }
-
         binding.apply {
             // 如果是当事人，设置默认当事人
             if (Global.isPetitioner) {
@@ -114,27 +111,30 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
                 // 如果是创建者，则启用编辑
                 if (mPetition.creator.target == Global.currentUser) {
-                    enableEditing()
+                    mEditable = true
                 }
             } else {
                 // 如果是新增，则启用编辑
-                enableEditing()
+                mEditable = true
             }
+
+            // 根据 mEditable 设置界面
+            etContent.isEnabled = mEditable
+            btnConfirm.visibility = if(mEditable) View.VISIBLE else View.INVISIBLE
 
             // 展示数据
             mPetition.apply {
                 etContent.setText(this.content)
                 tvPetitioner.text = this.petitioner.target?.name
                 tvPetitionType.text = this.petitionType.petitionTypeName
+
+                tvPetitionType.text ="不予通过，愿意还是非常不爱水电费而我若群无而"
             }
         }
 
         binding.apply {
-
-
-            etContent.isEnabled = true
-
             btnConfirm.setOnClickListener {
+                if (!mEditable) return@setOnClickListener
                 // 非空验证
                 val content = etContent.text.toString().trim()
                 if (content.isEmpty()) {
@@ -160,6 +160,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             }
 
             tvPetitioner.setOnClickListener {
+                if (!mEditable) return@setOnClickListener
                 if (Global.isStaff) {
                     dialogHolder = MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
                         title(text = "请选择当事人")
@@ -169,6 +170,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             }
 
             tvPetitionType.setOnClickListener {
+                if (!mEditable) return@setOnClickListener
                 dialogHolder = MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
                     title(text = "请选择信访类型")
                     listItems(
