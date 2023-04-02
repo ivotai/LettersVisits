@@ -6,6 +6,7 @@ import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import io.objectbox.relation.ToOne
+import java.io.Serializable
 import java.util.*
 
 
@@ -17,7 +18,7 @@ data class Petition(
     @Convert(
         converter = PetitionTypeConverter::class, dbType = String::class
     ) var petitionType: PetitionType? = null,
-) {
+) : Serializable {
     lateinit var petitioner: ToOne<User>
     lateinit var creator: ToOne<User>
 }

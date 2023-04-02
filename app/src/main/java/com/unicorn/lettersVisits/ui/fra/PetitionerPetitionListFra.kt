@@ -37,6 +37,12 @@ class PetitionerPetitionListFra : BaseFra<FraApplyListBinding>() {
                         tvContent.text = model.content
                     }
                 }
+                onFastClick(R.id.root) {
+                    val model = getModel<Petition>()
+                    start<AddPetitionAct> {
+                        putExtra("id", model.id)
+                    }
+                }
             }.models = getData()
         }
     }

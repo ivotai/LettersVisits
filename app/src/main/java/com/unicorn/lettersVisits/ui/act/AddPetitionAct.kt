@@ -57,12 +57,23 @@ class AddPetitionAct : BaiduOrcAct<ActAddPetitionBinding>() {
             idNumber = result.idNumber.words,
             name = result.name.words
         )
-        onPetitioner(user)
+        setPetitioner(user)
     }
 
     override fun initViews() {
         binding.apply {
-            titleBar.setTitle("添加信访申请")
+            titleBar.setTitle("信访申请")
+
+            // 显示已有数据
+            val id = intent.getLongExtra("id", -1L)
+            if (id != -1L) {
+                val petition = Global.boxStore.boxFor<Petition>().get(id)
+                titleBar.setTitle("信访申请修改")
+                etContent.setText(petition.content)
+                tvPetitioner.text = petition.petitioner.target?.name
+                tvPetitionType.text = petition.petitionType?.petitionTypeName
+                mPetition = petition
+            }
 
             btnConfirm.helper.backgroundColorPressed = ColorUtils.blendARGB(
                 color(R.color.main_color), Color.WHITE, 0.3f
@@ -70,7 +81,7 @@ class AddPetitionAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
             // 设置当事人
             if (Global.isPetitioner) {
-                onPetitioner(Global.currentUser!!)
+                setPetitioner(Global.currentUser!!)
             }
 
             // 信访材料
@@ -120,22 +131,22 @@ class AddPetitionAct : BaiduOrcAct<ActAddPetitionBinding>() {
                     ToastUtils.showShort("请输入申请内容")
                     return@setOnClickListener
                 }
-                if (petition.petitioner.target == null) {
+                if (mPetition.petitioner.target == null) {
                     ToastUtils.showShort("请选择当事人")
                     return@setOnClickListener
                 }
-                if (petition.petitionType == null) {
+                if (mPetition.petitionType == null) {
                     ToastUtils.showShort("请选择信访类型")
                     return@setOnClickListener
                 }
 
                 // 保存数据
-                petition.apply {
+                mPetition.apply {
                     this.content = content
                     this.createTime = Date()
                     this.creator.target = Global.currentUser
                 }
-                SimpleComponent().boxStore.boxFor<Petition>().put(petition)
+                SimpleComponent().boxStore.boxFor<Petition>().put(mPetition)
 
                 // 通知列表刷新
                 sendEvent(PetitionerSaveEvent())
@@ -157,7 +168,7 @@ class AddPetitionAct : BaiduOrcAct<ActAddPetitionBinding>() {
                     listItems(
                         items = PetitionType.values().map { it.petitionTypeName },
                     ) { _, index, text ->
-                        petition.petitionType = PetitionType.values()[index]
+                        mPetition.petitionType = PetitionType.values()[index]
                         tvPetitionType.text = text
                     }
                 }
@@ -197,16 +208,16 @@ class AddPetitionAct : BaiduOrcAct<ActAddPetitionBinding>() {
         }
         receiveEvent<PetitionerSelectEvent> {
             dialogHolder?.dismiss()
-            onPetitioner(it.petitioner)
+            setPetitioner(it.petitioner)
         }
     }
 
-    private fun onPetitioner(it: User) {
-        petition.petitioner.target = it
+    private var mPetition = Petition()
+
+    private fun setPetitioner(it: User) {
+        mPetition.petitioner.target = it
         binding.tvPetitioner.text = it.name
     }
-
-    private val petition = Petition()
 
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
