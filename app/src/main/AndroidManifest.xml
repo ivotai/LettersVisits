@@ -31,7 +31,7 @@
         <activity android:name=".ui.act.PetitionerMainAct" />
         <activity android:name=".ui.act.CommonCalculationAct" />
         <activity android:name=".ui.act.OpenAiAct" />
-        <activity android:name=".ui.act.AddPetitionAct" />
+        <activity android:name=".ui.act.PetitionDetailAct" />
     </application>
 
 </manifest>

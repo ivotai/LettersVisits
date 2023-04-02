@@ -26,6 +26,7 @@
         app:layout_constraintTop_toBottomOf="@+id/titleBar">
 
         <com.ruffian.library.widget.REditText
+            android:editable="false"
             android:id="@+id/etContent"
             android:layout_width="0dp"
             android:layout_height="200dp"

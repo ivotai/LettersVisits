@@ -21,11 +21,10 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.Global
 import com.unicorn.lettersVisits.app.initialPassword
-import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.Material
 import com.unicorn.lettersVisits.data.model.Petition
 import com.unicorn.lettersVisits.data.model.User
-import com.unicorn.lettersVisits.data.model.event.PetitionerSaveEvent
+import com.unicorn.lettersVisits.data.model.event.PetitionerPutEvent
 import com.unicorn.lettersVisits.data.model.event.PetitionerSelectEvent
 import com.unicorn.lettersVisits.data.model.event.StartOrcEvent
 import com.unicorn.lettersVisits.data.model.role.PetitionType
@@ -43,49 +42,19 @@ import java.util.*
 
 
 @RuntimePermissions
-class AddPetitionAct : BaiduOrcAct<ActAddPetitionBinding>() {
+class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
-    override fun onOrcResult(result: IDCardResult) {
-        val user = User(
-            username = result.name.words,
-            password = initialPassword,
-            role = Role.PETITIONER,
-            address = result.address.words,
-            birthday = result.birthday.words,
-            ethnic = result.birthday.words,
-            gender = result.gender.words,
-            idNumber = result.idNumber.words,
-            name = result.name.words
-        )
-        setPetitioner(user)
-    }
 
     override fun initViews() {
         binding.apply {
             titleBar.setTitle("信访申请")
 
-            // 显示已有数据
-            val id = intent.getLongExtra("id", -1L)
-            if (id != -1L) {
-                val petition = Global.boxStore.boxFor<Petition>().get(id)
-                titleBar.setTitle("信访申请修改")
-                etContent.setText(petition.content)
-                tvPetitioner.text = petition.petitioner.target?.name
-                tvPetitionType.text = petition.petitionType?.petitionTypeName
-                mPetition = petition
-            }
-
             btnConfirm.helper.backgroundColorPressed = ColorUtils.blendARGB(
                 color(R.color.main_color), Color.WHITE, 0.3f
             )
 
-            // 设置当事人
-            if (Global.isPetitioner) {
-                setPetitioner(Global.currentUser!!)
-            }
-
             // 信访材料
-            rv.layoutManager = FlexboxLayoutManager(this@AddPetitionAct)
+            rv.layoutManager = FlexboxLayoutManager(this@PetitionDetailAct)
             rv.setup {
                 addType<String>(R.layout.item_material_upload)
                 addType<Material>(R.layout.item_material)
@@ -123,9 +92,29 @@ class AddPetitionAct : BaiduOrcAct<ActAddPetitionBinding>() {
         super.initIntents()
 
         binding.apply {
+            // 如果是当事人，设置默认当事人
+            if (Global.isPetitioner) {
+                mPetition.petitioner.target  = Global.currentUser
+            }
+
+            // 恢复数据
+            val id = intent.getLongExtra("id", -1L)
+            if (id != -1L) {
+                mPetition = Global.boxStore.boxFor<Petition>().get(id)
+            }
+
+            // 展示数据
+            mPetition.apply {
+                etContent.setText(this.content)
+                tvPetitioner.text = this.petitioner.target?.name
+                tvPetitionType.text = this.petitionType.petitionTypeName
+            }
+        }
+
+        binding.apply {
 
             btnConfirm.setOnClickListener {
-                // 一些验证
+                // 非空验证
                 val content = etContent.text.toString().trim()
                 if (content.isEmpty()) {
                     ToastUtils.showShort("请输入申请内容")
@@ -135,35 +124,31 @@ class AddPetitionAct : BaiduOrcAct<ActAddPetitionBinding>() {
                     ToastUtils.showShort("请选择当事人")
                     return@setOnClickListener
                 }
-                if (mPetition.petitionType == null) {
-                    ToastUtils.showShort("请选择信访类型")
-                    return@setOnClickListener
-                }
 
                 // 保存数据
                 mPetition.apply {
                     this.content = content
-                    this.createTime = Date()
                     this.creator.target = Global.currentUser
+                    this.createTime = Date()
                 }
-                SimpleComponent().boxStore.boxFor<Petition>().put(mPetition)
+                Global.boxStore.boxFor<Petition>().put(mPetition)
 
                 // 通知列表刷新
-                sendEvent(PetitionerSaveEvent())
+                sendEvent(PetitionerPutEvent())
                 finish()
             }
 
             tvPetitioner.setOnClickListener {
                 if (Global.isStaff) {
-                    dialogHolder = MaterialDialog(this@AddPetitionAct, BottomSheet()).show {
+                    dialogHolder = MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
                         title(text = "请选择当事人")
-                        customView(view = PetitionerSelectView(this@AddPetitionAct))
+                        customView(view = PetitionerSelectView(this@PetitionDetailAct))
                     }
                 }
             }
 
             tvPetitionType.setOnClickListener {
-                dialogHolder = MaterialDialog(this@AddPetitionAct, BottomSheet()).show {
+                dialogHolder = MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
                     title(text = "请选择信访类型")
                     listItems(
                         items = PetitionType.values().map { it.petitionTypeName },
@@ -210,6 +195,21 @@ class AddPetitionAct : BaiduOrcAct<ActAddPetitionBinding>() {
             dialogHolder?.dismiss()
             setPetitioner(it.petitioner)
         }
+    }
+
+    override fun onOrcResult(result: IDCardResult) {
+        val user = User(
+            username = result.name.words,
+            password = initialPassword,
+            role = Role.PETITIONER,
+            address = result.address.words,
+            birthday = result.birthday.words,
+            ethnic = result.birthday.words,
+            gender = result.gender.words,
+            idNumber = result.idNumber.words,
+            name = result.name.words
+        )
+        setPetitioner(user)
     }
 
     private var mPetition = Petition()

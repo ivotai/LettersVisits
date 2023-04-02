@@ -11,10 +11,10 @@ import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.Petition
 import com.unicorn.lettersVisits.data.model.Petition_
-import com.unicorn.lettersVisits.data.model.event.PetitionerSaveEvent
+import com.unicorn.lettersVisits.data.model.event.PetitionerPutEvent
 import com.unicorn.lettersVisits.databinding.FraApplyListBinding
 import com.unicorn.lettersVisits.databinding.ItemApplyBinding
-import com.unicorn.lettersVisits.ui.act.AddPetitionAct
+import com.unicorn.lettersVisits.ui.act.PetitionDetailAct
 import com.unicorn.lettersVisits.ui.base.BaseFra
 import io.objectbox.kotlin.boxFor
 import splitties.fragments.start
@@ -39,7 +39,7 @@ class PetitionerPetitionListFra : BaseFra<FraApplyListBinding>() {
                 }
                 onFastClick(R.id.root) {
                     val model = getModel<Petition>()
-                    start<AddPetitionAct> {
+                    start<PetitionDetailAct> {
                         putExtra("id", model.id)
                     }
                 }
@@ -53,13 +53,13 @@ class PetitionerPetitionListFra : BaseFra<FraApplyListBinding>() {
                 ToastUtils.showShort("搜索没做")
             }
             ivAdd.setOnClickListener {
-                start<AddPetitionAct> {}
+                start<PetitionDetailAct> {}
             }
         }
     }
 
     override fun initEvents() {
-        receiveEvent<PetitionerSaveEvent> {
+        receiveEvent<PetitionerPutEvent> {
             binding.apply {
                 rv.models = getData()
                 rv.smoothScrollToPosition(0)

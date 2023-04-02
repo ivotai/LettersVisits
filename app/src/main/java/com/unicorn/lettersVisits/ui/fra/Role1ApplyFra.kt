@@ -4,7 +4,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.drake.statusbar.statusPadding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.unicorn.lettersVisits.databinding.FraRole2ApplyBinding
-import com.unicorn.lettersVisits.ui.act.AddPetitionAct
+import com.unicorn.lettersVisits.ui.act.PetitionDetailAct
 import com.unicorn.lettersVisits.ui.base.BaseFra
 import splitties.fragments.start
 
@@ -46,7 +46,7 @@ class Role1ApplyFra : BaseFra<FraRole2ApplyBinding>() {
     override fun initIntents() {
         binding.apply {
             ivAdd.setOnClickListener {
-                start<AddPetitionAct> { }
+                start<PetitionDetailAct> { }
             }
 
         }

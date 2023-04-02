@@ -13,11 +13,11 @@ import java.util.*
 @Entity
 data class Petition(
     @Id var id: Long = 0,
-    var content: String? = null,
-    var createTime: Date? = null,
+    var content: String = "",
+    var createTime: Date = Date(),
     @Convert(
         converter = PetitionTypeConverter::class, dbType = String::class
-    ) var petitionType: PetitionType? = null,
+    ) var petitionType: PetitionType = PetitionType.PetitionType1,
 ) : Serializable {
     lateinit var petitioner: ToOne<User>
     lateinit var creator: ToOne<User>
