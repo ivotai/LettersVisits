@@ -15,6 +15,7 @@ import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.databinding.ActLoginBinding
 import com.unicorn.lettersVisits.ui.base.BaseAct
 import com.unicorn.lettersVisits.view.UserSelectView
+import permissions.dispatcher.RuntimePermissions
 import splitties.activities.start
 import splitties.resources.color
 

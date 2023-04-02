@@ -1,6 +1,5 @@
 package com.unicorn.lettersVisits.ui.act
 
-import android.Manifest
 import android.content.Intent
 import androidx.viewbinding.ViewBinding
 import com.baidu.ocr.sdk.OCR
@@ -15,11 +14,8 @@ import com.baidu.ocr.ui.camera.CameraView
 import com.blankj.utilcode.util.ToastUtils
 import com.unicorn.lettersVisits.app.baidu.FileUtil
 import com.unicorn.lettersVisits.ui.base.BaseAct
-import permissions.dispatcher.NeedsPermission
-import permissions.dispatcher.RuntimePermissions
 import java.io.File
 
-@RuntimePermissions
 abstract class BaiduOrcAct<VB : ViewBinding>: BaseAct<VB>() {
 
     abstract fun onOrcResult(result: IDCardResult)
@@ -66,11 +62,6 @@ abstract class BaiduOrcAct<VB : ViewBinding>: BaseAct<VB>() {
     }
 
     @Suppress("DEPRECATION")
-    @NeedsPermission(
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.CAMERA
-    )
     fun startOrc() {
         if (ocrPrepared.not()) {
             ToastUtils.showShort("OCR未准备好")
@@ -127,14 +118,6 @@ abstract class BaiduOrcAct<VB : ViewBinding>: BaseAct<VB>() {
                 // do nothing
             }
         })
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>, grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        // NOTE: delegate the permission handling to generated function
-        onRequestPermissionsResult(requestCode, grantResults)
     }
 
 }

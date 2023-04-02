@@ -46,6 +46,15 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
     private var mEditable = false
 
+    @NeedsPermission(
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.CAMERA
+    )
+    fun startOrcWrapper(){
+        startOrc()
+    }
+
     override fun initViews() {
         binding.apply {
             titleBar.setTitle("信访申请")
@@ -271,7 +280,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
     override fun initEvents() {
         receiveEvent<StartOrcEvent> {
             dialogHolder?.dismiss()
-            startOrcWithPermissionCheck()
+            startOrcWrapperWithPermissionCheck()
         }
         receiveEvent<PetitionerSelectEvent> {
             dialogHolder?.dismiss()
