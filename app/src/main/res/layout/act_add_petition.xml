@@ -18,7 +18,9 @@
         android:id="@+id/rc1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         app:background_normal="@color/white"
+        app:corner_radius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleBar">
@@ -33,6 +35,7 @@
             android:textColor="@color/black"
             android:textSize="18dp"
             app:background_normal="@color/white"
+            app:corner_radius="16dp"
             app:layout_constraintBottom_toTopOf="@+id/rv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,118 +59,21 @@
         android:id="@+id/rc2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:paddingBottom="16dp"
+        android:layout_margin="16dp"
         app:background_normal="@color/white"
-        app:corner_radius="0dp"
+        app:corner_radius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rc1">
 
-        <TextView
-            android:id="@+id/l_petitioner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="当事人"
-            android:textColor="@color/black"
-            android:textSize="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_petitioner"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_petitioner" />
-
-        <TextView
-            android:id="@+id/tv_petitioner"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:gravity="end"
-            android:hint="请选择"
-            android:textColor="@color/black"
-            android:textSize="16dp"
+            android:clipToPadding="false"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:id="@+id/v1"
-            android:layout_width="0dp"
-            android:layout_height="1px"
-            android:layout_marginTop="16dp"
-            android:background="@color/grey_200"
-            app:layout_constraintEnd_toEndOf="@+id/tv_petitioner"
-            app:layout_constraintStart_toStartOf="@+id/l_petitioner"
-            app:layout_constraintTop_toBottomOf="@+id/tv_petitioner" />
-
-        <TextView
-            android:id="@+id/l_department"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="信访单位"
-            android:textColor="@color/black"
-            android:textSize="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_department"
-            app:layout_constraintStart_toStartOf="@+id/l_petitioner"
-            app:layout_constraintTop_toTopOf="@+id/tv_department" />
-
-        <TextView
-            android:id="@+id/tv_department"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:gravity="end"
-            android:hint="请选择"
-            android:textColor="@color/black"
-            android:textSize="16dp"
-            app:layout_constraintEnd_toEndOf="@+id/tv_petitioner"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/v1" />
-
-        <View
-            android:id="@+id/v2"
-            android:layout_width="0dp"
-            android:layout_height="1px"
-            android:layout_marginTop="16dp"
-            android:background="@color/grey_200"
-            app:layout_constraintEnd_toEndOf="@+id/tv_petitioner"
-            app:layout_constraintStart_toStartOf="@+id/l_petitioner"
-            app:layout_constraintTop_toBottomOf="@+id/tv_department" />
-
-        <TextView
-            android:id="@+id/l_petition_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="信访类型"
-            android:textColor="@color/black"
-            android:textSize="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_petition_type"
-            app:layout_constraintStart_toStartOf="@+id/l_petitioner"
-            app:layout_constraintTop_toTopOf="@+id/tv_petition_type" />
-
-        <TextView
-            android:id="@+id/tv_petition_type"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:gravity="end"
-            android:hint="请选择"
-            android:textColor="@color/black"
-            android:textSize="16dp"
-            app:layout_constraintEnd_toEndOf="@+id/tv_petitioner"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/v2" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
-
+            app:layout_constraintStart_toStartOf="parent" />
 
     </com.ruffian.library.widget.RConstraintLayout>
 
