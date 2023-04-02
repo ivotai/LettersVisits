@@ -37,7 +37,6 @@ import com.unicorn.lettersVisits.databinding.ItemMaterialBinding
 import com.unicorn.lettersVisits.databinding.ItemMaterialUploadBinding
 import com.unicorn.lettersVisits.view.PetitionerSelectView
 import io.objectbox.kotlin.boxFor
-import io.objectbox.model.ModelProperty.addType
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 import splitties.resources.color
@@ -106,21 +105,24 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
             // 恢复数据
             val id = intent.getLongExtra("id", -1L)
-            if (id != -1L) {
+            val isCreating = id == -1L
+            if (isCreating){
+                mEditable = true
+            }else{
                 mPetition = Global.boxStore.boxFor<Petition>().get(id)
-
                 // 如果是创建者，则启用编辑
                 if (mPetition.creator.target == Global.currentUser) {
                     mEditable = true
                 }
-            } else {
-                // 如果是新增，则启用编辑
-                mEditable = true
             }
 
             // 根据 mEditable 设置界面
             etContent.isEnabled = mEditable
             btnConfirm.visibility = if(mEditable) View.VISIBLE else View.INVISIBLE
+
+            // 根据 isCreating 设置界面
+
+
 
             // 展示数据
             mPetition.apply {

@@ -186,7 +186,7 @@
         android:focusable="true"
         android:gravity="center"
         android:padding="16dp"
-        android:text="确认"
+        android:text="提交"
         android:textColor="@color/white"
         android:textSize="16dp"
         android:textStyle="bold"
