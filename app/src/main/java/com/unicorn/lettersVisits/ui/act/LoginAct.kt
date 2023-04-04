@@ -7,15 +7,14 @@ import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.customview.customView
 import com.drake.channel.receiveEvent
 import com.unicorn.lettersVisits.R
+import com.unicorn.lettersVisits.app.JExcelApiHelper
 import com.unicorn.lettersVisits.app.Global
 import com.unicorn.lettersVisits.app.ObjectBoxHelper
-import com.unicorn.lettersVisits.data.model.User
 import com.unicorn.lettersVisits.data.model.event.UserSelectEvent
 import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.databinding.ActLoginBinding
 import com.unicorn.lettersVisits.ui.base.BaseAct
 import com.unicorn.lettersVisits.view.UserSelectView
-import permissions.dispatcher.RuntimePermissions
 import splitties.activities.start
 import splitties.resources.color
 
@@ -46,7 +45,10 @@ class LoginAct : BaseAct<ActLoginBinding>() {
 
         // 初始化数据库
         ObjectBoxHelper.init()
+
+        JExcelApiHelper().readExcel(this)
     }
+
 
 
     override fun initEvents() {

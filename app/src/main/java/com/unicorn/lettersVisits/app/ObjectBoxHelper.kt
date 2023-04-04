@@ -7,6 +7,7 @@ import com.unicorn.lettersVisits.data.model.role.Role
 import io.objectbox.Box
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
+import java.io.InputStream
 
 
 // 这个界面用来执行一些数据库操作,测试
@@ -39,6 +40,8 @@ class ObjectBoxHelper {
                 )
             }
         }
+
+
 
     }
 

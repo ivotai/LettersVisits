@@ -20,7 +20,7 @@ android {
 
     defaultConfig {
         applicationId "com.unicorn.lettersVisits"
-        minSdk 24
+        minSdk 26
         //noinspection ExpiredTargetSdkVersion
         targetSdk 28
         versionCode 1
@@ -118,5 +118,11 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:input:3.3.0'
     implementation 'cat.ereza:customactivityoncrash:2.4.0'
 
-
+    implementation 'org.apache.poi:poi:5.2.0'
+    implementation 'org.apache.poi:poi-ooxml:5.2.0'
+    implementation group: 'net.sourceforge.jexcelapi', name: 'jxl', version: '2.6.12'
+//    implementation 'com.alibaba:easyexcel:3.2.1'
+//
+//    implementation group: 'javax.xml.stream', name: 'stax-api', version: '1.0-2'
+//    implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.24'
 }
