@@ -40,6 +40,7 @@ import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 import splitties.resources.color
 import java.io.File
+import java.text.Collator
 import java.util.*
 
 
@@ -148,7 +149,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 //                                    setPetitionType(petitionTypes[index])
 //                                }
 //                            }
-                            sendEvent(ExcelDialogEvent(queryIndex = 2, "来访案件类型"))
+                            sendEvent(ExcelDialogEvent(queryIndex = 1, queryValue = "涉诉法院信息"))
                         }
                         else -> {
                             // do nothing
@@ -293,19 +294,19 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
         receiveEvent<ExcelDialogEvent> { event ->
             val excelDataBox = Global.boxStore.boxFor<ExcelData>()
             val propertyQuery = excelDataBox.query().equal(
-                    ExcelData_.__ALL_PROPERTIES[event.queryIndex],
-                    event.queryValue,
-                    QueryBuilder.StringOrder.CASE_SENSITIVE
-                ).order(ExcelData_.id).build()
-                .property(ExcelData_.__ALL_PROPERTIES[event.queryIndex + 1])
+                ExcelData_.__ALL_PROPERTIES[event.queryIndex],
+                event.queryValue,
+                QueryBuilder.StringOrder.CASE_SENSITIVE
+            ).build().property(ExcelData_.__ALL_PROPERTIES[event.queryIndex + 1])
             val results = propertyQuery.distinct().findStrings()
             if (results.size == 1) {
                 ToastUtils.showShort("选择结果: ${event.queryValue}")
                 return@receiveEvent
             }
-            MaterialDialog(this@PetitionDetailAct).show {
+            results.sortWith(Collator.getInstance(Locale.CHINA))
+            MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
                 title(text = "请选择")
-                listItems(items = results.toList()) { _, index, text ->
+                listItems(items = results.toList()) { _, _, text ->
                     sendEvent(ExcelDialogEvent(event.queryIndex + 1, text.toString()))
                 }
             }
