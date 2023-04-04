@@ -23,6 +23,7 @@ import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.Global
 import com.unicorn.lettersVisits.app.initialPassword
 import com.unicorn.lettersVisits.data.model.*
+import com.unicorn.lettersVisits.data.model.event.ExcelDialogEvent
 import com.unicorn.lettersVisits.data.model.event.PetitionerPutEvent
 import com.unicorn.lettersVisits.data.model.event.PetitionerSelectEvent
 import com.unicorn.lettersVisits.data.model.event.StartOrcEvent
@@ -34,6 +35,7 @@ import com.unicorn.lettersVisits.databinding.ItemMaterialUploadBinding
 import com.unicorn.lettersVisits.databinding.ItemPetitionFieldBinding
 import com.unicorn.lettersVisits.view.PetitionerSelectView
 import io.objectbox.kotlin.boxFor
+import io.objectbox.query.QueryBuilder
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 import splitties.resources.color
@@ -51,7 +53,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.CAMERA
     )
-    fun startOrcWrapper(){
+    fun startOrcWrapper() {
         startOrc()
     }
 
@@ -137,15 +139,16 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                             }
                         }
                         "信访类型" -> {
-                            val petitionTypes = PetitionType.values()
-                            MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
-                                title(text = "请选择信访类型")
-                                listItems(
-                                    items = petitionTypes.map { it.petitionTypeName },
-                                ) { _, index, _ ->
-                                    setPetitionType(petitionTypes[index])
-                                }
-                            }
+//                            val petitionTypes = PetitionType.values()
+//                            MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
+//                                title(text = "请选择信访类型")
+//                                listItems(
+//                                    items = petitionTypes.map { it.petitionTypeName },
+//                                ) { _, index, _ ->
+//                                    setPetitionType(petitionTypes[index])
+//                                }
+//                            }
+                            sendEvent(ExcelDialogEvent(queryIndex = 2, "来访案件类型"))
                         }
                         else -> {
                             // do nothing
@@ -286,7 +289,29 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             dialogHolder?.dismiss()
             setPetitioner(it.petitioner)
         }
+
+        receiveEvent<ExcelDialogEvent> { event ->
+            val excelDataBox = Global.boxStore.boxFor<ExcelData>()
+            val propertyQuery = excelDataBox.query().equal(
+                    ExcelData_.__ALL_PROPERTIES[event.queryIndex],
+                    event.queryValue,
+                    QueryBuilder.StringOrder.CASE_SENSITIVE
+                ).order(ExcelData_.id).build()
+                .property(ExcelData_.__ALL_PROPERTIES[event.queryIndex + 1])
+            val results = propertyQuery.distinct().findStrings()
+            if (results.size == 1) {
+                ToastUtils.showShort("选择结果: ${event.queryValue}")
+                return@receiveEvent
+            }
+            MaterialDialog(this@PetitionDetailAct).show {
+                title(text = "请选择")
+                listItems(items = results.toList()) { _, index, text ->
+                    sendEvent(ExcelDialogEvent(event.queryIndex + 1, text.toString()))
+                }
+            }
+        }
     }
+
 
     override fun onOrcResult(result: IDCardResult) {
         val user = User(

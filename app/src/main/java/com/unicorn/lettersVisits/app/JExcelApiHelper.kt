@@ -2,7 +2,6 @@ package com.unicorn.lettersVisits.app
 
 import android.content.Context
 import com.unicorn.lettersVisits.data.model.ExcelData
-import com.unicorn.lettersVisits.data.model.ExcelData_.*
 import io.objectbox.kotlin.boxFor
 import jxl.Workbook
 import java.io.InputStream
@@ -23,29 +22,29 @@ class JExcelApiHelper {
 
         var row = sheet.getRow(0)
         var oldData = ExcelData().apply {
-            projectName = row[0].contents
-            moduleName = row[1].contents
-            entryName = row[2].contents
-            level1 = row[3].contents
-            level2 = row[4].contents
-            level3 = row[5].contents
-            level4 = row[6].contents
-            level5 = row[7].contents
-            level6 = row[8].contents
+            d1 = row[0].contents
+            d2 = row[1].contents
+            d3 = row[2].contents
+            d4 = row[3].contents
+            d5 = row[4].contents
+            d6 = row[5].contents
+            d7 = row[6].contents
+            d8 = row[7].contents
+            d9 = row[8].contents
         }
 
         for (i in 1 until sheet.rows) {
-             row = sheet.getRow(i)
+            row = sheet.getRow(i)
             val data = ExcelData().apply {
-                projectName = row[0].contents.ifEmpty { oldData.projectName }
-                moduleName = row[1].contents.ifEmpty { oldData.moduleName }
-                entryName = row[2].contents.ifEmpty { oldData.entryName }
-                level1 = row[3].contents.ifEmpty { oldData.level1 }
-                level2 = row[4].contents.ifEmpty { oldData.level2 }
-                level3 = row[5].contents.ifEmpty { oldData.level3 }
-                level4 = row[6].contents.ifEmpty { oldData.level4 }
-                level5 = row[7].contents.ifEmpty { oldData.level5 }
-                level6 = row[8].contents.ifEmpty { oldData.level6 }
+                d1 = row[0].contents.ifEmpty { oldData.d1 }
+                d2 = row[1].contents.ifEmpty { oldData.d2 }
+                d3 = row[2].contents.ifEmpty { oldData.d3 }
+                d4 = row[3].contents.ifEmpty { oldData.d4 }
+                d5 = row[4].contents.ifEmpty { oldData.d5 }
+                d6 = row[5].contents.ifEmpty { oldData.d6 }
+                d7 = row[6].contents.ifEmpty { oldData.d7 }
+                d8 = row[7].contents.ifEmpty { oldData.d8 }
+                d9 = row[8].contents.ifEmpty { oldData.d9 }
             }
             datas.add(data)
             oldData = data

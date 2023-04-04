@@ -52,10 +52,12 @@ class StaffPetitionListFra : BaseFra<FraRole2ApplyListBinding>() {
     }
 
     private fun getData(): MutableList<Petition> {
+        ExcelData_.__ALL_PROPERTIES
         val petitionBox = Global.boxStore.boxFor<Petition>()
         val builder = petitionBox.query().orderDesc(Petition_.createTime)
         builder.link(Petition_.department)
-            .apply(Department_.name.equal(Global.currentUser!!.department.target.name))
+            .apply(Department_.name
+            .equal(Global.currentUser!!.department.target.name))
         return builder.build().find()
     }
 
