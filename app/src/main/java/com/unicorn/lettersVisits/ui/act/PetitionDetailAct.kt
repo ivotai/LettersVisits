@@ -295,7 +295,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             }
             results.sortedWith(Collator.getInstance(Locale.CHINA))
             MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
-                title(text = "请选择")
+                title(text = "请选择${event.queryValue}")
                 listItems(items = results.toList()) { _, _, text ->
                     sendEvent(
                         ExcelDialogEvent(
