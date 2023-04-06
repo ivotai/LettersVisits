@@ -21,33 +21,33 @@ class JExcelApiHelper {
         val datas = mutableListOf<ExcelData>()
 
         var row = sheet.getRow(0)
-        var oldData = ExcelData().apply {
-            d1 = row[0].contents
-            d2 = row[1].contents
-            d3 = row[2].contents
-            d4 = row[3].contents
-            d5 = row[4].contents
-            d6 = row[5].contents
-            d7 = row[6].contents
-            d8 = row[7].contents
-            d9 = row[8].contents
-        }
+//        var oldData = ExcelData().apply {
+//            d1 = row[0].contents
+//            d2 = row[1].contents
+//            d3 = row[2].contents
+//            d4 = row[3].contents
+//            d5 = row[4].contents
+//            d6 = row[5].contents
+//            d7 = row[6].contents
+//            d8 = row[7].contents
+//            d9 = row[8].contents
+//        }
 
-        for (i in 1 until sheet.rows) {
+        for (i in 0 until sheet.rows) {
             row = sheet.getRow(i)
             val data = ExcelData().apply {
-                d1 = row[0].contents.ifEmpty { oldData.d1 }
-                d2 = row[1].contents.ifEmpty { oldData.d2 }
-                d3 = row[2].contents.ifEmpty { oldData.d3 }
-                d4 = row[3].contents.ifEmpty { oldData.d4 }
-                d5 = row[4].contents.ifEmpty { oldData.d5 }
-                d6 = row[5].contents.ifEmpty { oldData.d6 }
-                d7 = row[6].contents.ifEmpty { oldData.d7 }
-                d8 = row[7].contents.ifEmpty { oldData.d8 }
-                d9 = row[8].contents.ifEmpty { oldData.d9 }
+                d1 = row[0].contents
+                d2 = row[1].contents
+                d3 = row[2].contents
+                d4 = row[3].contents
+                d5 = row[4].contents
+                d6 = row[5].contents
+                d7 = row[6].contents
+                d8 = row[7].contents
+                d9 = row[8].contents
             }
             datas.add(data)
-            oldData = data
+//            oldData = data/**/
         }
         excelDataBox.put(datas)
     }

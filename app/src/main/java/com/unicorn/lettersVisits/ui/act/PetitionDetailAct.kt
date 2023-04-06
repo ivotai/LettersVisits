@@ -289,13 +289,12 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                 event.queryValue,
                 QueryBuilder.StringOrder.CASE_SENSITIVE
             ).build().property(ExcelData_.__ALL_PROPERTIES[event.queryIndex + 1])
-            // todo maybe filter "" and result.size == 0
-            val results = propertyQuery.distinct().findStrings()
-            if (results.size == 1) {
+            val results = propertyQuery.distinct().findStrings().filter { it.isNotEmpty() }
+            if (results.isEmpty()) {
                 ToastUtils.showShort("选择结果: ${event.queryValue}")
                 return@receiveEvent
             }
-            results.sortWith(Collator.getInstance(Locale.CHINA))
+            results.sortedWith(Collator.getInstance(Locale.CHINA))
             MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
                 title(text = "请选择")
                 listItems(items = results.toList()) { _, _, text ->
