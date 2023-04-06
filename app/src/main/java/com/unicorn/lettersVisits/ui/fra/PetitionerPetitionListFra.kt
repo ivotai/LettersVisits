@@ -34,7 +34,7 @@ class PetitionerPetitionListFra : BaseFra<FraApplyListBinding>() {
                     val model = getModel<Petition>()
                     val binding = getBinding<ItemApplyBinding>()
                     binding.apply {
-                        tvUser.text = model.petitioner.target.username
+                        tvUser.text = model.name
                         tvContent.text = model.content
                     }
                 }
@@ -73,8 +73,8 @@ class PetitionerPetitionListFra : BaseFra<FraApplyListBinding>() {
     private fun getData(): MutableList<Petition> {
         val petitionBox = Global.boxStore.boxFor<Petition>()
         val builder = petitionBox.query().orderDesc(Petition_.createTime)
-        builder.link(Petition_.petitioner)
-            .apply(User_.username.equal(Global.currentUser!!.username))
+//        builder.link(Petition_.petitioner)
+//            .apply(User_.username.equal(Global.currentUser!!.username))
         return builder.build().find()
     }
 

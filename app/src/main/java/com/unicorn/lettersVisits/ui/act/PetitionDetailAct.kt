@@ -127,17 +127,6 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                                     }
                             }
                         }
-                        "信访单位" -> {
-                            val departments = Global.boxStore.boxFor<Department>().all
-                            MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
-                                title(text = "请选择信访单位")
-                                listItems(
-                                    items = departments.map { it.name },
-                                ) { _, index, _ ->
-                                    setDepartment(departments[index])
-                                }
-                            }
-                        }
                         "信访类型" -> {
                             sendEvent(ExcelDialogEvent(queryIndex = 2, queryValue = "最高人民法院  （备注：关联各审级的涉诉法院信息）"))
                         }
@@ -149,7 +138,6 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             }.models = listOf(
                 PetitionField(label = "当事人", hint = "请选择"),
                 PetitionField(label = "信访单位", hint = "请选择"),
-                PetitionField(label = "信访类型", hint = "请选择"),
                 PetitionField(label = "信访答复", hint = "待答复"),
             )
         }
@@ -160,12 +148,12 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
         binding.apply {
             // 赋予一些默认值
-            if (Global.isPetitioner) {
-                setPetitioner(Global.currentUser)
-            }
-            if (Global.isStaff) {
-                setDepartment(Global.currentUser?.department?.target)
-            }
+//            if (Global.isPetitioner) {
+//                setPetitioner(Global.currentUser)
+//            }
+//            if (Global.isStaff) {
+//                setDepartment(Global.currentUser?.department?.target)
+//            }
 
             // 恢复数据
             val id = intent.getLongExtra("id", -1L)
@@ -192,8 +180,6 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             // 展示数据
             mPetition.apply {
                 etContent.setText(this.content)
-                setPetitioner(this.petitioner.target)
-                setDepartment(this.department.target)
             }
         }
 
@@ -204,10 +190,6 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                 val content = etContent.text.toString().trim()
                 if (content.isEmpty()) {
                     ToastUtils.showShort("请输入申请内容")
-                    return@setOnClickListener
-                }
-                if (mPetition.petitioner.target == null) {
-                    ToastUtils.showShort("请选择当事人")
                     return@setOnClickListener
                 }
                 if (mPetition.department.target == null) {
@@ -275,10 +257,6 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             dialogHolder?.dismiss()
             startOrcWrapperWithPermissionCheck()
         }
-        receiveEvent<PetitionerSelectEvent> {
-            dialogHolder?.dismiss()
-            setPetitioner(it.petitioner)
-        }
 
         receiveEvent<ExcelDialogEvent> { event ->
             val excelDataBox = Global.boxStore.boxFor<ExcelData>()
@@ -311,36 +289,24 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             role = Role.PETITIONER,
             address = result.address.words,
             birthday = result.birthday.words,
-            ethnic = result.birthday.words,
+            ethnic = result.ethnic.words,
             gender = result.gender.words,
             idNumber = result.idNumber.words,
             name = result.name.words
         )
-        setPetitioner(user)
     }
 
     private var mPetition = Petition()
 
-    private fun setPetitioner(it: User?) {
-        if (it == null) return
-        binding.rv2.bindingAdapter.apply {
-            mPetition.petitioner.target = it
-            val petitionField = models!![0] as PetitionField
-            petitionField.text = it.username
-            notifyItemChanged(0)
-        }
-    }
-
-    private fun setDepartment(it: Department?) {
-        if (it == null) return
-        binding.rv2.bindingAdapter.apply {
-            mPetition.department.target = it
-            val petitionField = models!![1] as PetitionField
-            petitionField.text = it.name
-            notifyItemChanged(1)
-        }
-    }
-
+//    private fun setPetitioner(it: User?) {
+//        if (it == null) return
+//        binding.rv2.bindingAdapter.apply {
+//            mPetition.petitioner.target = it
+//            val petitionField = models!![0] as PetitionField
+//            petitionField.text = it.username
+//            notifyItemChanged(0)
+//        }
+//    }
 
     private fun setReply(it: String) {
         binding.rv2.bindingAdapter.apply {
