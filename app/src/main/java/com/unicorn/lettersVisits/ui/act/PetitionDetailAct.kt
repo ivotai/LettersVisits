@@ -12,10 +12,7 @@ import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItems
 import com.baidu.ocr.sdk.model.IDCardResult
 import com.blankj.utilcode.util.ToastUtils
-import com.drake.brv.utils.bindingAdapter
-import com.drake.brv.utils.divider
-import com.drake.brv.utils.linear
-import com.drake.brv.utils.setup
+import com.drake.brv.utils.*
 import com.drake.channel.receiveEvent
 import com.drake.channel.sendEvent
 import com.unicorn.lettersVisits.R
@@ -41,7 +38,6 @@ import splitties.resources.color
 import java.text.Collator
 import java.util.*
 import kotlin.reflect.KMutableProperty1
-import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 
 
@@ -149,22 +145,22 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                 PetitionField(label = "年龄", inputType = InputType.TEXT),
                 PetitionField(label = "性别", inputType = InputType.SELECT).apply {
                     excelDialogEvent = ExcelDialogEvent(
-                        queryValue = label, queryIndex = 2
+                        queryValue = label, queryIndex = 2, petitionField = this
                     )
                 },
                 PetitionField(label = "类别", inputType = InputType.SELECT).apply {
                     excelDialogEvent = ExcelDialogEvent(
-                        queryValue = label, queryIndex = 2
+                        queryValue = label, queryIndex = 2, petitionField = this
                     )
                 },
                 PetitionField(label = "民族", inputType = InputType.SELECT).apply {
                     excelDialogEvent = ExcelDialogEvent(
-                        queryValue = label, queryIndex = 2
+                        queryValue = label, queryIndex = 2, petitionField = this
                     )
                 },
                 PetitionField(label = "职业", inputType = InputType.SELECT).apply {
                     excelDialogEvent = ExcelDialogEvent(
-                        queryValue = label, queryIndex = 2
+                        queryValue = label, queryIndex = 2, petitionField = this
                     )
                 })
         }
@@ -292,13 +288,21 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             val results = propertyQuery.distinct().findStrings().filter { it.isNotEmpty() }
             if (results.isEmpty()) {
                 ToastUtils.showShort("选择结果: ${event.queryValue}")
+                val position = binding.rv2.models!!.indexOf(event.petitionField)
+                onPetitionFieldValueChange(position, event.queryValue)
                 return@receiveEvent
             }
             results.sortedWith(Collator.getInstance(Locale.CHINA))
             MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
                 title(text = "请选择")
                 listItems(items = results.toList()) { _, _, text ->
-                    sendEvent(ExcelDialogEvent(text.toString(), event.queryIndex + 1))
+                    sendEvent(
+                        ExcelDialogEvent(
+                            queryValue = text.toString(),
+                            queryIndex = event.queryIndex + 1,
+                            petitionField = event.petitionField
+                        )
+                    )
                 }
             }
         }
@@ -323,16 +327,15 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
     private fun onPetitionFieldValueChange(position: Int, value: String) {
         binding.rv2.bindingAdapter.apply {
+            // 展示
             val petitionField = models!![position] as PetitionField
             petitionField.value = value
             notifyItemChanged(position)
+
+            // 反射修改 mPetition
             val kProperty1 = Petition::class.memberProperties.elementAt(position)
             kProperty1 as KMutableProperty1<Petition, String>
             kProperty1.set(mPetition, value)
-//            kProperty1.let {
-//                it.isAccessible = true // 设置可访问性
-//                it.setter.call(person, "456 Elm St") // 设置属性值为 "456 Elm St"
-//            }
         }
 
 
