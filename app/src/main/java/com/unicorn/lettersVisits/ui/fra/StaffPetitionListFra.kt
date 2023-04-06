@@ -7,9 +7,9 @@ import com.drake.brv.utils.setup
 import com.drake.channel.receiveEvent
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.Global
-import com.unicorn.lettersVisits.app.module.SimpleComponent
 import com.unicorn.lettersVisits.data.model.*
 import com.unicorn.lettersVisits.data.model.event.PetitionerSelectEvent
+import com.unicorn.lettersVisits.data.model.petition.Petition
 import com.unicorn.lettersVisits.databinding.FraRole2ApplyListBinding
 import com.unicorn.lettersVisits.databinding.ItemApplyBinding
 import com.unicorn.lettersVisits.ui.act.PetitionDetailAct
@@ -54,10 +54,11 @@ class StaffPetitionListFra : BaseFra<FraRole2ApplyListBinding>() {
     private fun getData(): MutableList<Petition> {
         ExcelData_.__ALL_PROPERTIES
         val petitionBox = Global.boxStore.boxFor<Petition>()
-        val builder = petitionBox.query().orderDesc(Petition_.createTime)
-        builder.link(Petition_.department)
-            .apply(Department_.name
-            .equal(Global.currentUser!!.department.target.name))
+        val builder = petitionBox.query()
+//            .orderDesc(Petition_.createTime)
+//        builder.link(Petition_.department)
+//            .apply(Department_.name
+//            .equal(Global.currentUser!!.department.target.name))
         return builder.build().find()
     }
 

@@ -3,34 +3,36 @@ package com.unicorn.lettersVisits.ui.act
 
 import android.Manifest
 import android.graphics.Color
-import android.os.Environment.getExternalStorageDirectory
 import android.view.View
 import androidx.core.graphics.ColorUtils
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.customview.customView
-import com.afollestad.materialdialogs.files.fileChooser
 import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItems
 import com.baidu.ocr.sdk.model.IDCardResult
 import com.blankj.utilcode.util.ToastUtils
-import com.drake.brv.utils.*
+import com.drake.brv.utils.bindingAdapter
+import com.drake.brv.utils.divider
+import com.drake.brv.utils.linear
+import com.drake.brv.utils.setup
 import com.drake.channel.receiveEvent
 import com.drake.channel.sendEvent
-import com.google.android.flexbox.FlexboxLayoutManager
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.Global
 import com.unicorn.lettersVisits.app.initialPassword
-import com.unicorn.lettersVisits.data.model.*
+import com.unicorn.lettersVisits.data.model.ExcelData
+import com.unicorn.lettersVisits.data.model.ExcelData_
+import com.unicorn.lettersVisits.data.model.User
 import com.unicorn.lettersVisits.data.model.event.ExcelDialogEvent
 import com.unicorn.lettersVisits.data.model.event.PetitionerPutEvent
-import com.unicorn.lettersVisits.data.model.event.PetitionerSelectEvent
 import com.unicorn.lettersVisits.data.model.event.StartOrcEvent
+import com.unicorn.lettersVisits.data.model.petition.InputType
+import com.unicorn.lettersVisits.data.model.petition.Petition
+import com.unicorn.lettersVisits.data.model.petition.PetitionField
 import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.databinding.ActAddPetitionBinding
-import com.unicorn.lettersVisits.databinding.ItemMaterialBinding
-import com.unicorn.lettersVisits.databinding.ItemMaterialUploadBinding
 import com.unicorn.lettersVisits.databinding.ItemPetitionFieldBinding
 import com.unicorn.lettersVisits.view.PetitionerSelectView
 import io.objectbox.kotlin.boxFor
@@ -38,7 +40,6 @@ import io.objectbox.query.QueryBuilder
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 import splitties.resources.color
-import java.io.File
 import java.text.Collator
 import java.util.*
 
@@ -66,38 +67,38 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             )
 
             // 信访材料
-            rv.layoutManager = FlexboxLayoutManager(this@PetitionDetailAct)
-            rv.setup {
-                addType<String>(R.layout.item_material_upload)
-                addType<Material>(R.layout.item_material)
-                onBind {
-                    when (val item = getModel<Any>()) {
-                        is String -> {
-                            val binding = getBinding<ItemMaterialUploadBinding>()
-                            binding.tv.text = item
-                        }
-                        is Material -> {
-                            val binding = getBinding<ItemMaterialBinding>()
-                            binding.tv.text = item.file.name
-                        }
-                    }
-                }
-                onFastClick(R.id.root) {
-                    if (!mEditable) return@onFastClick
-                    when (getModel<Any>()) {
-                        is String -> {
-                            showFileDialogWithPermissionCheck()
-                        }
-                        is Material -> {
-                            val position = modelPosition
-                            binding.apply {
-                                rv.mutable.removeAt(position) // 先删除数据
-                                rv.bindingAdapter.notifyItemRemoved(position) // 然后刷新列表
-                            }
-                        }
-                    }
-                }
-            }.models = listOf("上传信访材料")
+//            rv.layoutManager = FlexboxLayoutManager(this@PetitionDetailAct)
+//            rv.setup {
+//                addType<String>(R.layout.item_material_upload)
+//                addType<Material>(R.layout.item_material)
+//                onBind {
+//                    when (val item = getModel<Any>()) {
+//                        is String -> {
+//                            val binding = getBinding<ItemMaterialUploadBinding>()
+//                            binding.tv.text = item
+//                        }
+//                        is Material -> {
+//                            val binding = getBinding<ItemMaterialBinding>()
+//                            binding.tv.text = item.file.name
+//                        }
+//                    }
+//                }
+//                onFastClick(R.id.root) {
+//                    if (!mEditable) return@onFastClick
+//                    when (getModel<Any>()) {
+//                        is String -> {
+//                            showFileDialogWithPermissionCheck()
+//                        }
+//                        is Material -> {
+//                            val position = modelPosition
+//                            binding.apply {
+//                                rv.mutable.removeAt(position) // 先删除数据
+//                                rv.bindingAdapter.notifyItemRemoved(position) // 然后刷新列表
+//                            }
+//                        }
+//                    }
+//                }
+//            }.models = listOf("上传信访材料")
 
             // petition field
             rv2.linear().divider {
@@ -111,12 +112,34 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                     val item = getModel<PetitionField>()
                     binding.apply {
                         l.text = item.label
-                        tv.hint = item.hint
-                        tv.text = item.text
+                        tv.hint = item.inputType.hint
+                        tv.text = item.value
                     }
                 }
                 onFastClick(R.id.tv) {
                     if (!mEditable) return@onFastClick
+                    val item = getModel<PetitionField>()
+                    when (item.inputType) {
+                        InputType.TEXT -> {
+                            MaterialDialog(this@PetitionDetailAct).show {
+                                title(text = "请输入${item.label}")
+                                input()
+                                positiveButton { dialog ->
+                                    val value = dialog.getInputField().text.toString()
+
+//                                    mPetition.reply = it
+                                    item.value = value
+                                    notifyItemChanged(modelPosition)
+                                    // todo 改变 pertition 值
+
+                                }
+                            }
+                        }
+                        else ->{
+                            // do nothing
+                        }
+                    }
+
                     when (getModel<PetitionField>().label) {
                         "当事人" -> {
                             if (Global.isStaff) {
@@ -128,7 +151,11 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                             }
                         }
                         "信访类型" -> {
-                            sendEvent(ExcelDialogEvent(queryIndex = 2, queryValue = "最高人民法院  （备注：关联各审级的涉诉法院信息）"))
+                            sendEvent(
+                                ExcelDialogEvent(
+                                    queryIndex = 2, queryValue = "最高人民法院  （备注：关联各审级的涉诉法院信息）"
+                                )
+                            )
                         }
                         else -> {
                             // do nothing
@@ -136,9 +163,28 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                     }
                 }
             }.models = listOf(
-                PetitionField(label = "当事人", hint = "请选择"),
-                PetitionField(label = "信访单位", hint = "请选择"),
-                PetitionField(label = "信访答复", hint = "待答复"),
+                PetitionField(label = "来访人姓名", inputType = InputType.TEXT),
+                PetitionField(label = "年龄", inputType = InputType.TEXT),
+                PetitionField(label = "性别", inputType = InputType.SELECT).apply {
+                    excelDialogEvent = ExcelDialogEvent(
+                        queryValue = label, queryIndex = 2
+                    )
+                },
+                PetitionField(label = "类别", inputType = InputType.SELECT).apply {
+                    excelDialogEvent = ExcelDialogEvent(
+                        queryValue = label, queryIndex = 2
+                    )
+                },
+                PetitionField(label = "民族", inputType = InputType.SELECT).apply {
+                    excelDialogEvent = ExcelDialogEvent(
+                        queryValue = label, queryIndex = 2
+                    )
+                },
+                PetitionField(label = "职业", inputType = InputType.SELECT).apply {
+                    excelDialogEvent = ExcelDialogEvent(
+                        queryValue = label, queryIndex = 2
+                    )
+                }
             )
         }
     }
@@ -229,26 +275,26 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
     // Android 10适配要点，作用域存储
 // https://mp.weixin.qq.com/s?__biz=MzA5MzI3NjE2MA==&mid=2650249029&idx=1&sn=6ab18477950e5f4e1a14dc47ecc4f763&chksm=8863662abf14ef3c1500d64c106ab2e5a6c95e716ff6e57ba379e2aabca7b6046060ccb78af2&scene=21#wechat_redirect
-    @NeedsPermission(
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-    )
-    fun showFileDialog() {
-        MaterialDialog(this).show {
-            fileChooser(
-                context = context,
-                initialDirectory = File(getExternalStorageDirectory(), "Download"),
-                emptyTextRes = R.string.empty_text,
-            ) { _, file ->
-                binding.rv.bindingAdapter.apply {
-                    val index = modelCount - 1
-                    addModels(
-                        listOf(Material(file = file)), index = index, animation = true
-                    )
-                }
-            }
-        }
-    }
+//    @NeedsPermission(
+//        Manifest.permission.READ_EXTERNAL_STORAGE,
+//        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//    )
+//    fun showFileDialog() {
+//        MaterialDialog(this).show {
+//            fileChooser(
+//                context = context,
+//                initialDirectory = File(getExternalStorageDirectory(), "Download"),
+//                emptyTextRes = R.string.empty_text,
+//            ) { _, file ->
+//                binding.rv.bindingAdapter.apply {
+//                    val index = modelCount - 1
+//                    addModels(
+//                        listOf(Material(file = file)), index = index, animation = true
+//                    )
+//                }
+//            }
+//        }
+//    }
 
     private var dialogHolder: MaterialDialog? = null
 
@@ -275,7 +321,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
                 title(text = "请选择")
                 listItems(items = results.toList()) { _, _, text ->
-                    sendEvent(ExcelDialogEvent(event.queryIndex + 1, text.toString()))
+                    sendEvent(ExcelDialogEvent(text.toString(),event.queryIndex + 1, ))
                 }
             }
         }
@@ -312,7 +358,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
         binding.rv2.bindingAdapter.apply {
             mPetition.reply = it
             val petitionField = models!![3] as PetitionField
-            petitionField.text = it
+            petitionField.value = it
             notifyItemChanged(3)
         }
     }

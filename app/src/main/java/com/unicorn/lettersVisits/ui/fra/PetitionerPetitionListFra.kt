@@ -9,15 +9,14 @@ import com.drake.channel.receiveEvent
 import com.drake.statusbar.statusPadding
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.Global
-import com.unicorn.lettersVisits.data.model.Petition
-import com.unicorn.lettersVisits.data.model.Petition_
-import com.unicorn.lettersVisits.data.model.User_
+import com.unicorn.lettersVisits.data.model.petition.Petition
 import com.unicorn.lettersVisits.data.model.event.PetitionerPutEvent
 import com.unicorn.lettersVisits.databinding.FraApplyListBinding
 import com.unicorn.lettersVisits.databinding.ItemApplyBinding
 import com.unicorn.lettersVisits.ui.act.PetitionDetailAct
 import com.unicorn.lettersVisits.ui.base.BaseFra
 import io.objectbox.kotlin.boxFor
+import io.objectbox.model.ModelProperty.addType
 import splitties.fragments.start
 
 
@@ -72,7 +71,7 @@ class PetitionerPetitionListFra : BaseFra<FraApplyListBinding>() {
 
     private fun getData(): MutableList<Petition> {
         val petitionBox = Global.boxStore.boxFor<Petition>()
-        val builder = petitionBox.query().orderDesc(Petition_.createTime)
+        val builder = petitionBox.query()
 //        builder.link(Petition_.petitioner)
 //            .apply(User_.username.equal(Global.currentUser!!.username))
         return builder.build().find()
