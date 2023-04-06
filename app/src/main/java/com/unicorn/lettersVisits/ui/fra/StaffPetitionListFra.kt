@@ -30,7 +30,7 @@ class StaffPetitionListFra : BaseFra<FraRole2ApplyListBinding>() {
                     val model = getModel<Petition>()
                     val binding = getBinding<ItemApplyBinding>()
                     binding.apply {
-                        tvUser.text = model.name
+                        tvUser.text = model.a1Name
                         tvContent.text = model.content
                     }
                 }

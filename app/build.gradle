@@ -118,5 +118,5 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:input:3.3.0'
     implementation 'cat.ereza:customactivityoncrash:2.4.0'
     implementation group: 'net.sourceforge.jexcelapi', name: 'jxl', version: '2.6.12'
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.7.10")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.20")
 }

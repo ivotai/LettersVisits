@@ -17,15 +17,16 @@ data class Petition(
     var reply: String = "",
 
     //
-    var name: String = "",
-    var age: String = "",
-    var gender: String = "",
-    var category: String = "",
-    var ethnicity: String = "",
-    var occupation: String = "",
+    var a1Name: String = "",
+    var a2Age: String = "",
+    var a3Gender: String = "",
+    var a4Category: String = "",
+    var a5Ethnicity: String = "",
+    var a6Occupation: String = "",
 
     ) : Serializable {
     //    lateinit var petitioner: ToOne<User>
     lateinit var creator: ToOne<User>
     lateinit var department: ToOne<Department>
+
 }

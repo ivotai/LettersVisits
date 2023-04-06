@@ -7,7 +7,6 @@ import android.view.View
 import androidx.core.graphics.ColorUtils
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
-import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItems
@@ -34,7 +33,6 @@ import com.unicorn.lettersVisits.data.model.petition.PetitionField
 import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.databinding.ActAddPetitionBinding
 import com.unicorn.lettersVisits.databinding.ItemPetitionFieldBinding
-import com.unicorn.lettersVisits.view.PetitionerSelectView
 import io.objectbox.kotlin.boxFor
 import io.objectbox.query.QueryBuilder
 import permissions.dispatcher.NeedsPermission
@@ -42,6 +40,9 @@ import permissions.dispatcher.RuntimePermissions
 import splitties.resources.color
 import java.text.Collator
 import java.util.*
+import kotlin.reflect.KMutableProperty1
+import kotlin.reflect.KProperty1
+import kotlin.reflect.full.memberProperties
 
 
 @RuntimePermissions
@@ -127,43 +128,24 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                                 positiveButton { dialog ->
                                     val value = dialog.getInputField().text.toString()
 
-//                                    mPetition.reply = it
-                                    item.value = value
-                                    notifyItemChanged(modelPosition)
-                                    // todo 改变 pertition 值
+                                    onPetitionFieldValueChange(
+                                        position = modelPosition, value = value
+                                    )
 
                                 }
                             }
                         }
-                        else ->{
-                            // do nothing
+                        InputType.SELECT -> {
+                            sendEvent(item.excelDialogEvent)
                         }
-                    }
 
-                    when (getModel<PetitionField>().label) {
-                        "当事人" -> {
-                            if (Global.isStaff) {
-                                dialogHolder =
-                                    MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
-                                        title(text = "请选择当事人")
-                                        customView(view = PetitionerSelectView(this@PetitionDetailAct))
-                                    }
-                            }
-                        }
-                        "信访类型" -> {
-                            sendEvent(
-                                ExcelDialogEvent(
-                                    queryIndex = 2, queryValue = "最高人民法院  （备注：关联各审级的涉诉法院信息）"
-                                )
-                            )
-                        }
                         else -> {
                             // do nothing
                         }
                     }
+
                 }
-            }.models = listOf(
-                PetitionField(label = "来访人姓名", inputType = InputType.TEXT),
+            }.models = listOf(PetitionField(label = "来访人姓名", inputType = InputType.TEXT),
                 PetitionField(label = "年龄", inputType = InputType.TEXT),
                 PetitionField(label = "性别", inputType = InputType.SELECT).apply {
                     excelDialogEvent = ExcelDialogEvent(
@@ -184,8 +166,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                     excelDialogEvent = ExcelDialogEvent(
                         queryValue = label, queryIndex = 2
                     )
-                }
-            )
+                })
         }
     }
 
@@ -238,10 +219,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                     ToastUtils.showShort("请输入申请内容")
                     return@setOnClickListener
                 }
-                if (mPetition.department.target == null) {
-                    ToastUtils.showShort("请选择信访单位")
-                    return@setOnClickListener
-                }
+
 
                 // 保存数据
                 mPetition.apply {
@@ -256,16 +234,16 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                 finish()
             }
 
-            btnReply.setOnClickListener {
-                MaterialDialog(this@PetitionDetailAct).show {
-                    title(text = "请输入答复内容")
-                    input()
-                    positiveButton { dialog ->
-                        setReply(dialog.getInputField().text.toString())
-                        Global.boxStore.boxFor<Petition>().put(mPetition)
-                    }
-                }
-            }
+//            btnReply.setOnClickListener {
+//                MaterialDialog(this@PetitionDetailAct).show {
+//                    title(text = "请输入答复内容")
+//                    input()
+//                    positiveButton { dialog ->
+//                        setReply(dialog.getInputField().text.toString())
+//                        Global.boxStore.boxFor<Petition>().put(mPetition)
+//                    }
+//                }
+//            }
 
             btnTransfer.setOnClickListener {
                 ToastUtils.showShort("转办没做")
@@ -321,7 +299,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
                 title(text = "请选择")
                 listItems(items = results.toList()) { _, _, text ->
-                    sendEvent(ExcelDialogEvent(text.toString(),event.queryIndex + 1, ))
+                    sendEvent(ExcelDialogEvent(text.toString(), event.queryIndex + 1))
                 }
             }
         }
@@ -344,23 +322,21 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
     private var mPetition = Petition()
 
-//    private fun setPetitioner(it: User?) {
-//        if (it == null) return
-//        binding.rv2.bindingAdapter.apply {
-//            mPetition.petitioner.target = it
-//            val petitionField = models!![0] as PetitionField
-//            petitionField.text = it.username
-//            notifyItemChanged(0)
-//        }
-//    }
-
-    private fun setReply(it: String) {
+    private fun onPetitionFieldValueChange(position: Int, value: String) {
         binding.rv2.bindingAdapter.apply {
-            mPetition.reply = it
-            val petitionField = models!![3] as PetitionField
-            petitionField.value = it
-            notifyItemChanged(3)
+            val petitionField = models!![position] as PetitionField
+            petitionField.value = value
+            notifyItemChanged(position)
+            val kProperty1 = Petition::class.memberProperties.elementAt(position)
+            kProperty1 as KMutableProperty1<Petition, String>
+            kProperty1.set(mPetition, value)
+//            kProperty1.let {
+//                it.isAccessible = true // 设置可访问性
+//                it.setter.call(person, "456 Elm St") // 设置属性值为 "456 Elm St"
+//            }
         }
+
+
     }
 
     override fun onRequestPermissionsResult(
