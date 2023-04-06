@@ -4,7 +4,6 @@ package com.unicorn.lettersVisits.ui.act
 import android.Manifest
 import android.annotation.SuppressLint
 import android.graphics.Color
-import android.view.View
 import androidx.core.graphics.ColorUtils
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
@@ -208,7 +207,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                     val kProperty1 = Petition::class.memberProperties.elementAt(index)
 //                    kProperty1 as KMutableProperty1<Petition, String>
                     kProperty1.get(mPetition)
-                    any.value =  kProperty1.get(mPetition) as String
+                    any.value = kProperty1.get(mPetition) as String
                 }
             }
             rv2.bindingAdapter.notifyDataSetChanged()
@@ -218,6 +217,16 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
         binding.apply {
             btnSubmit.setOnClickListener {
                 if (!isEditable) return@setOnClickListener
+
+                // empty check
+                rv2.models!!.forEach {
+                    if (it is PetitionField) {
+                        if (!it.allowEmpty && it.value.isEmpty()) {
+                            ToastUtils.showShort("请填写${it.label}")
+                            return@setOnClickListener
+                        }
+                    }
+                }
 
                 // 保存数据
                 mPetition.apply {

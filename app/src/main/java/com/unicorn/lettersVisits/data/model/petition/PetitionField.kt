@@ -6,7 +6,7 @@ class PetitionField(
     val label: String,
     val inputType: InputType = InputType.TEXT,
     var value: String = "",
-    val allowEmpty: Boolean = true,
+    val allowEmpty: Boolean = false,
 
     ) {
 
