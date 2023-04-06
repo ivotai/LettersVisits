@@ -12,7 +12,7 @@ import java.util.*
 @Entity
 data class Petition(
     @Id var id: Long = 0,
-    var content: String = "",
+//    var content: String = "",
     var createTime: Date = Date(),
     var reply: String = "",
 

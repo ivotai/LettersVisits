@@ -31,7 +31,7 @@ class StaffPetitionListFra : BaseFra<FraRole2ApplyListBinding>() {
                     val binding = getBinding<ItemApplyBinding>()
                     binding.apply {
                         tvUser.text = model.a1Name
-                        tvContent.text = model.content
+//                        tvContent.text = model.content
                     }
                 }
                 onFastClick(R.id.root) {

@@ -2,6 +2,7 @@ package com.unicorn.lettersVisits.ui.act
 
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.View
 import androidx.core.graphics.ColorUtils
@@ -44,7 +45,7 @@ import kotlin.reflect.full.memberProperties
 @RuntimePermissions
 class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
-    private var mEditable = false
+    private var isEditable = false
 
     @NeedsPermission(
         Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -114,7 +115,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                     }
                 }
                 onFastClick(R.id.tv) {
-                    if (!mEditable) return@onFastClick
+                    if (!isEditable) return@onFastClick
                     val item = getModel<PetitionField>()
                     when (item.inputType) {
                         InputType.TEXT -> {
@@ -166,6 +167,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun initIntents() {
         super.initIntents()
 
@@ -182,44 +184,43 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             val id = intent.getLongExtra("id", -1L)
             val isCreating = id == -1L
             if (isCreating) {
-                mEditable = true
+                isEditable = true
             } else {
                 mPetition = Global.boxStore.boxFor<Petition>().get(id)
                 // 如果是创建者，则启用编辑
                 if (mPetition.creator.target == Global.currentUser) {
-                    mEditable = true
+                    isEditable = true
                 }
             }
 
-            // 根据 mEditable 设置界面
-            etContent.isEnabled = mEditable
-            btnSubmit.visibility = if (mEditable) View.VISIBLE else View.GONE
-
-            // 根据 temp 设置界面
-            val temp = !isCreating && Global.isStaff
-            btnTransfer.visibility = if (temp) View.VISIBLE else View.GONE
-            btnReply.visibility = if (temp) View.VISIBLE else View.GONE
+//            // 根据 mEditable 设置界面
+//            etContent.isEnabled = isEditable
+//            btnSubmit.visibility = if (isEditable) View.VISIBLE else View.GONE
+//
+//            // 根据 temp 设置界面
+//            val temp = !isCreating && Global.isStaff
+//            btnTransfer.visibility = if (temp) View.VISIBLE else View.GONE
+//            btnReply.visibility = if (temp) View.VISIBLE else View.GONE
 
             // 展示数据
-            mPetition.apply {
-                etContent.setText(this.content)
+            rv2.models!!.forEachIndexed { index, any ->
+                if (any is PetitionField) {
+                    val kProperty1 = Petition::class.memberProperties.elementAt(index)
+//                    kProperty1 as KMutableProperty1<Petition, String>
+                    kProperty1.get(mPetition)
+                    any.value =  kProperty1.get(mPetition) as String
+                }
             }
+            rv2.bindingAdapter.notifyDataSetChanged()
+
         }
 
         binding.apply {
             btnSubmit.setOnClickListener {
-                if (!mEditable) return@setOnClickListener
-                // 非空验证
-                val content = etContent.text.toString().trim()
-                if (content.isEmpty()) {
-                    ToastUtils.showShort("请输入申请内容")
-                    return@setOnClickListener
-                }
-
+                if (!isEditable) return@setOnClickListener
 
                 // 保存数据
                 mPetition.apply {
-                    this.content = content
                     this.creator.target = Global.currentUser
                     this.createTime = Date()
                 }
