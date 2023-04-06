@@ -27,7 +27,6 @@ import com.unicorn.lettersVisits.data.model.event.ExcelDialogEvent
 import com.unicorn.lettersVisits.data.model.event.PetitionerPutEvent
 import com.unicorn.lettersVisits.data.model.event.PetitionerSelectEvent
 import com.unicorn.lettersVisits.data.model.event.StartOrcEvent
-import com.unicorn.lettersVisits.data.model.role.PetitionType
 import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.databinding.ActAddPetitionBinding
 import com.unicorn.lettersVisits.databinding.ItemMaterialBinding
@@ -140,16 +139,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                             }
                         }
                         "信访类型" -> {
-//                            val petitionTypes = PetitionType.values()
-//                            MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
-//                                title(text = "请选择信访类型")
-//                                listItems(
-//                                    items = petitionTypes.map { it.petitionTypeName },
-//                                ) { _, index, _ ->
-//                                    setPetitionType(petitionTypes[index])
-//                                }
-//                            }
-                            sendEvent(ExcelDialogEvent(queryIndex = 1, queryValue = "涉诉法院信息"))
+                            sendEvent(ExcelDialogEvent(queryIndex = 2, queryValue = "最高人民法院  （备注：关联各审级的涉诉法院信息）"))
                         }
                         else -> {
                             // do nothing
@@ -204,7 +194,6 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                 etContent.setText(this.content)
                 setPetitioner(this.petitioner.target)
                 setDepartment(this.department.target)
-                setPetitionType(this.petitionType)
             }
         }
 
@@ -298,6 +287,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                 event.queryValue,
                 QueryBuilder.StringOrder.CASE_SENSITIVE
             ).build().property(ExcelData_.__ALL_PROPERTIES[event.queryIndex + 1])
+            // todo maybe filter "" and result.size == 0
             val results = propertyQuery.distinct().findStrings()
             if (results.size == 1) {
                 ToastUtils.showShort("选择结果: ${event.queryValue}")
@@ -351,14 +341,6 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
         }
     }
 
-    private fun setPetitionType(it: PetitionType) {
-        binding.rv2.bindingAdapter.apply {
-            mPetition.petitionType = it
-            val petitionField = models!![2] as PetitionField
-            petitionField.text = it.petitionTypeName
-            notifyItemChanged(2)
-        }
-    }
 
     private fun setReply(it: String) {
         binding.rv2.bindingAdapter.apply {
