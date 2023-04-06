@@ -2,6 +2,7 @@ package com.unicorn.lettersVisits.view
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import android.widget.FrameLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.blankj.utilcode.util.ActivityUtils
@@ -31,6 +32,10 @@ class TitleBar(context: Context, attrs: AttributeSet? = null) : ConstraintLayout
         binding.apply {
             ctv.text = title
         }
+    }
+
+    fun getMoreView(): View {
+        return binding.civ2
     }
 
 }

@@ -119,4 +119,5 @@ dependencies {
     implementation 'cat.ereza:customactivityoncrash:2.4.0'
     implementation group: 'net.sourceforge.jexcelapi', name: 'jxl', version: '2.6.12'
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.20")
+    implementation "me.saket.cascade:cascade:2.0.0-rc02"
 }

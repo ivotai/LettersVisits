@@ -4,6 +4,7 @@ package com.unicorn.lettersVisits.ui.act
 import android.Manifest
 import android.annotation.SuppressLint
 import android.graphics.Color
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.graphics.ColorUtils
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
@@ -32,6 +33,8 @@ import com.unicorn.lettersVisits.databinding.ActAddPetitionBinding
 import com.unicorn.lettersVisits.databinding.ItemPetitionFieldBinding
 import io.objectbox.kotlin.boxFor
 import io.objectbox.query.QueryBuilder
+import me.saket.cascade.CascadePopupMenu
+import me.saket.cascade.addSubMenu
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 import splitties.resources.color
@@ -39,6 +42,7 @@ import java.text.Collator
 import java.util.*
 import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.full.memberProperties
+import kotlin.text.Typography.section
 
 
 @RuntimePermissions
@@ -254,7 +258,24 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             btnTransfer.setOnClickListener {
                 ToastUtils.showShort("转办没做")
             }
+
+
+            titleBar.getMoreView().setOnClickListener {
+                showPopupMenu()
+            }
         }
+    }
+
+    fun showPopupMenu(){
+        // https://saket.github.io/cascade/
+        val popup = CascadePopupMenu(this, binding.titleBar.getMoreView())
+//        popup.inflate(R.menu.menu)
+        popup.menu.add("sfdadf").setOnMenuItemClickListener { item ->
+            ToastUtils.showShort("sdf")
+            true
+        }
+        popup.menu.add("sdfdf12")
+        popup.show()
     }
 
     // Android 10适配要点，作用域存储
