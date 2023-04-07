@@ -5,13 +5,13 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.graphics.Color
 import androidx.core.graphics.ColorUtils
-import androidx.databinding.DataBindingUtil.getBinding
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItems
 import com.baidu.ocr.sdk.model.IDCardResult
+import com.blankj.utilcode.util.SizeUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.drake.brv.utils.*
 import com.drake.channel.receiveEvent
@@ -33,7 +33,6 @@ import com.unicorn.lettersVisits.databinding.ActAddPetitionBinding
 import com.unicorn.lettersVisits.databinding.ItemPetitionFieldBinding
 import com.unicorn.lettersVisits.view.UserSelectView
 import io.objectbox.kotlin.boxFor
-import io.objectbox.model.ModelProperty.addType
 import io.objectbox.query.QueryBuilder
 import me.saket.cascade.CascadePopupWindow
 import permissions.dispatcher.NeedsPermission
@@ -68,18 +67,37 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                 onBind {
                     val binding = getBinding<ItemPetitionFieldBinding>()
                     val item = getModel<PetitionField>()
+
+                    // 设置圆角
+                    val helper = binding.root.helper
+                    val cornerRadius = SizeUtils.dp2px(16f).toFloat()
+                    when (modelPosition) {
+                        0 -> {
+                            helper.cornerRadiusTopLeft = cornerRadius
+                            helper.cornerRadiusTopRight = cornerRadius
+                        }
+                        modelCount - 1 -> {
+                            helper.cornerRadiusBottomLeft = cornerRadius
+                            helper.cornerRadiusBottomRight = cornerRadius
+                        }
+                        else -> {
+                            // do nothing
+                        }
+                    }
+
                     binding.apply {
                         l.text = item.label
                         tv.hint = item.inputType.hint
                         tv.text = item.value
                     }
                 }
+
                 onFastClick(R.id.tv) {
                     if (!isEditable) return@onFastClick
                     val item = getModel<PetitionField>()
                     when (item.inputType) {
                         InputType.TEXT -> {
-                            MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
+                            MaterialDialog(this@PetitionDetailAct).show {
                                 title(text = "请输入${item.label}")
                                 input()
                                 positiveButton { dialog ->
@@ -99,7 +117,6 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                             // do nothing
                         }
                     }
-
                 }
             }.models = listOf(PetitionField(label = "来访人姓名", inputType = InputType.TEXT),
                 PetitionField(label = "年龄", inputType = InputType.TEXT),
@@ -203,7 +220,6 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 //                    }
 //                }
 //            }
-
 
 
             titleBar.getMoreView().setOnClickListener {
