@@ -1,0 +1,56 @@
+  // 信访材料
+//            rv.layoutManager = FlexboxLayoutManager(this@PetitionDetailAct)
+//            rv.setup {
+//                addType<String>(R.layout.item_material_upload)
+//                addType<Material>(R.layout.item_material)
+//                onBind {
+//                    when (val item = getModel<Any>()) {
+//                        is String -> {
+//                            val binding = getBinding<ItemMaterialUploadBinding>()
+//                            binding.tv.text = item
+//                        }
+//                        is Material -> {
+//                            val binding = getBinding<ItemMaterialBinding>()
+//                            binding.tv.text = item.file.name
+//                        }
+//                    }
+//                }
+//                onFastClick(R.id.root) {
+//                    if (!mEditable) return@onFastClick
+//                    when (getModel<Any>()) {
+//                        is String -> {
+//                            showFileDialogWithPermissionCheck()
+//                        }
+//                        is Material -> {
+//                            val position = modelPosition
+//                            binding.apply {
+//                                rv.mutable.removeAt(position) // 先删除数据
+//                                rv.bindingAdapter.notifyItemRemoved(position) // 然后刷新列表
+//                            }
+//                        }
+//                    }
+//                }
+//            }.models = listOf("上传信访材料")
+
+    // Android 10适配要点，作用域存储
+// https://mp.weixin.qq.com/s?__biz=MzA5MzI3NjE2MA==&mid=2650249029&idx=1&sn=6ab18477950e5f4e1a14dc47ecc4f763&chksm=8863662abf14ef3c1500d64c106ab2e5a6c95e716ff6e57ba379e2aabca7b6046060ccb78af2&scene=21#wechat_redirect
+//    @NeedsPermission(
+//        Manifest.permission.READ_EXTERNAL_STORAGE,
+//        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//    )
+//    fun showFileDialog() {
+//        MaterialDialog(this).show {
+//            fileChooser(
+//                context = context,
+//                initialDirectory = File(getExternalStorageDirectory(), "Download"),
+//                emptyTextRes = R.string.empty_text,
+//            ) { _, file ->
+//                binding.rv.bindingAdapter.apply {
+//                    val index = modelCount - 1
+//                    addModels(
+//                        listOf(Material(file = file)), index = index, animation = true
+//                    )
+//                }
+//            }
+//        }
+//    }
