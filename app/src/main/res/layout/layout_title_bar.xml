@@ -9,7 +9,7 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         app:iiv_color="@color/black"
-        app:iiv_icon="gmd-arrow-back-ios"
+        app:iiv_icon="gmr-arrow-back-ios"
         app:iiv_size="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,10 +39,11 @@
 
     <com.mikepenz.iconics.view.IconicsImageView
         android:id="@+id/civ2"
+        android:visibility="invisible"
         android:layout_width="64dp"
         android:layout_height="64dp"
         app:iiv_color="@color/black"
-        app:iiv_icon="gmd-more-vert"
+        app:iiv_icon="gmr-more-vert"
         app:iiv_size="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

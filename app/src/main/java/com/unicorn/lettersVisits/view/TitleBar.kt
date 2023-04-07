@@ -38,4 +38,9 @@ class TitleBar(context: Context, attrs: AttributeSet? = null) : ConstraintLayout
         return binding.civ2
     }
 
+    fun setOnMoreClickListener(listener: OnClickListener) {
+        binding.civ2.visibility = View.VISIBLE
+        binding.civ2.setOnClickListener(listener)
+    }
+
 }

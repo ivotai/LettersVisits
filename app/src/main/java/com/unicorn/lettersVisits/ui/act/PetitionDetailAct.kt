@@ -4,10 +4,10 @@ package com.unicorn.lettersVisits.ui.act
 import android.Manifest
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.view.View
 import androidx.core.graphics.ColorUtils
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
-import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItems
 import com.baidu.ocr.sdk.model.IDCardResult
@@ -31,10 +31,10 @@ import com.unicorn.lettersVisits.data.model.petition.PetitionField
 import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.databinding.ActAddPetitionBinding
 import com.unicorn.lettersVisits.databinding.ItemPetitionFieldBinding
-import com.unicorn.lettersVisits.view.UserSelectView
 import io.objectbox.kotlin.boxFor
 import io.objectbox.query.QueryBuilder
-import me.saket.cascade.CascadePopupWindow
+import me.saket.cascade.CascadePopupMenu
+import me.saket.cascade.add
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 import splitties.resources.color
@@ -48,21 +48,20 @@ import kotlin.reflect.full.memberProperties
 class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun initViews() {
         binding.apply {
             titleBar.setTitle("信访申请")
 
+            // 设置按钮点击效果
             btnSubmit.helper.backgroundColorPressed = ColorUtils.blendARGB(
                 color(R.color.main_color), Color.WHITE, 0.3f
             )
 
-
-            // petition field
             rv.linear().divider {
                 setColorRes(splitties.material.colors.R.color.grey_200)
                 setDivider(width = 1, dp = false)
             }.setup {
-
                 addType<PetitionField>(R.layout.item_petition_field)
                 onBind {
                     val binding = getBinding<ItemPetitionFieldBinding>()
@@ -91,7 +90,6 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                         tv.text = item.value
                     }
                 }
-
                 onFastClick(R.id.tv) {
                     if (!isEditable) return@onFastClick
                     val item = getModel<PetitionField>()
@@ -99,15 +97,12 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                         InputType.TEXT -> {
                             MaterialDialog(this@PetitionDetailAct).show {
                                 title(text = "请输入${item.label}")
-                                input()
-                                positiveButton { dialog ->
-                                    val value = dialog.getInputField().text.toString()
-
+                                input { _, text ->
                                     onPetitionFieldValueChange(
-                                        position = modelPosition, value = value
+                                        position = modelPosition, value = text.toString()
                                     )
-
                                 }
+                                positiveButton(text = "确认")
                             }
                         }
                         InputType.SELECT -> {
@@ -140,56 +135,41 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                         queryValue = label, queryIndex = 2, petitionField = this
                     )
                 })
-        }
-    }
 
-    @SuppressLint("NotifyDataSetChanged")
-    override fun initIntents() {
-        super.initIntents()
-
-        binding.apply {
-
-            // 恢复数据
+            // 可否编辑
             val id = intent.getLongExtra("id", -1L)
-            val isCreating = id == -1L
+            isCreating = id == -1L
             if (isCreating) {
                 isEditable = true
             } else {
                 petition = Global.boxStore.boxFor<Petition>().get(id)
-                // 如果是创建者，则启用编辑
+                // 如果是创建者，也启用编辑
                 if (petition.creator.target == Global.currentUser) {
                     isEditable = true
                 }
             }
-
-//            // 根据 mEditable 设置界面
-//            etContent.isEnabled = isEditable
-//            btnSubmit.visibility = if (isEditable) View.VISIBLE else View.GONE
-//
-//            // 根据 temp 设置界面
-//            val temp = !isCreating && Global.isStaff
-//            btnTransfer.visibility = if (temp) View.VISIBLE else View.GONE
-//            btnReply.visibility = if (temp) View.VISIBLE else View.GONE
+            btnSubmit.visibility = if (isEditable) View.VISIBLE else View.GONE
 
             // 展示数据
-            rv.models!!.forEachIndexed { index, any ->
-                if (any is PetitionField) {
+            rv.models?.forEachIndexed { index, model ->
+                if (model is PetitionField) {
                     val kProperty1 = Petition::class.memberProperties.elementAt(index)
-//                    kProperty1 as KMutableProperty1<Petition, String>
-                    kProperty1.get(petition)
-                    any.value = kProperty1.get(petition) as String
+                    model.value = kProperty1.get(petition) as String
                 }
             }
             rv.bindingAdapter.notifyDataSetChanged()
-
         }
+    }
+
+    override fun initIntents() {
+        super.initIntents()
 
         binding.apply {
             btnSubmit.setOnClickListener {
                 if (!isEditable) return@setOnClickListener
 
-                // empty check
-                rv.models!!.forEach {
+                // 非空校验
+                rv.models?.forEach {
                     if (it is PetitionField) {
                         if (!it.allowEmpty && it.value.isEmpty()) {
                             ToastUtils.showShort("请填写${it.label}")
@@ -198,10 +178,12 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                     }
                 }
 
-                // 保存数据
-                petition.apply {
-                    this.creator.target = Global.currentUser
-                    this.createTime = Date()
+                // 设置创建信息
+                if (isCreating) {
+                    petition.also {
+                        it.creator.target = Global.currentUser
+                        it.createTime = Date()
+                    }
                 }
                 Global.boxStore.boxFor<Petition>().put(petition)
 
@@ -210,40 +192,24 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                 finish()
             }
 
-//            btnReply.setOnClickListener {
-//                MaterialDialog(this@PetitionDetailAct).show {
-//                    title(text = "请输入答复内容")
-//                    input()
-//                    positiveButton { dialog ->
-//                        setReply(dialog.getInputField().text.toString())
-//                        Global.boxStore.boxFor<Petition>().put(mPetition)
-//                    }
-//                }
-//            }
-
-
-            titleBar.getMoreView().setOnClickListener {
+            titleBar.setOnMoreClickListener {
+                fun showPopupMenu() {
+                    val popup =
+                        CascadePopupMenu(this@PetitionDetailAct, binding.titleBar.getMoreView())
+                    popup.also {
+                        it.menu.add(title = "扫描身份证", onClick = {})
+                        it.menu.add(title = "答复", onClick = {
+                            ToastUtils.showShort("答复")
+                        })
+                        it.menu.add(title = "转办", onClick = {
+                            ToastUtils.showShort("转办")
+                        })
+                    }.show()
+                }
                 showPopupMenu()
             }
         }
     }
-
-    fun showPopupMenu() {
-        // https://saket.github.io/cascade/
-//        val popup = CascadePopupMenu(this, binding.titleBar.getMoreView())
-////        popup.inflate(R.menu.menu)
-//        popup.menu.add("sfdadf").setOnMenuItemClickListener { item ->
-//            ToastUtils.showShort("sdf")
-//            true
-//        }
-//        popup.menu.add("sdfdf12")
-//        popup.show()
-
-        val popup = CascadePopupWindow(this)
-        popup.contentView.addView(UserSelectView(context = this))  // Also see contentView.goBack().
-        popup.show(binding.titleBar.getMoreView())
-    }
-
 
     override fun initEvents() {
         receiveEvent<StartOrcEvent> {
@@ -296,6 +262,8 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
     }
 
     private var isEditable = false
+
+    private var isCreating = false
 
     private var petition = Petition()
 
