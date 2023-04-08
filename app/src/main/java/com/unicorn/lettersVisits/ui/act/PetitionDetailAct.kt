@@ -89,7 +89,6 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                         petitionFieldType = PetitionFieldType.BOTTOM
                     ),
 
-
                     //
                     SupportDivider(),
                     PetitionField(
@@ -128,19 +127,26 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                             queryValue = label, queryIndex = 2, petitionField = this
                         )
                     },
+                    SupportDivider(),
+                    PetitionField(label = "通知法院", inputType = InputType.SELECT, petitionFieldType = PetitionFieldType.TOP).apply {
+                        excelDialogEvent = ExcelDialogEvent(
+                            queryValue = "最高人民法院  （备注：关联各审级的涉诉法院信息）",
+                            queryIndex = 2,
+                            petitionField = this
+                        )
+                    },
+                    PetitionField(label = "通知人", inputType = InputType.TEXT),
+                    PetitionField(label = "通知时间", inputType = InputType.TEXT),
+                    PetitionField(label = "领走法院", inputType = InputType.SELECT).apply {
+                        excelDialogEvent = ExcelDialogEvent(
+                            queryValue = "最高人民法院  （备注：关联各审级的涉诉法院信息）",
+                            queryIndex = 2,
+                            petitionField = this
+                        )
+                    },
+                    PetitionField(label = "领走人", inputType = InputType.TEXT),
+                    PetitionField(label = "领走时间", inputType = InputType.TEXT, petitionFieldType = PetitionFieldType.BOTTOM),
                 )
-
-                // 处理两个 position
-                val petitionFields = data.filterIsInstance<PetitionField>()
-                petitionFields.forEach { petitionField ->
-                    petitionField.petitionFieldPosition = petitionFields.indexOf(petitionField)
-                }
-                data.forEach { any ->
-                    if (any is PetitionField) {
-                        any.modelPosition = data.indexOf(any)
-                    }
-                }
-
                 return data
             }
 
@@ -213,6 +219,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                     }
                 }
             }.models = getData()
+            prepareModels()
 
             // 可否编辑
             val id = intent.getLongExtra("id", -1L)
@@ -268,17 +275,13 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
             titleBar.setOnMoreClickListener {
                 fun showPopupMenu() {
-                    val popup =
-                        CascadePopupMenu(this@PetitionDetailAct, binding.titleBar.getMoreView())
-                    popup.also {
+
+                    CascadePopupMenu(this@PetitionDetailAct, binding.titleBar.getMoreView()).also {
                         it.menu.add(title = "扫描身份证", onClick = {
                             sendEvent(StartOrcEvent())
                         })
-                        it.menu.add(title = "答复", onClick = {
-                            ToastUtils.showShort("答复没做")
-                        })
-                        it.menu.add(title = "转办", onClick = {
-                            ToastUtils.showShort("转办没做")
+                        it.menu.add(title = "越级访转办", onClick = {
+                            ToastUtils.showShort("越级访转办")
                         })
                     }.show()
                 }
@@ -368,6 +371,20 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             val kProperty1 = Petition::class.memberProperties.elementAt(item.petitionFieldPosition)
             kProperty1 as KMutableProperty1<Petition, String>
             kProperty1.set(petition, value)
+        }
+    }
+
+    private fun prepareModels() {
+        // 处理两个 position
+        val data = binding.rv.models!!
+        val petitionFields = data.filterIsInstance<PetitionField>()
+        petitionFields.forEach { petitionField ->
+            petitionField.petitionFieldPosition = petitionFields.indexOf(petitionField)
+        }
+        data.forEach { any ->
+            if (any is PetitionField) {
+                any.modelPosition = data.indexOf(any)
+            }
         }
     }
 
