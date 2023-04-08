@@ -18,6 +18,13 @@ data class Petition(
 
     //
     var a1: String = "",
+    var a10: String = "",
+    var a11: String = "",
+    var a12: String = "",
+    var a13: String = "",
+    var a14: String = "",
+    var a15: String = "",
+    var a16: String = "",
     var a2: String = "",
     var a3: String = "",
     var a4: String = "",
@@ -26,13 +33,6 @@ data class Petition(
     var a7: String = "",
     var a8: String = "",
     var a9: String = "",
-    var a10: String = "",
-    var a11: String = "",
-    var a12: String = "",
-    var a13: String = "",
-    var a14: String = "",
-    var a15: String = "",
-    var a16: String = "",
 
     ) : Serializable {
     //    lateinit var petitioner: ToOne<User>

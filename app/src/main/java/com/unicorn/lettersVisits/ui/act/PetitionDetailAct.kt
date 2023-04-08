@@ -18,10 +18,8 @@ import com.drake.channel.receiveEvent
 import com.drake.channel.sendEvent
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.Global
-import com.unicorn.lettersVisits.app.initialPassword
 import com.unicorn.lettersVisits.data.model.ExcelData
 import com.unicorn.lettersVisits.data.model.ExcelData_
-import com.unicorn.lettersVisits.data.model.User
 import com.unicorn.lettersVisits.data.model.event.ExcelDialogEvent
 import com.unicorn.lettersVisits.data.model.event.PetitionerPutEvent
 import com.unicorn.lettersVisits.data.model.event.StartOrcEvent
@@ -29,7 +27,7 @@ import com.unicorn.lettersVisits.data.model.petition.InputType
 import com.unicorn.lettersVisits.data.model.petition.Petition
 import com.unicorn.lettersVisits.data.model.petition.PetitionField
 import com.unicorn.lettersVisits.data.model.petition.PetitionFieldType
-import com.unicorn.lettersVisits.data.model.role.Role
+import com.unicorn.lettersVisits.data.model.support.SupportDivider
 import com.unicorn.lettersVisits.databinding.ActAddPetitionBinding
 import com.unicorn.lettersVisits.databinding.ItemPetitionFieldBinding
 import io.objectbox.kotlin.boxFor
@@ -62,8 +60,8 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                 color(R.color.main_color), Color.WHITE, 0.3f
             )
 
-            fun getData(): List<PetitionField> {
-                return listOf(
+            fun getData(): List<Any> {
+                val data = listOf(
                     PetitionField(
                         label = "姓名",
                         inputType = InputType.TEXT,
@@ -75,7 +73,6 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                             queryValue = label, queryIndex = 2, petitionField = this
                         )
                     },
-
                     PetitionField(label = "民族", inputType = InputType.SELECT).apply {
                         excelDialogEvent = ExcelDialogEvent(
                             queryValue = label, queryIndex = 2, petitionField = this
@@ -92,8 +89,14 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                         petitionFieldType = PetitionFieldType.BOTTOM
                     ),
 
+
                     //
-                    PetitionField(label = "类别", inputType = InputType.SELECT).apply {
+                    SupportDivider(),
+                    PetitionField(
+                        label = "类别",
+                        inputType = InputType.SELECT,
+                        petitionFieldType = PetitionFieldType.TOP
+                    ).apply {
                         excelDialogEvent = ExcelDialogEvent(
                             queryValue = label, queryIndex = 2, petitionField = this
                         )
@@ -116,12 +119,29 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                             petitionField = this
                         )
                     },
-                    PetitionField(label = "来访案件类型", inputType = InputType.SELECT).apply {
+                    PetitionField(
+                        label = "来访案件类型",
+                        inputType = InputType.SELECT,
+                        petitionFieldType = PetitionFieldType.BOTTOM
+                    ).apply {
                         excelDialogEvent = ExcelDialogEvent(
                             queryValue = label, queryIndex = 2, petitionField = this
                         )
                     },
                 )
+
+                // 处理两个 position
+                val petitionFields = data.filterIsInstance<PetitionField>()
+                petitionFields.forEach { petitionField ->
+                    petitionField.petitionFieldPosition = petitionFields.indexOf(petitionField)
+                }
+                data.forEach { any ->
+                    if (any is PetitionField) {
+                        any.modelPosition = data.indexOf(any)
+                    }
+                }
+
+                return data
             }
 
             rv.linear().divider {
@@ -129,32 +149,46 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                 setDivider(width = 1, dp = false)
             }.setup {
                 addType<PetitionField>(R.layout.item_petition_field)
+                addType<SupportDivider>(R.layout.divider_support)
                 onBind {
-                    val binding = getBinding<ItemPetitionFieldBinding>()
-                    val item = getModel<PetitionField>()
+                    when (val item = getModel<Any>()) {
+                        is PetitionField -> {
+                            val binding = getBinding<ItemPetitionFieldBinding>()
 
-                    // 设置圆角
-                    val helper = binding.root.helper
-                    val cornerRadius = SizeUtils.dp2px(16f).toFloat()
-                    when (item.petitionFieldType) {
-                        PetitionFieldType.TOP -> {
-                            helper.cornerRadiusTopLeft = cornerRadius
-                            helper.cornerRadiusTopRight = cornerRadius
-                        }
-                        PetitionFieldType.BOTTOM -> {
-                            helper.cornerRadiusBottomLeft = cornerRadius
-                            helper.cornerRadiusBottomRight = cornerRadius
-                        }
-                        PetitionFieldType.MIDDLE -> {
-                            helper.cornerRadius = 0f
-                        }
-                    }
+                            // 设置圆角
+                            val helper = binding.root.helper
+                            val `16dp` = SizeUtils.dp2px(16f).toFloat()
+                            when (item.petitionFieldType) {
+                                PetitionFieldType.TOP -> {
+                                    helper.cornerRadiusTopLeft = `16dp`
+                                    helper.cornerRadiusTopRight = `16dp`
+                                    helper.cornerRadiusBottomLeft = 0f
+                                    helper.cornerRadiusBottomRight = 0f
+                                }
+                                PetitionFieldType.BOTTOM -> {
+                                    helper.cornerRadiusTopLeft = 0f
+                                    helper.cornerRadiusTopRight = 0f
+                                    helper.cornerRadiusBottomLeft = `16dp`
+                                    helper.cornerRadiusBottomRight = `16dp`
+                                }
+                                PetitionFieldType.MIDDLE -> {
+                                    helper.cornerRadiusTopLeft = 0f
+                                    helper.cornerRadiusTopRight = 0f
+                                    helper.cornerRadiusBottomLeft = 0f
+                                    helper.cornerRadiusBottomRight = 0f
+                                }
+                            }
 
-                    // 展示数据
-                    binding.apply {
-                        l.text = item.label
-                        tv.hint = item.inputType.hint
-                        tv.text = item.value
+                            // 展示数据
+                            binding.apply {
+                                l.text = item.label
+                                tv.hint = item.inputType.hint
+                                tv.text = item.value
+                            }
+                        }
+                        is SupportDivider -> {
+                            // do nothing
+                        }
                     }
                 }
                 onFastClick(R.id.tv) {
@@ -165,9 +199,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                             MaterialDialog(this@PetitionDetailAct).show {
                                 title(text = "请输入${item.label}")
                                 input { _, text ->
-                                    onPetitionFieldValueChange(
-                                        position = modelPosition, value = text.toString()
-                                    )
+                                    onPetitionFieldValueChange(item, text.toString())
                                 }
                                 positiveButton(text = "确认")
                             }
@@ -197,11 +229,9 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             btnSubmit.visibility = if (isEditable) View.VISIBLE else View.GONE
 
             // 展示数据
-            rv.models?.forEachIndexed { index, model ->
-                if (model is PetitionField) {
-                    val kProperty1 = Petition::class.memberProperties.elementAt(index)
-                    model.value = kProperty1.get(petition) as String
-                }
+            rv.models?.filterIsInstance<PetitionField>()?.forEachIndexed { index, model ->
+                val kProperty1 = Petition::class.memberProperties.elementAt(index)
+                model.value = kProperty1.get(petition) as String
             }
             rv.bindingAdapter.notifyDataSetChanged()
         }
@@ -215,12 +245,10 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                 if (!isEditable) return@setOnClickListener
 
                 // 非空校验
-                rv.models?.forEach {
-                    if (it is PetitionField) {
-                        if (!it.allowEmpty && it.value.isEmpty()) {
-                            ToastUtils.showShort("请填写${it.label}")
-                            return@setOnClickListener
-                        }
+                rv.models?.filterIsInstance<PetitionField>()?.forEach {
+                    if (!it.allowEmpty && it.value.isEmpty()) {
+                        ToastUtils.showShort("请填写${it.label}")
+                        return@setOnClickListener
                     }
                 }
 
@@ -273,9 +301,8 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             ).build().property(ExcelData_.__ALL_PROPERTIES[event.queryIndex + 1])
             val results = propertyQuery.distinct().findStrings().filter { it.isNotEmpty() }
             if (results.isEmpty()) {
-                ToastUtils.showShort("选择结果: ${event.queryValue}")
-                val position = binding.rv.models!!.indexOf(event.petitionField)
-                onPetitionFieldValueChange(position, event.queryValue)
+//                ToastUtils.showShort("选择结果: ${event.queryValue}")
+                onPetitionFieldValueChange(event.petitionField, event.queryValue)
                 return@receiveEvent
             }
             results.sortedWith(Collator.getInstance(Locale.CHINA))
@@ -310,12 +337,14 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             return age
         }
 
-        onPetitionFieldValueChange(0, result.name.words)
-        onPetitionFieldValueChange(1, calculateAge(result.birthday.words).toString())
-        onPetitionFieldValueChange(2, result.gender.words)
-        onPetitionFieldValueChange(3, result.ethnic.words)
-        onPetitionFieldValueChange(4, "居民身份证")
-        onPetitionFieldValueChange(5, result.idNumber.words)
+        binding.rv.models!!.filterIsInstance<PetitionField>().also {
+            onPetitionFieldValueChange(it[0], result.name.words)
+            onPetitionFieldValueChange(it[1], calculateAge(result.birthday.words).toString())
+            onPetitionFieldValueChange(it[2], result.gender.words)
+            onPetitionFieldValueChange(it[3], result.ethnic.words)
+            onPetitionFieldValueChange(it[4], "居民身份证")
+            onPetitionFieldValueChange(it[5], result.idNumber.words)
+        }
     }
 
     private var isEditable = false
@@ -324,15 +353,19 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
     private var petition = Petition()
 
-    private fun onPetitionFieldValueChange(position: Int, value: String) {
+
+    // petitionFieldPosition:
+    // modelPosition: AnyPosition
+    private fun onPetitionFieldValueChange(
+        item: PetitionField, value: String
+    ) {
         binding.rv.bindingAdapter.apply {
             // 刷新界面
-            val item = models!![position] as PetitionField
             item.value = value
-            notifyItemChanged(position)
+            notifyItemChanged(item.modelPosition)
 
             // 修改 petition 对象
-            val kProperty1 = Petition::class.memberProperties.elementAt(position)
+            val kProperty1 = Petition::class.memberProperties.elementAt(item.petitionFieldPosition)
             kProperty1 as KMutableProperty1<Petition, String>
             kProperty1.set(petition, value)
         }

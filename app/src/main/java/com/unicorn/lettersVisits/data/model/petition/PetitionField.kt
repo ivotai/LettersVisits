@@ -8,6 +8,8 @@ class PetitionField(
     var value: String = "",
     val allowEmpty: Boolean = true,
     val petitionFieldType: PetitionFieldType = PetitionFieldType.MIDDLE,
+    var modelPosition: Int = 0,
+    var petitionFieldPosition: Int = 0
 ) {
 
     lateinit var excelDialogEvent: ExcelDialogEvent

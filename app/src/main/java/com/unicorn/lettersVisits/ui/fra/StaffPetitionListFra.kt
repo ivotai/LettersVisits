@@ -8,6 +8,7 @@ import com.drake.channel.receiveEvent
 import com.unicorn.lettersVisits.R
 import com.unicorn.lettersVisits.app.Global
 import com.unicorn.lettersVisits.data.model.*
+import com.unicorn.lettersVisits.data.model.event.PetitionerPutEvent
 import com.unicorn.lettersVisits.data.model.event.PetitionerSelectEvent
 import com.unicorn.lettersVisits.data.model.petition.Petition
 import com.unicorn.lettersVisits.databinding.FraRole2ApplyListBinding
@@ -45,7 +46,7 @@ class StaffPetitionListFra : BaseFra<FraRole2ApplyListBinding>() {
     }
 
     override fun initEvents() {
-        receiveEvent<PetitionerSelectEvent> {
+        receiveEvent<PetitionerPutEvent> {
             binding.rv.models = getData()
             binding.rv.smoothScrollToPosition(0)
         }
