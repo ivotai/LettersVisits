@@ -28,6 +28,7 @@ import com.unicorn.lettersVisits.data.model.event.StartOrcEvent
 import com.unicorn.lettersVisits.data.model.petition.InputType
 import com.unicorn.lettersVisits.data.model.petition.Petition
 import com.unicorn.lettersVisits.data.model.petition.PetitionField
+import com.unicorn.lettersVisits.data.model.petition.PetitionFieldType
 import com.unicorn.lettersVisits.data.model.role.Role
 import com.unicorn.lettersVisits.databinding.ActAddPetitionBinding
 import com.unicorn.lettersVisits.databinding.ItemPetitionFieldBinding
@@ -39,6 +40,9 @@ import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 import splitties.resources.color
 import java.text.Collator
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.*
 import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.full.memberProperties
@@ -60,24 +64,19 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
             fun getData(): List<PetitionField> {
                 return listOf(
-                    PetitionField(label = "来访人姓名", inputType = InputType.TEXT),
+                    PetitionField(
+                        label = "姓名",
+                        inputType = InputType.TEXT,
+                        petitionFieldType = PetitionFieldType.TOP
+                    ),
                     PetitionField(label = "年龄", inputType = InputType.TEXT),
                     PetitionField(label = "性别", inputType = InputType.SELECT).apply {
                         excelDialogEvent = ExcelDialogEvent(
                             queryValue = label, queryIndex = 2, petitionField = this
                         )
                     },
-                    PetitionField(label = "类别", inputType = InputType.SELECT).apply {
-                        excelDialogEvent = ExcelDialogEvent(
-                            queryValue = label, queryIndex = 2, petitionField = this
-                        )
-                    },
+
                     PetitionField(label = "民族", inputType = InputType.SELECT).apply {
-                        excelDialogEvent = ExcelDialogEvent(
-                            queryValue = label, queryIndex = 2, petitionField = this
-                        )
-                    },
-                    PetitionField(label = "职业", inputType = InputType.SELECT).apply {
                         excelDialogEvent = ExcelDialogEvent(
                             queryValue = label, queryIndex = 2, petitionField = this
                         )
@@ -87,7 +86,23 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                             queryValue = label, queryIndex = 2, petitionField = this
                         )
                     },
-                    PetitionField(label = "证件号", inputType = InputType.TEXT),
+                    PetitionField(
+                        label = "证件号",
+                        inputType = InputType.TEXT,
+                        petitionFieldType = PetitionFieldType.BOTTOM
+                    ),
+
+                    //
+                    PetitionField(label = "类别", inputType = InputType.SELECT).apply {
+                        excelDialogEvent = ExcelDialogEvent(
+                            queryValue = label, queryIndex = 2, petitionField = this
+                        )
+                    },
+                    PetitionField(label = "职业", inputType = InputType.SELECT).apply {
+                        excelDialogEvent = ExcelDialogEvent(
+                            queryValue = label, queryIndex = 2, petitionField = this
+                        )
+                    },
                     PetitionField(label = "邮政编码", inputType = InputType.TEXT),
                     PetitionField(label = "固定电话", inputType = InputType.TEXT),
                     PetitionField(label = "移动电话", inputType = InputType.TEXT),
@@ -121,20 +136,21 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                     // 设置圆角
                     val helper = binding.root.helper
                     val cornerRadius = SizeUtils.dp2px(16f).toFloat()
-                    when (modelPosition) {
-                        0 -> {
+                    when (item.petitionFieldType) {
+                        PetitionFieldType.TOP -> {
                             helper.cornerRadiusTopLeft = cornerRadius
                             helper.cornerRadiusTopRight = cornerRadius
                         }
-                        modelCount - 1 -> {
+                        PetitionFieldType.BOTTOM -> {
                             helper.cornerRadiusBottomLeft = cornerRadius
                             helper.cornerRadiusBottomRight = cornerRadius
                         }
-                        else -> {
+                        PetitionFieldType.MIDDLE -> {
                             helper.cornerRadius = 0f
                         }
                     }
 
+                    // 展示数据
                     binding.apply {
                         l.text = item.label
                         tv.hint = item.inputType.hint
@@ -227,7 +243,9 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                     val popup =
                         CascadePopupMenu(this@PetitionDetailAct, binding.titleBar.getMoreView())
                     popup.also {
-                        it.menu.add(title = "扫描身份证", onClick = {})
+                        it.menu.add(title = "扫描身份证", onClick = {
+                            sendEvent(StartOrcEvent())
+                        })
                         it.menu.add(title = "答复", onClick = {
                             ToastUtils.showShort("答复没做")
                         })
@@ -278,19 +296,26 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
 
     override fun onOrcResult(result: IDCardResult) {
-        val user = User(
-            username = result.name.words,
-            password = initialPassword,
-            role = Role.PETITIONER,
-            address = result.address.words,
-            birthday = result.birthday.words,
-            ethnic = result.ethnic.words,
-            gender = result.gender.words,
-            idNumber = result.idNumber.words,
-            name = result.name.words
-        )
+
+        fun calculateAge(birthdate: String): Int {
+            val today = LocalDate.now()
+            val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+            val birthdateObj = LocalDate.parse(birthdate, formatter)
+            val age = ChronoUnit.YEARS.between(birthdateObj, today).toInt()
+
+            if (today.monthValue < birthdateObj.monthValue || (today.monthValue == birthdateObj.monthValue && today.dayOfMonth < birthdateObj.dayOfMonth)) {
+                return age - 1
+            }
+
+            return age
+        }
+
         onPetitionFieldValueChange(0, result.name.words)
+        onPetitionFieldValueChange(1, calculateAge(result.birthday.words).toString())
         onPetitionFieldValueChange(2, result.gender.words)
+        onPetitionFieldValueChange(3, result.ethnic.words)
+        onPetitionFieldValueChange(4, "居民身份证")
+        onPetitionFieldValueChange(5, result.idNumber.words)
     }
 
     private var isEditable = false

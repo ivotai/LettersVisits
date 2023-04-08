@@ -7,8 +7,8 @@ class PetitionField(
     val inputType: InputType = InputType.TEXT,
     var value: String = "",
     val allowEmpty: Boolean = true,
-
-    ) {
+    val petitionFieldType: PetitionFieldType = PetitionFieldType.MIDDLE,
+) {
 
     lateinit var excelDialogEvent: ExcelDialogEvent
 
