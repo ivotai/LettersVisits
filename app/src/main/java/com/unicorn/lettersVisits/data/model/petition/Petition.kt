@@ -5,8 +5,6 @@ import com.unicorn.lettersVisits.data.model.User
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import io.objectbox.relation.ToOne
-import splitties.views.InputType.Companion.number
-import splitties.views.InputType.Companion.phone
 import java.io.Serializable
 import java.util.*
 
@@ -19,22 +17,22 @@ data class Petition(
     var reply: String = "",
 
     //
-    var a1Name: String = "",
-    var a2Age: String = "",
-    var a3Gender: String = "",
-    var a4Category: String = "",
-    var a5Ethnicity: String = "",
-    var a6Occupation: String = "",
-    var a7DocumentType: String = "",
-    var a8DocumentNumber: String = "",
-    var a9PostalCode: String = "",
-    var a10LandlinePhoneNumber: String = "",
-    var a11MobilePhoneNumber: String = "",
-    var a12NumberOfVisits: String = "",
-    var a13LawyersLicenseNumber: String = "",
-    var a14OrganizationCode: String = "",
-    var a15CourtWithJurisdiction: String = "",
-    var a16TypeOfCase:String = "",
+    var a1: String = "",
+    var a2: String = "",
+    var a3: String = "",
+    var a4: String = "",
+    var a5: String = "",
+    var a6: String = "",
+    var a7: String = "",
+    var a8: String = "",
+    var a9: String = "",
+    var a10: String = "",
+    var a11: String = "",
+    var a12: String = "",
+    var a13: String = "",
+    var a14: String = "",
+    var a15: String = "",
+    var a16: String = "",
 
     ) : Serializable {
     //    lateinit var petitioner: ToOne<User>

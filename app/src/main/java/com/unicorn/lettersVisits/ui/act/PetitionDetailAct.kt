@@ -96,7 +96,9 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                     PetitionField(label = "组织机构代码", inputType = InputType.TEXT),
                     PetitionField(label = "涉诉法院", inputType = InputType.SELECT).apply {
                         excelDialogEvent = ExcelDialogEvent(
-                            queryValue = "最高人民法院  （备注：关联各审级的涉诉法院信息）", queryIndex = 2, petitionField = this
+                            queryValue = "最高人民法院  （备注：关联各审级的涉诉法院信息）",
+                            queryIndex = 2,
+                            petitionField = this
                         )
                     },
                     PetitionField(label = "来访案件类型", inputType = InputType.SELECT).apply {
@@ -287,6 +289,8 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             idNumber = result.idNumber.words,
             name = result.name.words
         )
+        onPetitionFieldValueChange(0, result.name.words)
+        onPetitionFieldValueChange(2, result.gender.words)
     }
 
     private var isEditable = false
