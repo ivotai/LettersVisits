@@ -7,7 +7,7 @@ enum class InputType(
     NUMBER,
     DATE,
     TIME,
-    DATETIME,
+    DATETIME(hint = "请选择"),
     SELECT(hint = "请选择"),
     MULTISELECT,
     RADIO,

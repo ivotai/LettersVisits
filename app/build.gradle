@@ -120,6 +120,6 @@ dependencies {
     implementation group: 'net.sourceforge.jexcelapi', name: 'jxl', version: '2.6.12'
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.20")
     implementation "me.saket.cascade:cascade:2.0.0-rc02"
-    implementation "me.saket.cascade:cascade-compose:2.0.0-rc02"
+    implementation 'com.afollestad.material-dialogs:datetime:3.3.0'
 
 }

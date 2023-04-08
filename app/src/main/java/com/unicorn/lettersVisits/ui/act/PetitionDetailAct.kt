@@ -4,10 +4,12 @@ package com.unicorn.lettersVisits.ui.act
 import android.Manifest
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.icu.text.SimpleDateFormat
 import android.view.View
 import androidx.core.graphics.ColorUtils
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
+import com.afollestad.materialdialogs.datetime.dateTimePicker
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItems
 import com.baidu.ocr.sdk.model.IDCardResult
@@ -23,12 +25,10 @@ import com.unicorn.lettersVisits.data.model.ExcelData_
 import com.unicorn.lettersVisits.data.model.event.ExcelDialogEvent
 import com.unicorn.lettersVisits.data.model.event.PetitionerPutEvent
 import com.unicorn.lettersVisits.data.model.event.StartOrcEvent
-import com.unicorn.lettersVisits.data.model.petition.InputType
-import com.unicorn.lettersVisits.data.model.petition.Petition
-import com.unicorn.lettersVisits.data.model.petition.PetitionField
-import com.unicorn.lettersVisits.data.model.petition.PetitionFieldType
+import com.unicorn.lettersVisits.data.model.petition.*
 import com.unicorn.lettersVisits.data.model.support.SupportDivider
 import com.unicorn.lettersVisits.databinding.ActAddPetitionBinding
+import com.unicorn.lettersVisits.databinding.GroupPetitionFieldBinding
 import com.unicorn.lettersVisits.databinding.ItemPetitionFieldBinding
 import io.objectbox.kotlin.boxFor
 import io.objectbox.query.QueryBuilder
@@ -50,7 +50,7 @@ import kotlin.reflect.full.memberProperties
 class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "SimpleDateFormat")
     override fun initViews() {
         binding.apply {
             titleBar.setTitle("信访申请")
@@ -62,10 +62,10 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
             fun getData(): List<Any> {
                 val data = listOf(
+                    PetitionGroup("来访人信息"),
                     PetitionField(
                         label = "姓名",
                         inputType = InputType.TEXT,
-                        petitionFieldType = PetitionFieldType.TOP
                     ),
                     PetitionField(label = "年龄", inputType = InputType.TEXT),
                     PetitionField(label = "性别", inputType = InputType.SELECT).apply {
@@ -91,10 +91,10 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
                     //
                     SupportDivider(),
+                    PetitionGroup("其他信息"),
                     PetitionField(
                         label = "类别",
                         inputType = InputType.SELECT,
-                        petitionFieldType = PetitionFieldType.TOP
                     ).apply {
                         excelDialogEvent = ExcelDialogEvent(
                             queryValue = label, queryIndex = 2, petitionField = this
@@ -128,7 +128,11 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                         )
                     },
                     SupportDivider(),
-                    PetitionField(label = "通知法院", inputType = InputType.SELECT, petitionFieldType = PetitionFieldType.TOP).apply {
+                    PetitionGroup("越级转办"),
+                    PetitionField(
+                        label = "通知法院",
+                        inputType = InputType.SELECT,
+                    ).apply {
                         excelDialogEvent = ExcelDialogEvent(
                             queryValue = "最高人民法院  （备注：关联各审级的涉诉法院信息）",
                             queryIndex = 2,
@@ -136,7 +140,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                         )
                     },
                     PetitionField(label = "通知人", inputType = InputType.TEXT),
-                    PetitionField(label = "通知时间", inputType = InputType.TEXT),
+                    PetitionField(label = "通知时间", inputType = InputType.DATETIME),
                     PetitionField(label = "领走法院", inputType = InputType.SELECT).apply {
                         excelDialogEvent = ExcelDialogEvent(
                             queryValue = "最高人民法院  （备注：关联各审级的涉诉法院信息）",
@@ -145,7 +149,11 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                         )
                     },
                     PetitionField(label = "领走人", inputType = InputType.TEXT),
-                    PetitionField(label = "领走时间", inputType = InputType.TEXT, petitionFieldType = PetitionFieldType.BOTTOM),
+                    PetitionField(
+                        label = "领走时间",
+                        inputType = InputType.DATETIME,
+                        petitionFieldType = PetitionFieldType.BOTTOM
+                    ),
                 )
                 return data
             }
@@ -156,6 +164,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             }.setup {
                 addType<PetitionField>(R.layout.item_petition_field)
                 addType<SupportDivider>(R.layout.divider_support)
+                addType<PetitionGroup>(R.layout.group_petition_field)
                 onBind {
                     when (val item = getModel<Any>()) {
                         is PetitionField -> {
@@ -192,6 +201,10 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                                 tv.text = item.value
                             }
                         }
+                        is PetitionGroup -> {
+                            val binding = getBinding<GroupPetitionFieldBinding>()
+                            binding.tv.text = item.name
+                        }
                         is SupportDivider -> {
                             // do nothing
                         }
@@ -213,13 +226,28 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                         InputType.SELECT -> {
                             sendEvent(item.excelDialogEvent)
                         }
+                        InputType.DATETIME -> {
+                            MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
+                                dateTimePicker() { _, dateTime ->
+                                    // 创建日期格式化器，指定格式
+                                    SimpleDateFormat.getDateTimeInstance()
+                                    val formatter = SimpleDateFormat("yyyy年MM月dd日\r\nHH点mm分")
+                                    // 格式化日期
+                                    val dateTimeString = formatter.format(dateTime.time)
+                                    // 返回格式化后的日期字符串
+                                    onPetitionFieldValueChange(item, dateTimeString)
+                                }
+                            }
+                        }
                         else -> {
                             // do nothing
                         }
                     }
                 }
             }.models = getData()
-            prepareModels()
+            prepareData()
+
+            hideExtraData()
 
             // 可否编辑
             val id = intent.getLongExtra("id", -1L)
@@ -280,8 +308,8 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                         it.menu.add(title = "扫描身份证", onClick = {
                             sendEvent(StartOrcEvent())
                         })
-                        it.menu.add(title = "越级访转办", onClick = {
-                            ToastUtils.showShort("越级访转办")
+                        it.menu.add(title = "通知越级转办法院", onClick = {
+                            ToastUtils.showShort("已通知")
                         })
                     }.show()
                 }
@@ -374,7 +402,11 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
         }
     }
 
-    private fun prepareModels() {
+    fun hideExtraData() {
+        binding.rv.bindingAdapter.notifyItemRangeRemoved(17, 7)
+    }
+
+    private fun prepareData() {
         // 处理两个 position
         val data = binding.rv.models!!
         val petitionFields = data.filterIsInstance<PetitionField>()
