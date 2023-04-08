@@ -64,21 +64,26 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                 val data = listOf(
                     PetitionGroup("来访人信息"),
                     PetitionField(
-                        label = "姓名",
-                        inputType = InputType.TEXT,
+                        label = "姓名", inputType = InputType.TEXT, allowEmpty = false
                     ),
-                    PetitionField(label = "年龄", inputType = InputType.TEXT),
-                    PetitionField(label = "性别", inputType = InputType.SELECT).apply {
+                    PetitionField(label = "年龄", inputType = InputType.TEXT, allowEmpty = false),
+                    PetitionField(
+                        label = "性别", inputType = InputType.SELECT, allowEmpty = false
+                    ).apply {
                         excelDialogEvent = ExcelDialogEvent(
                             queryValue = label, queryIndex = 2, petitionField = this
                         )
                     },
-                    PetitionField(label = "民族", inputType = InputType.SELECT).apply {
+                    PetitionField(
+                        label = "民族", inputType = InputType.SELECT, allowEmpty = false
+                    ).apply {
                         excelDialogEvent = ExcelDialogEvent(
                             queryValue = label, queryIndex = 2, petitionField = this
                         )
                     },
-                    PetitionField(label = "证件类型", inputType = InputType.SELECT).apply {
+                    PetitionField(
+                        label = "证件类型", inputType = InputType.SELECT, allowEmpty = false
+                    ).apply {
                         excelDialogEvent = ExcelDialogEvent(
                             queryValue = label, queryIndex = 2, petitionField = this
                         )
@@ -86,7 +91,8 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                     PetitionField(
                         label = "证件号",
                         inputType = InputType.TEXT,
-                        petitionFieldType = PetitionFieldType.BOTTOM
+                        petitionFieldType = PetitionFieldType.BOTTOM,
+                        allowEmpty = false
                     ),
 
                     //
@@ -172,19 +178,19 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
                             // 设置圆角
                             val helper = binding.root.helper
-                            val `16dp` = SizeUtils.dp2px(16f).toFloat()
+                            val dp16 = SizeUtils.dp2px(16f).toFloat()
                             when (item.petitionFieldType) {
                                 PetitionFieldType.TOP -> {
-                                    helper.cornerRadiusTopLeft = `16dp`
-                                    helper.cornerRadiusTopRight = `16dp`
+                                    helper.cornerRadiusTopLeft = dp16
+                                    helper.cornerRadiusTopRight = dp16
                                     helper.cornerRadiusBottomLeft = 0f
                                     helper.cornerRadiusBottomRight = 0f
                                 }
                                 PetitionFieldType.BOTTOM -> {
                                     helper.cornerRadiusTopLeft = 0f
                                     helper.cornerRadiusTopRight = 0f
-                                    helper.cornerRadiusBottomLeft = `16dp`
-                                    helper.cornerRadiusBottomRight = `16dp`
+                                    helper.cornerRadiusBottomLeft = dp16
+                                    helper.cornerRadiusBottomRight = dp16
                                 }
                                 PetitionFieldType.MIDDLE -> {
                                     helper.cornerRadiusTopLeft = 0f
@@ -227,11 +233,11 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                             sendEvent(item.excelDialogEvent)
                         }
                         InputType.DATETIME -> {
-                            MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
+                            MaterialDialog(this@PetitionDetailAct).show {
                                 dateTimePicker() { _, dateTime ->
                                     // 创建日期格式化器，指定格式
                                     SimpleDateFormat.getDateTimeInstance()
-                                    val formatter = SimpleDateFormat("yyyy年MM月dd日\r\nHH点mm分")
+                                    val formatter = SimpleDateFormat("yyyy年MM月dd日\nHH点mm分")
                                     // 格式化日期
                                     val dateTimeString = formatter.format(dateTime.time)
                                     // 返回格式化后的日期字符串
@@ -246,8 +252,6 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                 }
             }.models = getData()
             prepareData()
-
-            hideExtraData()
 
             // 可否编辑
             val id = intent.getLongExtra("id", -1L)
@@ -332,13 +336,12 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             ).build().property(ExcelData_.__ALL_PROPERTIES[event.queryIndex + 1])
             val results = propertyQuery.distinct().findStrings().filter { it.isNotEmpty() }
             if (results.isEmpty()) {
-//                ToastUtils.showShort("选择结果: ${event.queryValue}")
                 onPetitionFieldValueChange(event.petitionField, event.queryValue)
                 return@receiveEvent
             }
             results.sortedWith(Collator.getInstance(Locale.CHINA))
             MaterialDialog(this@PetitionDetailAct, BottomSheet()).show {
-                title(text = "请选择${event.queryValue}")
+                title(text = "请选择${event.petitionField.label}")
                 listItems(items = results.toList()) { _, _, text ->
                     sendEvent(
                         ExcelDialogEvent(
@@ -400,10 +403,6 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
             kProperty1 as KMutableProperty1<Petition, String>
             kProperty1.set(petition, value)
         }
-    }
-
-    fun hideExtraData() {
-        binding.rv.bindingAdapter.notifyItemRangeRemoved(17, 7)
     }
 
     private fun prepareData() {
