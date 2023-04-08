@@ -104,7 +104,7 @@
     },
     {
       "id": "7:6479716510433386145",
-      "lastPropertyId": "20:3944520949749426760",
+      "lastPropertyId": "30:336592089976947885",
       "name": "Petition",
       "properties": [
         {
@@ -167,6 +167,56 @@
         {
           "id": "20:3944520949749426760",
           "name": "a6Occupation",
+          "type": 9
+        },
+        {
+          "id": "21:8603147394621033733",
+          "name": "a7DocumentType",
+          "type": 9
+        },
+        {
+          "id": "22:1760091257485892921",
+          "name": "a8DocumentNumber",
+          "type": 9
+        },
+        {
+          "id": "23:3980431533984124129",
+          "name": "a9PostalCode",
+          "type": 9
+        },
+        {
+          "id": "24:9039161111265559426",
+          "name": "a10LandlinePhoneNumber",
+          "type": 9
+        },
+        {
+          "id": "25:815425638692577598",
+          "name": "a11MobilePhoneNumber",
+          "type": 9
+        },
+        {
+          "id": "26:8308923711805139884",
+          "name": "a12NumberOfVisits",
+          "type": 9
+        },
+        {
+          "id": "27:7213559538604294",
+          "name": "a13LawyersLicenseNumber",
+          "type": 9
+        },
+        {
+          "id": "28:3176080858678236372",
+          "name": "a14OrganizationCode",
+          "type": 9
+        },
+        {
+          "id": "29:1643184313144991828",
+          "name": "a15CourtWithJurisdiction",
+          "type": 9
+        },
+        {
+          "id": "30:336592089976947885",
+          "name": "a16TypeOfCase",
           "type": 9
         }
       ],

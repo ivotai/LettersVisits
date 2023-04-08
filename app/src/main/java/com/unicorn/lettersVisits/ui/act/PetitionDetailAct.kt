@@ -58,6 +58,55 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                 color(R.color.main_color), Color.WHITE, 0.3f
             )
 
+            fun getData(): List<PetitionField> {
+                return listOf(
+                    PetitionField(label = "来访人姓名", inputType = InputType.TEXT),
+                    PetitionField(label = "年龄", inputType = InputType.TEXT),
+                    PetitionField(label = "性别", inputType = InputType.SELECT).apply {
+                        excelDialogEvent = ExcelDialogEvent(
+                            queryValue = label, queryIndex = 2, petitionField = this
+                        )
+                    },
+                    PetitionField(label = "类别", inputType = InputType.SELECT).apply {
+                        excelDialogEvent = ExcelDialogEvent(
+                            queryValue = label, queryIndex = 2, petitionField = this
+                        )
+                    },
+                    PetitionField(label = "民族", inputType = InputType.SELECT).apply {
+                        excelDialogEvent = ExcelDialogEvent(
+                            queryValue = label, queryIndex = 2, petitionField = this
+                        )
+                    },
+                    PetitionField(label = "职业", inputType = InputType.SELECT).apply {
+                        excelDialogEvent = ExcelDialogEvent(
+                            queryValue = label, queryIndex = 2, petitionField = this
+                        )
+                    },
+                    PetitionField(label = "证件类型", inputType = InputType.SELECT).apply {
+                        excelDialogEvent = ExcelDialogEvent(
+                            queryValue = label, queryIndex = 2, petitionField = this
+                        )
+                    },
+                    PetitionField(label = "证件号", inputType = InputType.TEXT),
+                    PetitionField(label = "邮政编码", inputType = InputType.TEXT),
+                    PetitionField(label = "固定电话", inputType = InputType.TEXT),
+                    PetitionField(label = "移动电话", inputType = InputType.TEXT),
+                    PetitionField(label = "来访次数", inputType = InputType.TEXT),
+                    PetitionField(label = "律师证号", inputType = InputType.TEXT),
+                    PetitionField(label = "组织机构代码", inputType = InputType.TEXT),
+                    PetitionField(label = "涉诉法院", inputType = InputType.SELECT).apply {
+                        excelDialogEvent = ExcelDialogEvent(
+                            queryValue = "最高人民法院  （备注：关联各审级的涉诉法院信息）", queryIndex = 2, petitionField = this
+                        )
+                    },
+                    PetitionField(label = "来访案件类型", inputType = InputType.SELECT).apply {
+                        excelDialogEvent = ExcelDialogEvent(
+                            queryValue = label, queryIndex = 2, petitionField = this
+                        )
+                    },
+                )
+            }
+
             rv.linear().divider {
                 setColorRes(splitties.material.colors.R.color.grey_200)
                 setDivider(width = 1, dp = false)
@@ -80,7 +129,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                             helper.cornerRadiusBottomRight = cornerRadius
                         }
                         else -> {
-                            // do nothing
+                            helper.cornerRadius = 0f
                         }
                     }
 
@@ -113,28 +162,7 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                         }
                     }
                 }
-            }.models = listOf(PetitionField(label = "来访人姓名", inputType = InputType.TEXT),
-                PetitionField(label = "年龄", inputType = InputType.TEXT),
-                PetitionField(label = "性别", inputType = InputType.SELECT).apply {
-                    excelDialogEvent = ExcelDialogEvent(
-                        queryValue = label, queryIndex = 2, petitionField = this
-                    )
-                },
-                PetitionField(label = "类别", inputType = InputType.SELECT).apply {
-                    excelDialogEvent = ExcelDialogEvent(
-                        queryValue = label, queryIndex = 2, petitionField = this
-                    )
-                },
-                PetitionField(label = "民族", inputType = InputType.SELECT).apply {
-                    excelDialogEvent = ExcelDialogEvent(
-                        queryValue = label, queryIndex = 2, petitionField = this
-                    )
-                },
-                PetitionField(label = "职业", inputType = InputType.SELECT).apply {
-                    excelDialogEvent = ExcelDialogEvent(
-                        queryValue = label, queryIndex = 2, petitionField = this
-                    )
-                })
+            }.models = getData()
 
             // 可否编辑
             val id = intent.getLongExtra("id", -1L)
@@ -199,10 +227,10 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                     popup.also {
                         it.menu.add(title = "扫描身份证", onClick = {})
                         it.menu.add(title = "答复", onClick = {
-                            ToastUtils.showShort("答复")
+                            ToastUtils.showShort("答复没做")
                         })
                         it.menu.add(title = "转办", onClick = {
-                            ToastUtils.showShort("转办")
+                            ToastUtils.showShort("转办没做")
                         })
                     }.show()
                 }
