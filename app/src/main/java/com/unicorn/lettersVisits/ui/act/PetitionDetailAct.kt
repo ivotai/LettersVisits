@@ -286,7 +286,8 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
                 // 非空校验
                 rv.models?.filterIsInstance<PetitionField>()?.forEach {
                     if (!it.allowEmpty && it.value.isEmpty()) {
-                        ToastUtils.showShort("请填写${it.label}")
+                        ToastUtils.showShort("${it.label}不能为空")
+                        binding.rv.smoothScrollToPosition(it.modelPosition)
                         return@setOnClickListener
                     }
                 }
@@ -307,13 +308,23 @@ class PetitionDetailAct : BaiduOrcAct<ActAddPetitionBinding>() {
 
             titleBar.setOnMoreClickListener {
                 fun showPopupMenu() {
-
-                    CascadePopupMenu(this@PetitionDetailAct, binding.titleBar.getMoreView()).also {
-                        it.menu.add(title = "扫描身份证", onClick = {
+                    CascadePopupMenu(
+                        this@PetitionDetailAct, binding.titleBar.getMoreView()
+                    ).also { popupMenu ->
+                        popupMenu.menu.add(title = "扫描身份证", onClick = {
                             sendEvent(StartOrcEvent())
                         })
-                        it.menu.add(title = "通知越级转办法院", onClick = {
-                            ToastUtils.showShort("已通知")
+                        popupMenu.menu.add(title = "通知越级转办法院", onClick = {
+                            binding.rv.models!!.filterIsInstance<PetitionField>().filter {
+                                it.petitionFieldPosition in listOf(16, 17)
+                            }.forEach {
+                                if (it.value.isEmpty()) {
+                                    ToastUtils.showShort("${it.label}不能为空")
+                                    binding.rv.smoothScrollToPosition(it.modelPosition)
+                                    return@add
+                                }
+                            }
+                            ToastUtils.showShort("已通知!")
                         })
                     }.show()
                 }

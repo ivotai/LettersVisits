@@ -36,7 +36,7 @@ open class BaseAct<VB : ViewBinding> : BaseBindingActivity<VB>(), Ui {
 
     override fun initStatusBar() {
         // true 表示黑色字体
-        immersive(darkMode = true)
+        immersive()
         binding.root.statusPadding()
     }
 
